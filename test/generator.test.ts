@@ -459,6 +459,101 @@ describe('generator', () => {
                   },
                   "description": "Successful response",
                 },
+                "5XX": Object {
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "example": Object {
+                          "code": "INTERNAL_SERVER_ERROR",
+                          "message": "Internal server error",
+                        },
+                        "properties": Object {
+                          "code": Object {
+                            "description": "The error code",
+                            "example": "INTERNAL_SERVER_ERROR",
+                            "type": "string",
+                          },
+                          "issues": Object {
+                            "description": "An array of issues that were responsible for the error",
+                            "example": Array [],
+                            "items": Object {
+                              "properties": Object {
+                                "message": Object {
+                                  "type": "string",
+                                },
+                              },
+                              "required": Array [
+                                "message",
+                              ],
+                              "type": "object",
+                            },
+                            "type": "array",
+                          },
+                          "message": Object {
+                            "description": "The error message",
+                            "example": "Internal server error",
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "message",
+                          "code",
+                        ],
+                        "type": "object",
+                      },
+                    },
+                  },
+                  "description": "An error response",
+                },
+              },
+              "security": undefined,
+              "summary": undefined,
+              "tags": undefined,
+            },
+            "post": Object {
+              "description": undefined,
+              "operationId": "createUser",
+              "requestBody": Object {
+                "content": Object {
+                  "application/json": Object {
+                    "schema": Object {
+                      "properties": Object {
+                        "name": Object {
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "name",
+                      ],
+                      "type": "object",
+                    },
+                  },
+                },
+                "required": true,
+              },
+              "responses": Object {
+                "200": Object {
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "properties": Object {
+                          "id": Object {
+                            "type": "string",
+                          },
+                          "name": Object {
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "id",
+                          "name",
+                        ],
+                        "type": "object",
+                      },
+                    },
+                  },
+                  "description": "Successful response",
+                },
                 "4XX": Object {
                   "content": Object {
                     "application/json": Object {
@@ -556,57 +651,37 @@ describe('generator', () => {
               "summary": undefined,
               "tags": undefined,
             },
-            "post": Object {
+          },
+          "/users/{id}": Object {
+            "delete": Object {
               "description": undefined,
-              "operationId": "createUser",
-              "requestBody": Object {
-                "content": Object {
-                  "application/json": Object {
-                    "schema": Object {
-                      "properties": Object {
-                        "name": Object {
-                          "type": "string",
-                        },
-                      },
-                      "required": Array [
-                        "name",
-                      ],
-                      "type": "object",
-                    },
+              "operationId": "deleteUser",
+              "parameters": Array [
+                Object {
+                  "in": "path",
+                  "name": "id",
+                  "required": true,
+                  "schema": Object {
+                    "type": "string",
                   },
                 },
-                "required": true,
-              },
+              ],
               "responses": Object {
                 "200": Object {
                   "content": Object {
                     "application/json": Object {
-                      "schema": Object {
-                        "properties": Object {
-                          "id": Object {
-                            "type": "string",
-                          },
-                          "name": Object {
-                            "type": "string",
-                          },
-                        },
-                        "required": Array [
-                          "id",
-                          "name",
-                        ],
-                        "type": "object",
-                      },
+                      "schema": Object {},
                     },
                   },
                   "description": "Successful response",
                 },
-                "5XX": Object {
+                "4XX": Object {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
                         "example": Object {
-                          "code": "INTERNAL_SERVER_ERROR",
-                          "message": "Internal server error",
+                          "code": "VALIDATION_ERROR",
+                          "message": "Invalid name provided",
                         },
                         "properties": Object {
                           "code": Object {
@@ -645,35 +720,6 @@ describe('generator', () => {
                     },
                   },
                   "description": "An error response",
-                },
-              },
-              "security": undefined,
-              "summary": undefined,
-              "tags": undefined,
-            },
-          },
-          "/users/{id}": Object {
-            "delete": Object {
-              "description": undefined,
-              "operationId": "deleteUser",
-              "parameters": Array [
-                Object {
-                  "in": "path",
-                  "name": "id",
-                  "required": true,
-                  "schema": Object {
-                    "type": "string",
-                  },
-                },
-              ],
-              "responses": Object {
-                "200": Object {
-                  "content": Object {
-                    "application/json": Object {
-                      "schema": Object {},
-                    },
-                  },
-                  "description": "Successful response",
                 },
                 "5XX": Object {
                   "content": Object {
@@ -761,6 +807,52 @@ describe('generator', () => {
                     },
                   },
                   "description": "Successful response",
+                },
+                "4XX": Object {
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "example": Object {
+                          "code": "VALIDATION_ERROR",
+                          "message": "Invalid name provided",
+                        },
+                        "properties": Object {
+                          "code": Object {
+                            "description": "The error code",
+                            "example": "INTERNAL_SERVER_ERROR",
+                            "type": "string",
+                          },
+                          "issues": Object {
+                            "description": "An array of issues that were responsible for the error",
+                            "example": Array [],
+                            "items": Object {
+                              "properties": Object {
+                                "message": Object {
+                                  "type": "string",
+                                },
+                              },
+                              "required": Array [
+                                "message",
+                              ],
+                              "type": "object",
+                            },
+                            "type": "array",
+                          },
+                          "message": Object {
+                            "description": "The error message",
+                            "example": "Internal server error",
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "message",
+                          "code",
+                        ],
+                        "type": "object",
+                      },
+                    },
+                  },
+                  "description": "An error response",
                 },
                 "5XX": Object {
                   "content": Object {
@@ -863,6 +955,52 @@ describe('generator', () => {
                     },
                   },
                   "description": "Successful response",
+                },
+                "4XX": Object {
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "example": Object {
+                          "code": "VALIDATION_ERROR",
+                          "message": "Invalid name provided",
+                        },
+                        "properties": Object {
+                          "code": Object {
+                            "description": "The error code",
+                            "example": "INTERNAL_SERVER_ERROR",
+                            "type": "string",
+                          },
+                          "issues": Object {
+                            "description": "An array of issues that were responsible for the error",
+                            "example": Array [],
+                            "items": Object {
+                              "properties": Object {
+                                "message": Object {
+                                  "type": "string",
+                                },
+                              },
+                              "required": Array [
+                                "message",
+                              ],
+                              "type": "object",
+                            },
+                            "type": "array",
+                          },
+                          "message": Object {
+                            "description": "The error message",
+                            "example": "Internal server error",
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "message",
+                          "code",
+                        ],
+                        "type": "object",
+                      },
+                    },
+                  },
+                  "description": "An error response",
                 },
                 "5XX": Object {
                   "content": Object {
@@ -1077,6 +1215,52 @@ describe('generator', () => {
             },
             "description": "Successful response",
           },
+          "4XX": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "example": Object {
+                    "code": "VALIDATION_ERROR",
+                    "message": "Invalid name provided",
+                  },
+                  "properties": Object {
+                    "code": Object {
+                      "description": "The error code",
+                      "example": "INTERNAL_SERVER_ERROR",
+                      "type": "string",
+                    },
+                    "issues": Object {
+                      "description": "An array of issues that were responsible for the error",
+                      "example": Array [],
+                      "items": Object {
+                        "properties": Object {
+                          "message": Object {
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "message",
+                        ],
+                        "type": "object",
+                      },
+                      "type": "array",
+                    },
+                    "message": Object {
+                      "description": "The error message",
+                      "example": "Internal server error",
+                      "type": "string",
+                    },
+                  },
+                  "required": Array [
+                    "message",
+                    "code",
+                  ],
+                  "type": "object",
+                },
+              },
+            },
+            "description": "An error response",
+          },
           "5XX": Object {
             "content": Object {
               "application/json": Object {
@@ -1171,6 +1355,52 @@ describe('generator', () => {
               },
             },
             "description": "Successful response",
+          },
+          "4XX": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "example": Object {
+                    "code": "VALIDATION_ERROR",
+                    "message": "Invalid name provided",
+                  },
+                  "properties": Object {
+                    "code": Object {
+                      "description": "The error code",
+                      "example": "INTERNAL_SERVER_ERROR",
+                      "type": "string",
+                    },
+                    "issues": Object {
+                      "description": "An array of issues that were responsible for the error",
+                      "example": Array [],
+                      "items": Object {
+                        "properties": Object {
+                          "message": Object {
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "message",
+                        ],
+                        "type": "object",
+                      },
+                      "type": "array",
+                    },
+                    "message": Object {
+                      "description": "The error message",
+                      "example": "Internal server error",
+                      "type": "string",
+                    },
+                  },
+                  "required": Array [
+                    "message",
+                    "code",
+                  ],
+                  "type": "object",
+                },
+              },
+            },
+            "description": "An error response",
           },
           "5XX": Object {
             "content": Object {
@@ -2389,6 +2619,52 @@ describe('generator', () => {
                 },
                 "description": "Successful response",
               },
+              "4XX": Object {
+                "content": Object {
+                  "application/json": Object {
+                    "schema": Object {
+                      "example": Object {
+                        "code": "VALIDATION_ERROR",
+                        "message": "Invalid name provided",
+                      },
+                      "properties": Object {
+                        "code": Object {
+                          "description": "The error code",
+                          "example": "INTERNAL_SERVER_ERROR",
+                          "type": "string",
+                        },
+                        "issues": Object {
+                          "description": "An array of issues that were responsible for the error",
+                          "example": Array [],
+                          "items": Object {
+                            "properties": Object {
+                              "message": Object {
+                                "type": "string",
+                              },
+                            },
+                            "required": Array [
+                              "message",
+                            ],
+                            "type": "object",
+                          },
+                          "type": "array",
+                        },
+                        "message": Object {
+                          "description": "The error message",
+                          "example": "Internal server error",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "message",
+                        "code",
+                      ],
+                      "type": "object",
+                    },
+                  },
+                },
+                "description": "An error response",
+              },
               "5XX": Object {
                 "content": Object {
                   "application/json": Object {
@@ -2474,6 +2750,52 @@ describe('generator', () => {
                 },
                 "description": "Successful response",
               },
+              "4XX": Object {
+                "content": Object {
+                  "application/json": Object {
+                    "schema": Object {
+                      "example": Object {
+                        "code": "VALIDATION_ERROR",
+                        "message": "Invalid name provided",
+                      },
+                      "properties": Object {
+                        "code": Object {
+                          "description": "The error code",
+                          "example": "INTERNAL_SERVER_ERROR",
+                          "type": "string",
+                        },
+                        "issues": Object {
+                          "description": "An array of issues that were responsible for the error",
+                          "example": Array [],
+                          "items": Object {
+                            "properties": Object {
+                              "message": Object {
+                                "type": "string",
+                              },
+                            },
+                            "required": Array [
+                              "message",
+                            ],
+                            "type": "object",
+                          },
+                          "type": "array",
+                        },
+                        "message": Object {
+                          "description": "The error message",
+                          "example": "Internal server error",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "message",
+                        "code",
+                      ],
+                      "type": "object",
+                    },
+                  },
+                },
+                "description": "An error response",
+              },
               "5XX": Object {
                 "content": Object {
                   "application/json": Object {
@@ -2558,6 +2880,52 @@ describe('generator', () => {
                   },
                 },
                 "description": "Successful response",
+              },
+              "4XX": Object {
+                "content": Object {
+                  "application/json": Object {
+                    "schema": Object {
+                      "example": Object {
+                        "code": "VALIDATION_ERROR",
+                        "message": "Invalid name provided",
+                      },
+                      "properties": Object {
+                        "code": Object {
+                          "description": "The error code",
+                          "example": "INTERNAL_SERVER_ERROR",
+                          "type": "string",
+                        },
+                        "issues": Object {
+                          "description": "An array of issues that were responsible for the error",
+                          "example": Array [],
+                          "items": Object {
+                            "properties": Object {
+                              "message": Object {
+                                "type": "string",
+                              },
+                            },
+                            "required": Array [
+                              "message",
+                            ],
+                            "type": "object",
+                          },
+                          "type": "array",
+                        },
+                        "message": Object {
+                          "description": "The error message",
+                          "example": "Internal server error",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "message",
+                        "code",
+                      ],
+                      "type": "object",
+                    },
+                  },
+                },
+                "description": "An error response",
               },
               "5XX": Object {
                 "content": Object {

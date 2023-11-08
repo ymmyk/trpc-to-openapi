@@ -174,7 +174,7 @@ export const getRequestBodyObject = (
 };
 
 export const hasInputs = (schema: unknown) =>
-  instanceofZodType(schema) && instanceofZodTypeLikeVoid(unwrapZodType(schema, true));
+  instanceofZodType(schema) && !instanceofZodTypeLikeVoid(unwrapZodType(schema, true));
 
 export const errorSchema = z
   .object({
