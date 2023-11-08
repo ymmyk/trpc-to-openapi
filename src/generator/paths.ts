@@ -33,7 +33,8 @@ export const getOpenApiPathsObject = (
         });
       }
 
-      const { method, protect, summary, description, tags, headers, responseHeaders } = openapi;
+      const { method, protect, summary, description, tags, requestHeaders, responseHeaders } =
+        openapi;
 
       const path = normalizePath(openapi.path);
       const pathParameters = getPathParameters(path);
@@ -75,12 +76,12 @@ export const getOpenApiPathsObject = (
             ? {
                 requestBody: getRequestBodyObject(inputParser, pathParameters, contentTypes),
                 requestParams:
-                  getParameterObjects(inputParser, pathParameters, headers, 'path') || {},
+                  getParameterObjects(inputParser, pathParameters, requestHeaders, 'path') || {},
               }
             : {
                 requestBody: undefined,
                 requestParams:
-                  getParameterObjects(inputParser, pathParameters, headers, 'all') || {},
+                  getParameterObjects(inputParser, pathParameters, requestHeaders, 'all') || {},
               }),
           responses: getResponsesObject(outputParser, responseHeaders),
           ...(openapi.deprecated ? { deprecated: openapi.deprecated } : {}),
