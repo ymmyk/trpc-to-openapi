@@ -224,7 +224,7 @@ export const getResponsesObject = (
   headers: AnyZodObject | undefined,
   isProtected: boolean,
   hasInputs: boolean,
-  errorCodes?: number[],
+  errorResponses?: number[] | { [key: number]: string },
 ): ZodOpenApiResponsesObject => {
   if (!instanceofZodType(schema)) {
     throw new TRPCError({
@@ -250,13 +250,21 @@ export const getResponsesObject = (
 
   return {
     200: successResponseObject,
-    ...(errorCodes !== undefined
+    ...(errorResponses !== undefined
       ? Object.fromEntries(
-          errorCodes.map((x) => {
-            const code = HTTP_STATUS_TRPC_ERROR_CODE[x];
-            const message = code && TRPC_ERROR_CODE_MESSAGE[code];
-            return [x, errorResponseObject(code ?? 'UNKNOWN_ERROR', message ?? 'Unknown error')];
-          }),
+          Array.isArray(errorResponses)
+            ? errorResponses.map((x) => {
+                const code = HTTP_STATUS_TRPC_ERROR_CODE[x];
+                const message = code && TRPC_ERROR_CODE_MESSAGE[code];
+                return [
+                  x,
+                  errorResponseObject(code ?? 'UNKNOWN_ERROR', message ?? 'Unknown error'),
+                ];
+              })
+            : Object.entries(errorResponses).map(([k, v]) => [
+                k,
+                errorResponseObject(HTTP_STATUS_TRPC_ERROR_CODE[Number(k)] ?? 'UNKNOWN_ERROR', v),
+              ]),
         )
       : {
           ...(isProtected

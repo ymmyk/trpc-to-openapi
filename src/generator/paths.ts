@@ -41,7 +41,7 @@ export const getOpenApiPathsObject = (
         tags,
         requestHeaders,
         responseHeaders,
-        errorCodes,
+        errorResponses,
       } = openapi;
 
       const path = normalizePath(openapi.path);
@@ -96,7 +96,7 @@ export const getOpenApiPathsObject = (
             responseHeaders,
             protect ?? false,
             hasInputs(inputParser),
-            errorCodes,
+            errorResponses,
           ),
           ...(openapi.deprecated ? { deprecated: openapi.deprecated } : {}),
         },
