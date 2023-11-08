@@ -1,4 +1,4 @@
-import { SecuritySchemeObject } from 'openapi3-ts/dist/oas31';
+import { OpenAPIObject, SecuritySchemeObject } from 'openapi3-ts/dist/oas31';
 import { ZodOpenApiObject, createDocument } from 'zod-openapi';
 
 import { OpenApiRouter } from '../types';
@@ -18,7 +18,7 @@ export type GenerateOpenApiDocumentOptions = {
 export const generateOpenApiDocument = (
   appRouter: OpenApiRouter,
   opts: GenerateOpenApiDocumentOptions,
-) => {
+): OpenAPIObject => {
   const securitySchemes = opts.securitySchemes || {
     Authorization: {
       type: 'http',

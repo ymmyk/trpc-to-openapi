@@ -1,5 +1,6 @@
-// eslint-disable-next-line import/no-unresolved
 import { ProcedureType } from '@trpc/server';
+// eslint-disable-next-line import/no-unresolved
+import { Parser } from '@trpc/server/dist/core/parser';
 import { AnyZodObject, z } from 'zod';
 
 import { OpenApiMeta, OpenApiProcedure, OpenApiProcedureRecord } from '../types';
@@ -11,7 +12,12 @@ const mergeInputs = (inputParsers: AnyZodObject[]): AnyZodObject => {
 };
 
 // `inputParser` & `outputParser` are private so this is a hack to access it
-export const getInputOutputParsers = (procedure: OpenApiProcedure) => {
+export const getInputOutputParsers = (
+  procedure: OpenApiProcedure,
+): {
+  inputParser: AnyZodObject | Parser | undefined;
+  outputParser: Parser | undefined;
+} => {
   const { inputs, output } = procedure._def;
   return {
     inputParser: inputs.length >= 2 ? mergeInputs(inputs as AnyZodObject[]) : inputs[0],
