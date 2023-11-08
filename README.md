@@ -17,7 +17,7 @@
 
 - Easy REST endpoints for your tRPC procedures.
 - Perfect for incremental adoption.
-- OpenAPI version 3.0.3.
+- Supports all OpenAPI versions.
 
 ## Usage
 
@@ -171,7 +171,7 @@ const body = await res.json(); /* { greeting: 'Hello James!' } */
 
 ### Custom headers
 
-Any custom headers can be specified in the `meta.openapi.headers` array, these headers will not be validated on request. Please consider using [Authorization](#authorization) for first-class OpenAPI auth/security support.
+Any custom headers can be specified in the `meta.openapi.requestHeaders` and `meta.openapi.responseHeaders` zod object schema, these headers will not be validated. Please consider using [Authorization](#authorization) for first-class OpenAPI auth/security support.
 
 ## HTTP Responses
 
@@ -339,8 +339,9 @@ Please see [full typings here](src/types.ts).
 | `summary`      | `string`            | A short summary of the endpoint included in the OpenAPI document.                                    | `false`  | `undefined`            |
 | `description`  | `string`            | A verbose description of the endpoint included in the OpenAPI document.                              | `false`  | `undefined`            |
 | `tags`         | `string[]`          | A list of tags used for logical grouping of endpoints in the OpenAPI document.                       | `false`  | `undefined`            |
-| `headers`      | `ParameterObject[]` | An array of custom headers to add for this endpoint in the OpenAPI document.                         | `false`  | `undefined`            |
-| `contentTypes` | `ContentType[]`     | A set of content types specified as accepted in the OpenAPI document.                                | `false`  | `['application/json']` |
+| `requestHeaders`      | `AnyZodObject` | A zod object schema describing any custom headers to add to the request for this endpoint in the OpenAPI document.                         | `false`  | `undefined`            |
+| `responseHeaders`      | `AnyZodObject` | A zod object schema describing any custom headers to add to the response for this endpoint in the OpenAPI document.                         | `false`  | `undefined`            |
+| `contentTypes` | `OpenApiContentType[]`     | A set of content types specified as accepted in the OpenAPI document.                                | `false`  | `['application/json']` |
 | `deprecated`   | `boolean`           | Whether or not to mark an endpoint as deprecated                                                     | `false`  | `false`                |
 
 #### CreateOpenApiNodeHttpHandlerOptions
