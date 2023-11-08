@@ -463,8 +463,10 @@ describe('generator', () => {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
+                        "description": "The error information",
                         "example": Object {
                           "code": "INTERNAL_SERVER_ERROR",
+                          "issues": Array [],
                           "message": "Internal server error",
                         },
                         "properties": Object {
@@ -499,11 +501,12 @@ describe('generator', () => {
                           "message",
                           "code",
                         ],
+                        "title": "Error",
                         "type": "object",
                       },
                     },
                   },
-                  "description": "An error response",
+                  "description": "Internal server error",
                 },
               },
               "security": undefined,
@@ -558,14 +561,16 @@ describe('generator', () => {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
+                        "description": "The error information",
                         "example": Object {
-                          "code": "VALIDATION_ERROR",
-                          "message": "Invalid name provided",
+                          "code": "BAD_REQUEST",
+                          "issues": Array [],
+                          "message": "Bad request",
                         },
                         "properties": Object {
                           "code": Object {
                             "description": "The error code",
-                            "example": "INTERNAL_SERVER_ERROR",
+                            "example": "BAD_REQUEST",
                             "type": "string",
                           },
                           "issues": Object {
@@ -586,7 +591,7 @@ describe('generator', () => {
                           },
                           "message": Object {
                             "description": "The error message",
-                            "example": "Internal server error",
+                            "example": "Bad request",
                             "type": "string",
                           },
                         },
@@ -594,18 +599,21 @@ describe('generator', () => {
                           "message",
                           "code",
                         ],
+                        "title": "Error",
                         "type": "object",
                       },
                     },
                   },
-                  "description": "An error response",
+                  "description": "Bad request",
                 },
                 "5XX": Object {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
+                        "description": "The error information",
                         "example": Object {
                           "code": "INTERNAL_SERVER_ERROR",
+                          "issues": Array [],
                           "message": "Internal server error",
                         },
                         "properties": Object {
@@ -640,11 +648,12 @@ describe('generator', () => {
                           "message",
                           "code",
                         ],
+                        "title": "Error",
                         "type": "object",
                       },
                     },
                   },
-                  "description": "An error response",
+                  "description": "Internal server error",
                 },
               },
               "security": undefined,
@@ -679,14 +688,16 @@ describe('generator', () => {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
+                        "description": "The error information",
                         "example": Object {
-                          "code": "VALIDATION_ERROR",
-                          "message": "Invalid name provided",
+                          "code": "BAD_REQUEST",
+                          "issues": Array [],
+                          "message": "Bad request",
                         },
                         "properties": Object {
                           "code": Object {
                             "description": "The error code",
-                            "example": "INTERNAL_SERVER_ERROR",
+                            "example": "BAD_REQUEST",
                             "type": "string",
                           },
                           "issues": Object {
@@ -707,7 +718,7 @@ describe('generator', () => {
                           },
                           "message": Object {
                             "description": "The error message",
-                            "example": "Internal server error",
+                            "example": "Bad request",
                             "type": "string",
                           },
                         },
@@ -715,18 +726,21 @@ describe('generator', () => {
                           "message",
                           "code",
                         ],
+                        "title": "Error",
                         "type": "object",
                       },
                     },
                   },
-                  "description": "An error response",
+                  "description": "Bad request",
                 },
                 "5XX": Object {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
+                        "description": "The error information",
                         "example": Object {
                           "code": "INTERNAL_SERVER_ERROR",
+                          "issues": Array [],
                           "message": "Internal server error",
                         },
                         "properties": Object {
@@ -761,11 +775,12 @@ describe('generator', () => {
                           "message",
                           "code",
                         ],
+                        "title": "Error",
                         "type": "object",
                       },
                     },
                   },
-                  "description": "An error response",
+                  "description": "Internal server error",
                 },
               },
               "security": undefined,
@@ -812,14 +827,16 @@ describe('generator', () => {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
+                        "description": "The error information",
                         "example": Object {
-                          "code": "VALIDATION_ERROR",
-                          "message": "Invalid name provided",
+                          "code": "BAD_REQUEST",
+                          "issues": Array [],
+                          "message": "Bad request",
                         },
                         "properties": Object {
                           "code": Object {
                             "description": "The error code",
-                            "example": "INTERNAL_SERVER_ERROR",
+                            "example": "BAD_REQUEST",
                             "type": "string",
                           },
                           "issues": Object {
@@ -840,7 +857,7 @@ describe('generator', () => {
                           },
                           "message": Object {
                             "description": "The error message",
-                            "example": "Internal server error",
+                            "example": "Bad request",
                             "type": "string",
                           },
                         },
@@ -848,18 +865,21 @@ describe('generator', () => {
                           "message",
                           "code",
                         ],
+                        "title": "Error",
                         "type": "object",
                       },
                     },
                   },
-                  "description": "An error response",
+                  "description": "Bad request",
                 },
                 "5XX": Object {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
+                        "description": "The error information",
                         "example": Object {
                           "code": "INTERNAL_SERVER_ERROR",
+                          "issues": Array [],
                           "message": "Internal server error",
                         },
                         "properties": Object {
@@ -894,11 +914,12 @@ describe('generator', () => {
                           "message",
                           "code",
                         ],
+                        "title": "Error",
                         "type": "object",
                       },
                     },
                   },
-                  "description": "An error response",
+                  "description": "Internal server error",
                 },
               },
               "security": undefined,
@@ -960,14 +981,16 @@ describe('generator', () => {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
+                        "description": "The error information",
                         "example": Object {
-                          "code": "VALIDATION_ERROR",
-                          "message": "Invalid name provided",
+                          "code": "BAD_REQUEST",
+                          "issues": Array [],
+                          "message": "Bad request",
                         },
                         "properties": Object {
                           "code": Object {
                             "description": "The error code",
-                            "example": "INTERNAL_SERVER_ERROR",
+                            "example": "BAD_REQUEST",
                             "type": "string",
                           },
                           "issues": Object {
@@ -988,7 +1011,7 @@ describe('generator', () => {
                           },
                           "message": Object {
                             "description": "The error message",
-                            "example": "Internal server error",
+                            "example": "Bad request",
                             "type": "string",
                           },
                         },
@@ -996,18 +1019,21 @@ describe('generator', () => {
                           "message",
                           "code",
                         ],
+                        "title": "Error",
                         "type": "object",
                       },
                     },
                   },
-                  "description": "An error response",
+                  "description": "Bad request",
                 },
                 "5XX": Object {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
+                        "description": "The error information",
                         "example": Object {
                           "code": "INTERNAL_SERVER_ERROR",
+                          "issues": Array [],
                           "message": "Internal server error",
                         },
                         "properties": Object {
@@ -1042,11 +1068,12 @@ describe('generator', () => {
                           "message",
                           "code",
                         ],
+                        "title": "Error",
                         "type": "object",
                       },
                     },
                   },
-                  "description": "An error response",
+                  "description": "Internal server error",
                 },
               },
               "security": undefined,
@@ -1219,14 +1246,16 @@ describe('generator', () => {
             "content": Object {
               "application/json": Object {
                 "schema": Object {
+                  "description": "The error information",
                   "example": Object {
-                    "code": "VALIDATION_ERROR",
-                    "message": "Invalid name provided",
+                    "code": "BAD_REQUEST",
+                    "issues": Array [],
+                    "message": "Bad request",
                   },
                   "properties": Object {
                     "code": Object {
                       "description": "The error code",
-                      "example": "INTERNAL_SERVER_ERROR",
+                      "example": "BAD_REQUEST",
                       "type": "string",
                     },
                     "issues": Object {
@@ -1247,7 +1276,7 @@ describe('generator', () => {
                     },
                     "message": Object {
                       "description": "The error message",
-                      "example": "Internal server error",
+                      "example": "Bad request",
                       "type": "string",
                     },
                   },
@@ -1255,18 +1284,21 @@ describe('generator', () => {
                     "message",
                     "code",
                   ],
+                  "title": "Error",
                   "type": "object",
                 },
               },
             },
-            "description": "An error response",
+            "description": "Bad request",
           },
           "5XX": Object {
             "content": Object {
               "application/json": Object {
                 "schema": Object {
+                  "description": "The error information",
                   "example": Object {
                     "code": "INTERNAL_SERVER_ERROR",
+                    "issues": Array [],
                     "message": "Internal server error",
                   },
                   "properties": Object {
@@ -1301,11 +1333,12 @@ describe('generator', () => {
                     "message",
                     "code",
                   ],
+                  "title": "Error",
                   "type": "object",
                 },
               },
             },
-            "description": "An error response",
+            "description": "Internal server error",
           },
         },
         "security": undefined,
@@ -1360,14 +1393,16 @@ describe('generator', () => {
             "content": Object {
               "application/json": Object {
                 "schema": Object {
+                  "description": "The error information",
                   "example": Object {
-                    "code": "VALIDATION_ERROR",
-                    "message": "Invalid name provided",
+                    "code": "BAD_REQUEST",
+                    "issues": Array [],
+                    "message": "Bad request",
                   },
                   "properties": Object {
                     "code": Object {
                       "description": "The error code",
-                      "example": "INTERNAL_SERVER_ERROR",
+                      "example": "BAD_REQUEST",
                       "type": "string",
                     },
                     "issues": Object {
@@ -1388,7 +1423,7 @@ describe('generator', () => {
                     },
                     "message": Object {
                       "description": "The error message",
-                      "example": "Internal server error",
+                      "example": "Bad request",
                       "type": "string",
                     },
                   },
@@ -1396,18 +1431,21 @@ describe('generator', () => {
                     "message",
                     "code",
                   ],
+                  "title": "Error",
                   "type": "object",
                 },
               },
             },
-            "description": "An error response",
+            "description": "Bad request",
           },
           "5XX": Object {
             "content": Object {
               "application/json": Object {
                 "schema": Object {
+                  "description": "The error information",
                   "example": Object {
                     "code": "INTERNAL_SERVER_ERROR",
+                    "issues": Array [],
                     "message": "Internal server error",
                   },
                   "properties": Object {
@@ -1442,11 +1480,12 @@ describe('generator', () => {
                     "message",
                     "code",
                   ],
+                  "title": "Error",
                   "type": "object",
                 },
               },
             },
-            "description": "An error response",
+            "description": "Internal server error",
           },
         },
         "security": undefined,
@@ -2623,14 +2662,16 @@ describe('generator', () => {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
+                      "description": "The error information",
                       "example": Object {
-                        "code": "VALIDATION_ERROR",
-                        "message": "Invalid name provided",
+                        "code": "BAD_REQUEST",
+                        "issues": Array [],
+                        "message": "Bad request",
                       },
                       "properties": Object {
                         "code": Object {
                           "description": "The error code",
-                          "example": "INTERNAL_SERVER_ERROR",
+                          "example": "BAD_REQUEST",
                           "type": "string",
                         },
                         "issues": Object {
@@ -2651,7 +2692,7 @@ describe('generator', () => {
                         },
                         "message": Object {
                           "description": "The error message",
-                          "example": "Internal server error",
+                          "example": "Bad request",
                           "type": "string",
                         },
                       },
@@ -2659,18 +2700,21 @@ describe('generator', () => {
                         "message",
                         "code",
                       ],
+                      "title": "Error",
                       "type": "object",
                     },
                   },
                 },
-                "description": "An error response",
+                "description": "Bad request",
               },
               "5XX": Object {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
+                      "description": "The error information",
                       "example": Object {
                         "code": "INTERNAL_SERVER_ERROR",
+                        "issues": Array [],
                         "message": "Internal server error",
                       },
                       "properties": Object {
@@ -2705,11 +2749,12 @@ describe('generator', () => {
                         "message",
                         "code",
                       ],
+                      "title": "Error",
                       "type": "object",
                     },
                   },
                 },
-                "description": "An error response",
+                "description": "Internal server error",
               },
             },
             "security": undefined,
@@ -2754,14 +2799,16 @@ describe('generator', () => {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
+                      "description": "The error information",
                       "example": Object {
-                        "code": "VALIDATION_ERROR",
-                        "message": "Invalid name provided",
+                        "code": "BAD_REQUEST",
+                        "issues": Array [],
+                        "message": "Bad request",
                       },
                       "properties": Object {
                         "code": Object {
                           "description": "The error code",
-                          "example": "INTERNAL_SERVER_ERROR",
+                          "example": "BAD_REQUEST",
                           "type": "string",
                         },
                         "issues": Object {
@@ -2782,7 +2829,7 @@ describe('generator', () => {
                         },
                         "message": Object {
                           "description": "The error message",
-                          "example": "Internal server error",
+                          "example": "Bad request",
                           "type": "string",
                         },
                       },
@@ -2790,18 +2837,21 @@ describe('generator', () => {
                         "message",
                         "code",
                       ],
+                      "title": "Error",
                       "type": "object",
                     },
                   },
                 },
-                "description": "An error response",
+                "description": "Bad request",
               },
               "5XX": Object {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
+                      "description": "The error information",
                       "example": Object {
                         "code": "INTERNAL_SERVER_ERROR",
+                        "issues": Array [],
                         "message": "Internal server error",
                       },
                       "properties": Object {
@@ -2836,11 +2886,12 @@ describe('generator', () => {
                         "message",
                         "code",
                       ],
+                      "title": "Error",
                       "type": "object",
                     },
                   },
                 },
-                "description": "An error response",
+                "description": "Internal server error",
               },
             },
             "security": undefined,
@@ -2885,14 +2936,16 @@ describe('generator', () => {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
+                      "description": "The error information",
                       "example": Object {
-                        "code": "VALIDATION_ERROR",
-                        "message": "Invalid name provided",
+                        "code": "BAD_REQUEST",
+                        "issues": Array [],
+                        "message": "Bad request",
                       },
                       "properties": Object {
                         "code": Object {
                           "description": "The error code",
-                          "example": "INTERNAL_SERVER_ERROR",
+                          "example": "BAD_REQUEST",
                           "type": "string",
                         },
                         "issues": Object {
@@ -2913,7 +2966,7 @@ describe('generator', () => {
                         },
                         "message": Object {
                           "description": "The error message",
-                          "example": "Internal server error",
+                          "example": "Bad request",
                           "type": "string",
                         },
                       },
@@ -2921,18 +2974,21 @@ describe('generator', () => {
                         "message",
                         "code",
                       ],
+                      "title": "Error",
                       "type": "object",
                     },
                   },
                 },
-                "description": "An error response",
+                "description": "Bad request",
               },
               "5XX": Object {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
+                      "description": "The error information",
                       "example": Object {
                         "code": "INTERNAL_SERVER_ERROR",
+                        "issues": Array [],
                         "message": "Internal server error",
                       },
                       "properties": Object {
@@ -2967,11 +3023,12 @@ describe('generator', () => {
                         "message",
                         "code",
                       ],
+                      "title": "Error",
                       "type": "object",
                     },
                   },
                 },
-                "description": "An error response",
+                "description": "Internal server error",
               },
             },
             "security": undefined,

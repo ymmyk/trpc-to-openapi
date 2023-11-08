@@ -181,27 +181,42 @@ export const getRequestBodyObject = (
 export const hasInputs = (schema: unknown) =>
   instanceofZodType(schema) && !instanceofZodTypeLikeVoid(unwrapZodType(schema, true));
 
-export const errorSchema = z
-  .object({
-    message: z
-      .string()
-      .openapi({ description: 'The error message', example: 'Internal server error' }),
-    code: z.string().openapi({ description: 'The error code', example: 'INTERNAL_SERVER_ERROR' }),
-    issues: z
-      .array(z.object({ message: z.string() }))
-      .optional()
-      .openapi({
-        description: 'An array of issues that were responsible for the error',
-        example: [],
-      }),
-  })
-  .openapi({ title: 'Error', description: 'The error information' });
-
 export const errorResponseObject = (
-  example?: z.infer<typeof errorSchema>,
+  code?: string,
+  message?: string,
+  issues?: { message: string }[],
 ): ZodOpenApiResponseObject => ({
-  description: 'An error response',
-  content: { 'application/json': { schema: errorSchema.openapi({ example }) } },
+  description: message ?? 'An error response',
+  content: {
+    'application/json': {
+      schema: z
+        .object({
+          message: z.string().openapi({
+            description: 'The error message',
+            example: message ?? 'Internal server error',
+          }),
+          code: z
+            .string()
+            .openapi({ description: 'The error code', example: code ?? 'INTERNAL_SERVER_ERROR' }),
+          issues: z
+            .array(z.object({ message: z.string() }))
+            .optional()
+            .openapi({
+              description: 'An array of issues that were responsible for the error',
+              example: issues ?? [],
+            }),
+        })
+        .openapi({
+          title: 'Error',
+          description: 'The error information',
+          example: {
+            code: code ?? 'INTERNAL_SERVER_ERROR',
+            message: message ?? 'Internal server error',
+            issues: issues ?? [],
+          },
+        }),
+    },
+  },
 });
 
 export const getResponsesObject = (
@@ -240,36 +255,21 @@ export const getResponsesObject = (
           errorCodes.map((x) => {
             const code = HTTP_STATUS_TRPC_ERROR_CODE[x];
             const message = code && TRPC_ERROR_CODE_MESSAGE[code];
-            return [
-              x,
-              errorResponseObject({
-                code: code ?? 'UNKNOWN_ERROR',
-                message: message ?? 'Unknown error',
-              }),
-            ];
+            return [x, errorResponseObject(code ?? 'UNKNOWN_ERROR', message ?? 'Unknown error')];
           }),
         )
       : {
           ...(isProtected
             ? {
-                401: errorResponseObject({
-                  code: 'UNAUTHORIZED',
-                  message: 'Authorization not provided',
-                }),
+                401: errorResponseObject('UNAUTHORIZED', 'Authorization not provided'),
               }
             : {}),
           ...(hasInputs
             ? {
-                '4XX': errorResponseObject({
-                  code: 'VALIDATION_ERROR',
-                  message: 'Invalid name provided',
-                }),
+                '4XX': errorResponseObject('BAD_REQUEST', 'Bad request'),
               }
             : {}),
-          '5XX': errorResponseObject({
-            code: 'INTERNAL_SERVER_ERROR',
-            message: 'Internal server error',
-          }),
+          '5XX': errorResponseObject('INTERNAL_SERVER_ERROR', 'Internal server error'),
         }),
   };
 };
