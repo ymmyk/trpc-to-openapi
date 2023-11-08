@@ -224,6 +224,7 @@ export const getResponsesObject = (
   headers: AnyZodObject | undefined,
   isProtected: boolean,
   hasInputs: boolean,
+  successDescription?: string,
   errorResponses?: number[] | { [key: number]: string },
 ): ZodOpenApiResponsesObject => {
   if (!instanceofZodType(schema)) {
@@ -234,7 +235,7 @@ export const getResponsesObject = (
   }
 
   const successResponseObject: ZodOpenApiResponseObject = {
-    description: 'Successful response',
+    description: successDescription ?? 'Successful response',
     headers: headers,
     content: {
       'application/json': {
