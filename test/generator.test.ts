@@ -414,45 +414,6 @@ describe('generator', () => {
     expect(openApiDocument).toMatchInlineSnapshot(`
       Object {
         "components": Object {
-          "schemas": Object {
-            "Error": Object {
-              "description": "The error information",
-              "properties": Object {
-                "code": Object {
-                  "description": "The error code",
-                  "example": "INTERNAL_SERVER_ERROR",
-                  "type": "string",
-                },
-                "issues": Object {
-                  "description": "An array of issues that were responsible for the error",
-                  "example": Array [],
-                  "items": Object {
-                    "properties": Object {
-                      "message": Object {
-                        "type": "string",
-                      },
-                    },
-                    "required": Array [
-                      "message",
-                    ],
-                    "type": "object",
-                  },
-                  "type": "array",
-                },
-                "message": Object {
-                  "description": "The error message",
-                  "example": "Internal server error",
-                  "type": "string",
-                },
-              },
-              "required": Array [
-                "message",
-                "code",
-              ],
-              "title": "Error",
-              "type": "object",
-            },
-          },
           "securitySchemes": Object {
             "Authorization": Object {
               "scheme": "bearer",
@@ -498,15 +459,97 @@ describe('generator', () => {
                   },
                   "description": "Successful response",
                 },
-                "default": Object {
+                "4XX": Object {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
-                        "$ref": "#/components/schemas/Error",
+                        "example": Object {
+                          "code": "VALIDATION_ERROR",
+                          "message": "Invalid name provided",
+                        },
+                        "properties": Object {
+                          "code": Object {
+                            "description": "The error code",
+                            "example": "INTERNAL_SERVER_ERROR",
+                            "type": "string",
+                          },
+                          "issues": Object {
+                            "description": "An array of issues that were responsible for the error",
+                            "example": Array [],
+                            "items": Object {
+                              "properties": Object {
+                                "message": Object {
+                                  "type": "string",
+                                },
+                              },
+                              "required": Array [
+                                "message",
+                              ],
+                              "type": "object",
+                            },
+                            "type": "array",
+                          },
+                          "message": Object {
+                            "description": "The error message",
+                            "example": "Internal server error",
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "message",
+                          "code",
+                        ],
+                        "type": "object",
                       },
                     },
                   },
-                  "description": "Error response",
+                  "description": "An error response",
+                },
+                "5XX": Object {
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "example": Object {
+                          "code": "INTERNAL_SERVER_ERROR",
+                          "message": "Internal server error",
+                        },
+                        "properties": Object {
+                          "code": Object {
+                            "description": "The error code",
+                            "example": "INTERNAL_SERVER_ERROR",
+                            "type": "string",
+                          },
+                          "issues": Object {
+                            "description": "An array of issues that were responsible for the error",
+                            "example": Array [],
+                            "items": Object {
+                              "properties": Object {
+                                "message": Object {
+                                  "type": "string",
+                                },
+                              },
+                              "required": Array [
+                                "message",
+                              ],
+                              "type": "object",
+                            },
+                            "type": "array",
+                          },
+                          "message": Object {
+                            "description": "The error message",
+                            "example": "Internal server error",
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "message",
+                          "code",
+                        ],
+                        "type": "object",
+                      },
+                    },
+                  },
+                  "description": "An error response",
                 },
               },
               "security": undefined,
@@ -557,15 +600,51 @@ describe('generator', () => {
                   },
                   "description": "Successful response",
                 },
-                "default": Object {
+                "5XX": Object {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
-                        "$ref": "#/components/schemas/Error",
+                        "example": Object {
+                          "code": "INTERNAL_SERVER_ERROR",
+                          "message": "Internal server error",
+                        },
+                        "properties": Object {
+                          "code": Object {
+                            "description": "The error code",
+                            "example": "INTERNAL_SERVER_ERROR",
+                            "type": "string",
+                          },
+                          "issues": Object {
+                            "description": "An array of issues that were responsible for the error",
+                            "example": Array [],
+                            "items": Object {
+                              "properties": Object {
+                                "message": Object {
+                                  "type": "string",
+                                },
+                              },
+                              "required": Array [
+                                "message",
+                              ],
+                              "type": "object",
+                            },
+                            "type": "array",
+                          },
+                          "message": Object {
+                            "description": "The error message",
+                            "example": "Internal server error",
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "message",
+                          "code",
+                        ],
+                        "type": "object",
                       },
                     },
                   },
-                  "description": "Error response",
+                  "description": "An error response",
                 },
               },
               "security": undefined,
@@ -596,15 +675,51 @@ describe('generator', () => {
                   },
                   "description": "Successful response",
                 },
-                "default": Object {
+                "5XX": Object {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
-                        "$ref": "#/components/schemas/Error",
+                        "example": Object {
+                          "code": "INTERNAL_SERVER_ERROR",
+                          "message": "Internal server error",
+                        },
+                        "properties": Object {
+                          "code": Object {
+                            "description": "The error code",
+                            "example": "INTERNAL_SERVER_ERROR",
+                            "type": "string",
+                          },
+                          "issues": Object {
+                            "description": "An array of issues that were responsible for the error",
+                            "example": Array [],
+                            "items": Object {
+                              "properties": Object {
+                                "message": Object {
+                                  "type": "string",
+                                },
+                              },
+                              "required": Array [
+                                "message",
+                              ],
+                              "type": "object",
+                            },
+                            "type": "array",
+                          },
+                          "message": Object {
+                            "description": "The error message",
+                            "example": "Internal server error",
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "message",
+                          "code",
+                        ],
+                        "type": "object",
                       },
                     },
                   },
-                  "description": "Error response",
+                  "description": "An error response",
                 },
               },
               "security": undefined,
@@ -647,15 +762,51 @@ describe('generator', () => {
                   },
                   "description": "Successful response",
                 },
-                "default": Object {
+                "5XX": Object {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
-                        "$ref": "#/components/schemas/Error",
+                        "example": Object {
+                          "code": "INTERNAL_SERVER_ERROR",
+                          "message": "Internal server error",
+                        },
+                        "properties": Object {
+                          "code": Object {
+                            "description": "The error code",
+                            "example": "INTERNAL_SERVER_ERROR",
+                            "type": "string",
+                          },
+                          "issues": Object {
+                            "description": "An array of issues that were responsible for the error",
+                            "example": Array [],
+                            "items": Object {
+                              "properties": Object {
+                                "message": Object {
+                                  "type": "string",
+                                },
+                              },
+                              "required": Array [
+                                "message",
+                              ],
+                              "type": "object",
+                            },
+                            "type": "array",
+                          },
+                          "message": Object {
+                            "description": "The error message",
+                            "example": "Internal server error",
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "message",
+                          "code",
+                        ],
+                        "type": "object",
                       },
                     },
                   },
-                  "description": "Error response",
+                  "description": "An error response",
                 },
               },
               "security": undefined,
@@ -713,15 +864,51 @@ describe('generator', () => {
                   },
                   "description": "Successful response",
                 },
-                "default": Object {
+                "5XX": Object {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
-                        "$ref": "#/components/schemas/Error",
+                        "example": Object {
+                          "code": "INTERNAL_SERVER_ERROR",
+                          "message": "Internal server error",
+                        },
+                        "properties": Object {
+                          "code": Object {
+                            "description": "The error code",
+                            "example": "INTERNAL_SERVER_ERROR",
+                            "type": "string",
+                          },
+                          "issues": Object {
+                            "description": "An array of issues that were responsible for the error",
+                            "example": Array [],
+                            "items": Object {
+                              "properties": Object {
+                                "message": Object {
+                                  "type": "string",
+                                },
+                              },
+                              "required": Array [
+                                "message",
+                              ],
+                              "type": "object",
+                            },
+                            "type": "array",
+                          },
+                          "message": Object {
+                            "description": "The error message",
+                            "example": "Internal server error",
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "message",
+                          "code",
+                        ],
+                        "type": "object",
                       },
                     },
                   },
-                  "description": "Error response",
+                  "description": "An error response",
                 },
               },
               "security": undefined,
@@ -890,15 +1077,51 @@ describe('generator', () => {
             },
             "description": "Successful response",
           },
-          "default": Object {
+          "5XX": Object {
             "content": Object {
               "application/json": Object {
                 "schema": Object {
-                  "$ref": "#/components/schemas/Error",
+                  "example": Object {
+                    "code": "INTERNAL_SERVER_ERROR",
+                    "message": "Internal server error",
+                  },
+                  "properties": Object {
+                    "code": Object {
+                      "description": "The error code",
+                      "example": "INTERNAL_SERVER_ERROR",
+                      "type": "string",
+                    },
+                    "issues": Object {
+                      "description": "An array of issues that were responsible for the error",
+                      "example": Array [],
+                      "items": Object {
+                        "properties": Object {
+                          "message": Object {
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "message",
+                        ],
+                        "type": "object",
+                      },
+                      "type": "array",
+                    },
+                    "message": Object {
+                      "description": "The error message",
+                      "example": "Internal server error",
+                      "type": "string",
+                    },
+                  },
+                  "required": Array [
+                    "message",
+                    "code",
+                  ],
+                  "type": "object",
                 },
               },
             },
-            "description": "Error response",
+            "description": "An error response",
           },
         },
         "security": undefined,
@@ -949,15 +1172,51 @@ describe('generator', () => {
             },
             "description": "Successful response",
           },
-          "default": Object {
+          "5XX": Object {
             "content": Object {
               "application/json": Object {
                 "schema": Object {
-                  "$ref": "#/components/schemas/Error",
+                  "example": Object {
+                    "code": "INTERNAL_SERVER_ERROR",
+                    "message": "Internal server error",
+                  },
+                  "properties": Object {
+                    "code": Object {
+                      "description": "The error code",
+                      "example": "INTERNAL_SERVER_ERROR",
+                      "type": "string",
+                    },
+                    "issues": Object {
+                      "description": "An array of issues that were responsible for the error",
+                      "example": Array [],
+                      "items": Object {
+                        "properties": Object {
+                          "message": Object {
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "message",
+                        ],
+                        "type": "object",
+                      },
+                      "type": "array",
+                    },
+                    "message": Object {
+                      "description": "The error message",
+                      "example": "Internal server error",
+                      "type": "string",
+                    },
+                  },
+                  "required": Array [
+                    "message",
+                    "code",
+                  ],
+                  "type": "object",
                 },
               },
             },
-            "description": "Error response",
+            "description": "An error response",
           },
         },
         "security": undefined,
@@ -1918,7 +2177,7 @@ describe('generator', () => {
           openapi: {
             method: 'GET',
             path: '/echo',
-            headers: z
+            requestHeaders: z
               .object({
                 'x-custom-header': z.string().openapi({ description: 'Some custom header.' }),
               })
@@ -2130,15 +2389,51 @@ describe('generator', () => {
                 },
                 "description": "Successful response",
               },
-              "default": Object {
+              "5XX": Object {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
-                      "$ref": "#/components/schemas/Error",
+                      "example": Object {
+                        "code": "INTERNAL_SERVER_ERROR",
+                        "message": "Internal server error",
+                      },
+                      "properties": Object {
+                        "code": Object {
+                          "description": "The error code",
+                          "example": "INTERNAL_SERVER_ERROR",
+                          "type": "string",
+                        },
+                        "issues": Object {
+                          "description": "An array of issues that were responsible for the error",
+                          "example": Array [],
+                          "items": Object {
+                            "properties": Object {
+                              "message": Object {
+                                "type": "string",
+                              },
+                            },
+                            "required": Array [
+                              "message",
+                            ],
+                            "type": "object",
+                          },
+                          "type": "array",
+                        },
+                        "message": Object {
+                          "description": "The error message",
+                          "example": "Internal server error",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "message",
+                        "code",
+                      ],
+                      "type": "object",
                     },
                   },
                 },
-                "description": "Error response",
+                "description": "An error response",
               },
             },
             "security": undefined,
@@ -2179,15 +2474,51 @@ describe('generator', () => {
                 },
                 "description": "Successful response",
               },
-              "default": Object {
+              "5XX": Object {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
-                      "$ref": "#/components/schemas/Error",
+                      "example": Object {
+                        "code": "INTERNAL_SERVER_ERROR",
+                        "message": "Internal server error",
+                      },
+                      "properties": Object {
+                        "code": Object {
+                          "description": "The error code",
+                          "example": "INTERNAL_SERVER_ERROR",
+                          "type": "string",
+                        },
+                        "issues": Object {
+                          "description": "An array of issues that were responsible for the error",
+                          "example": Array [],
+                          "items": Object {
+                            "properties": Object {
+                              "message": Object {
+                                "type": "string",
+                              },
+                            },
+                            "required": Array [
+                              "message",
+                            ],
+                            "type": "object",
+                          },
+                          "type": "array",
+                        },
+                        "message": Object {
+                          "description": "The error message",
+                          "example": "Internal server error",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "message",
+                        "code",
+                      ],
+                      "type": "object",
                     },
                   },
                 },
-                "description": "Error response",
+                "description": "An error response",
               },
             },
             "security": undefined,
@@ -2228,15 +2559,51 @@ describe('generator', () => {
                 },
                 "description": "Successful response",
               },
-              "default": Object {
+              "5XX": Object {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
-                      "$ref": "#/components/schemas/Error",
+                      "example": Object {
+                        "code": "INTERNAL_SERVER_ERROR",
+                        "message": "Internal server error",
+                      },
+                      "properties": Object {
+                        "code": Object {
+                          "description": "The error code",
+                          "example": "INTERNAL_SERVER_ERROR",
+                          "type": "string",
+                        },
+                        "issues": Object {
+                          "description": "An array of issues that were responsible for the error",
+                          "example": Array [],
+                          "items": Object {
+                            "properties": Object {
+                              "message": Object {
+                                "type": "string",
+                              },
+                            },
+                            "required": Array [
+                              "message",
+                            ],
+                            "type": "object",
+                          },
+                          "type": "array",
+                        },
+                        "message": Object {
+                          "description": "The error message",
+                          "example": "Internal server error",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "message",
+                        "code",
+                      ],
+                      "type": "object",
                     },
                   },
                 },
-                "description": "Error response",
+                "description": "An error response",
               },
             },
             "security": undefined,

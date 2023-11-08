@@ -5,7 +5,7 @@ import { OpenApiProcedureRecord, OpenApiRouter } from '../types';
 import { acceptsRequestBody } from '../utils/method';
 import { getPathParameters, normalizePath } from '../utils/path';
 import { forEachOpenApiProcedure, getInputOutputParsers } from '../utils/procedure';
-import { getParameterObjects, getRequestBodyObject, getResponsesObject } from './schema';
+import { getParameterObjects, getRequestBodyObject, getResponsesObject, hasInputs } from './schema';
 
 enum HttpMethods {
   GET = 'get',
@@ -83,7 +83,12 @@ export const getOpenApiPathsObject = (
                 requestParams:
                   getParameterObjects(inputParser, pathParameters, requestHeaders, 'all') || {},
               }),
-          responses: getResponsesObject(outputParser, responseHeaders),
+          responses: getResponsesObject(
+            outputParser,
+            responseHeaders,
+            protect ?? false,
+            hasInputs(inputParser),
+          ),
           ...(openapi.deprecated ? { deprecated: openapi.deprecated } : {}),
         },
       };

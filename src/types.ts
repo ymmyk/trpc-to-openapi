@@ -27,6 +27,7 @@ export type OpenApiMeta<TMeta = TRPCMeta> = TMeta & {
     deprecated?: boolean;
     requestHeaders?: AnyZodObject;
     responseHeaders?: AnyZodObject;
+    errorCodes?: number[];
   };
 };
 

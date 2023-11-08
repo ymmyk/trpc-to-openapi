@@ -173,34 +173,37 @@ export const getRequestBodyObject = (
   };
 };
 
-export const errorResponseObject: ZodOpenApiResponseObject = {
-  description: 'Error response',
-  content: {
-    'application/json': {
-      schema: z
-        .object({
-          message: z
-            .string()
-            .openapi({ description: 'The error message', example: 'Internal server error' }),
-          code: z
-            .string()
-            .openapi({ description: 'The error code', example: 'INTERNAL_SERVER_ERROR' }),
-          issues: z
-            .array(z.object({ message: z.string() }))
-            .optional()
-            .openapi({
-              description: 'An array of issues that were responsible for the error',
-              example: [],
-            }),
-        })
-        .openapi({ ref: 'Error', title: 'Error', description: 'The error information' }),
-    },
-  },
-};
+export const hasInputs = (schema: unknown) =>
+  instanceofZodType(schema) && instanceofZodTypeLikeVoid(unwrapZodType(schema, true));
+
+export const errorSchema = z
+  .object({
+    message: z
+      .string()
+      .openapi({ description: 'The error message', example: 'Internal server error' }),
+    code: z.string().openapi({ description: 'The error code', example: 'INTERNAL_SERVER_ERROR' }),
+    issues: z
+      .array(z.object({ message: z.string() }))
+      .optional()
+      .openapi({
+        description: 'An array of issues that were responsible for the error',
+        example: [],
+      }),
+  })
+  .openapi({ title: 'Error', description: 'The error information' });
+
+export const errorResponseObject = (
+  example?: z.infer<typeof errorSchema>,
+): ZodOpenApiResponseObject => ({
+  description: 'An error response',
+  content: { 'application/json': { schema: errorSchema.openapi({ example }) } },
+});
 
 export const getResponsesObject = (
   schema: unknown,
   headers: AnyZodObject | undefined,
+  isProtected: boolean,
+  hasInputs: boolean,
 ): ZodOpenApiResponsesObject => {
   if (!instanceofZodType(schema)) {
     throw new TRPCError({
@@ -226,6 +229,25 @@ export const getResponsesObject = (
 
   return {
     200: successResponseObject,
-    default: errorResponseObject,
+    ...(isProtected
+      ? {
+          401: errorResponseObject({
+            code: 'UNAUTHORIZED',
+            message: 'Authorization not provided',
+          }),
+        }
+      : {}),
+    ...(hasInputs
+      ? {
+          '4XX': errorResponseObject({
+            code: 'VALIDATION_ERROR',
+            message: 'Invalid name provided',
+          }),
+        }
+      : {}),
+    '5XX': errorResponseObject({
+      code: 'INTERNAL_SERVER_ERROR',
+      message: 'Internal server error',
+    }),
   };
 };
