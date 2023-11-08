@@ -9,6 +9,11 @@ import {
   extendZodWithOpenApi,
 } from 'zod-openapi';
 
+import {
+  HTTP_STATUS_TRPC_ERROR_CODE,
+  TRPC_ERROR_CODE_HTTP_STATUS,
+  TRPC_ERROR_CODE_MESSAGE,
+} from '../adapters/node-http/errors';
 import { OpenApiContentType } from '../types';
 import {
   instanceofZodType,
@@ -204,6 +209,7 @@ export const getResponsesObject = (
   headers: AnyZodObject | undefined,
   isProtected: boolean,
   hasInputs: boolean,
+  errorCodes?: number[],
 ): ZodOpenApiResponsesObject => {
   if (!instanceofZodType(schema)) {
     throw new TRPCError({
@@ -229,25 +235,41 @@ export const getResponsesObject = (
 
   return {
     200: successResponseObject,
-    ...(isProtected
-      ? {
-          401: errorResponseObject({
-            code: 'UNAUTHORIZED',
-            message: 'Authorization not provided',
+    ...(errorCodes !== undefined
+      ? Object.fromEntries(
+          errorCodes.map((x) => {
+            const code = HTTP_STATUS_TRPC_ERROR_CODE[x];
+            const message = code && TRPC_ERROR_CODE_MESSAGE[code];
+            return [
+              x,
+              errorResponseObject({
+                code: code ?? 'UNKNOWN_ERROR',
+                message: message ?? 'Unknown error',
+              }),
+            ];
           }),
-        }
-      : {}),
-    ...(hasInputs
-      ? {
-          '4XX': errorResponseObject({
-            code: 'VALIDATION_ERROR',
-            message: 'Invalid name provided',
+        )
+      : {
+          ...(isProtected
+            ? {
+                401: errorResponseObject({
+                  code: 'UNAUTHORIZED',
+                  message: 'Authorization not provided',
+                }),
+              }
+            : {}),
+          ...(hasInputs
+            ? {
+                '4XX': errorResponseObject({
+                  code: 'VALIDATION_ERROR',
+                  message: 'Invalid name provided',
+                }),
+              }
+            : {}),
+          '5XX': errorResponseObject({
+            code: 'INTERNAL_SERVER_ERROR',
+            message: 'Internal server error',
           }),
-        }
-      : {}),
-    '5XX': errorResponseObject({
-      code: 'INTERNAL_SERVER_ERROR',
-      message: 'Internal server error',
-    }),
+        }),
   };
 };

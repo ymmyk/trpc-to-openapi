@@ -33,8 +33,16 @@ export const getOpenApiPathsObject = (
         });
       }
 
-      const { method, protect, summary, description, tags, requestHeaders, responseHeaders } =
-        openapi;
+      const {
+        method,
+        protect,
+        summary,
+        description,
+        tags,
+        requestHeaders,
+        responseHeaders,
+        errorCodes,
+      } = openapi;
 
       const path = normalizePath(openapi.path);
       const pathParameters = getPathParameters(path);
@@ -88,6 +96,7 @@ export const getOpenApiPathsObject = (
             responseHeaders,
             protect ?? false,
             hasInputs(inputParser),
+            errorCodes,
           ),
           ...(openapi.deprecated ? { deprecated: openapi.deprecated } : {}),
         },

@@ -17,6 +17,39 @@ export const TRPC_ERROR_CODE_HTTP_STATUS: Record<TRPCError['code'], number> = {
   UNPROCESSABLE_CONTENT: 422,
 };
 
+export const HTTP_STATUS_TRPC_ERROR_CODE: Record<number, TRPCError['code']> = {
+  400: 'BAD_REQUEST',
+  404: 'NOT_FOUND',
+  500: 'INTERNAL_SERVER_ERROR',
+  401: 'UNAUTHORIZED',
+  403: 'FORBIDDEN',
+  408: 'TIMEOUT',
+  409: 'CONFLICT',
+  499: 'CLIENT_CLOSED_REQUEST',
+  412: 'PRECONDITION_FAILED',
+  413: 'PAYLOAD_TOO_LARGE',
+  405: 'METHOD_NOT_SUPPORTED',
+  429: 'TOO_MANY_REQUESTS',
+  422: 'UNPROCESSABLE_CONTENT',
+};
+
+export const TRPC_ERROR_CODE_MESSAGE: Record<TRPCError['code'], string> = {
+  PARSE_ERROR: 'Parse error',
+  BAD_REQUEST: 'Bad request',
+  NOT_FOUND: 'Not found',
+  INTERNAL_SERVER_ERROR: 'Internal server error',
+  UNAUTHORIZED: 'Unauthorized',
+  FORBIDDEN: 'Forbidden',
+  TIMEOUT: 'Timeout',
+  CONFLICT: 'Conflict',
+  CLIENT_CLOSED_REQUEST: 'Client closed request',
+  PRECONDITION_FAILED: 'Precondition failed',
+  PAYLOAD_TOO_LARGE: 'Payload too large',
+  METHOD_NOT_SUPPORTED: 'Method not supported',
+  TOO_MANY_REQUESTS: 'Too many requests',
+  UNPROCESSABLE_CONTENT: 'Unprocessable content',
+};
+
 export function getErrorFromUnknown(cause: unknown): TRPCError {
   if (cause instanceof Error && cause.name === 'TRPCError') {
     return cause as TRPCError;
