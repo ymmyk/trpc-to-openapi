@@ -490,8 +490,8 @@ describe('standalone adapter', () => {
       echo: t.procedure
         .meta({ openapi: { method: 'GET', path: '/echo' } })
         .input(z.object({ payload: z.string() }))
-        .output(z.object({ payload: z.string(), context: z.undefined() }))
-        .query(({ input, ctx }) => ({ payload: input.payload, context: ctx })),
+        .output(z.object({ payload: z.string() }))
+        .query(({ input }) => ({ payload: input.payload })),
     });
 
     const { url, close } = createHttpServerWithRouter({
@@ -523,8 +523,8 @@ describe('standalone adapter', () => {
       echo: t2.procedure
         .meta({ openapi: { method: 'GET', path: '/echo' } })
         .input(z.object({ payload: z.string() }))
-        .output(z.object({ payload: z.string(), context: z.undefined() }))
-        .query(({ input, ctx }) => ({ payload: input.payload })),
+        .output(z.object({ payload: z.string() }))
+        .query(({ input }) => ({ payload: input.payload })),
     });
 
     const { url, close } = createHttpServerWithRouter({

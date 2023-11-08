@@ -2,8 +2,7 @@ import { Procedure, ProcedureParams, Router } from '@trpc/server';
 import type { RootConfig } from '@trpc/server/dist/core/internals/config';
 import { TRPC_ERROR_CODE_KEY } from '@trpc/server/rpc';
 import type { RouterDef } from '@trpc/server/src/core/router';
-import { OpenAPIV3 } from 'openapi-types';
-import { ZodIssue } from 'zod';
+import { AnyZodObject, ZodIssue } from 'zod';
 
 export type OpenApiMethod = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
 
@@ -24,14 +23,10 @@ export type OpenApiMeta<TMeta = TRPCMeta> = TMeta & {
     description?: string;
     protect?: boolean;
     tags?: string[];
-    headers?: (OpenAPIV3.ParameterBaseObject & { name: string; in?: 'header' })[];
     contentTypes?: OpenApiContentType[];
     deprecated?: boolean;
-    example?: {
-      request?: Record<string, any>;
-      response?: Record<string, any>;
-    };
-    responseHeaders?: Record<string, OpenAPIV3.HeaderObject | OpenAPIV3.ReferenceObject>;
+    headers?: AnyZodObject;
+    responseHeaders?: AnyZodObject;
   };
 };
 

@@ -14,11 +14,7 @@ import {
   createOpenApiNuxtHandler,
   fastifyTRPCOpenApiPlugin,
 } from './adapters';
-import {
-  GenerateOpenApiDocumentOptions,
-  generateOpenApiDocument,
-  openApiVersion,
-} from './generator';
+import { GenerateOpenApiDocumentOptions, generateOpenApiDocument } from './generator';
 import {
   OpenApiErrorResponse,
   OpenApiMeta,
@@ -44,7 +40,6 @@ export {
   createOpenApiNuxtHandler,
   createOpenApiAwsLambdaHandler,
   fastifyTRPCOpenApiPlugin,
-  openApiVersion,
   generateOpenApiDocument,
   GenerateOpenApiDocumentOptions,
   OpenApiRouter,

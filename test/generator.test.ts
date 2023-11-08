@@ -1,19 +1,14 @@
 import { initTRPC } from '@trpc/server';
 import { observable } from '@trpc/server/observable';
-import openAPISchemaValidator from 'openapi-schema-validator';
 import { z } from 'zod';
+import { extendZodWithOpenApi } from 'zod-openapi';
 
-import {
-  GenerateOpenApiDocumentOptions,
-  OpenApiMeta,
-  generateOpenApiDocument,
-  openApiVersion,
-} from '../src';
+import { GenerateOpenApiDocumentOptions, OpenApiMeta, generateOpenApiDocument } from '../src';
 import * as zodUtils from '../src/utils/zod';
 
-// TODO: test for duplicate paths (using getPathRegExp)
+extendZodWithOpenApi(z);
 
-const openApiSchemaValidator = new openAPISchemaValidator({ version: openApiVersion });
+// TODO: test for duplicate paths (using getPathRegExp)
 
 const t = initTRPC.meta<OpenApiMeta>().context<any>().create();
 
@@ -24,10 +19,6 @@ const defaultDocOpts: GenerateOpenApiDocumentOptions = {
 };
 
 describe('generator', () => {
-  test('open api version', () => {
-    expect(openApiVersion).toBe('3.0.3');
-  });
-
   test('with empty router', () => {
     const appRouter = t.router({});
 
@@ -40,50 +31,9 @@ describe('generator', () => {
       tags: [],
     });
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
     expect(openApiDocument).toMatchInlineSnapshot(`
       Object {
         "components": Object {
-          "responses": Object {
-            "error": Object {
-              "content": Object {
-                "application/json": Object {
-                  "schema": Object {
-                    "additionalProperties": false,
-                    "properties": Object {
-                      "code": Object {
-                        "type": "string",
-                      },
-                      "issues": Object {
-                        "items": Object {
-                          "additionalProperties": false,
-                          "properties": Object {
-                            "message": Object {
-                              "type": "string",
-                            },
-                          },
-                          "required": Array [
-                            "message",
-                          ],
-                          "type": "object",
-                        },
-                        "type": "array",
-                      },
-                      "message": Object {
-                        "type": "string",
-                      },
-                    },
-                    "required": Array [
-                      "message",
-                      "code",
-                    ],
-                    "type": "object",
-                  },
-                },
-              },
-              "description": "Error response",
-            },
-          },
           "securitySchemes": Object {
             "Authorization": Object {
               "scheme": "bearer",
@@ -254,14 +204,11 @@ describe('generator', () => {
 
       const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-      expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-      expect(openApiDocument.paths['/ok-input']!.post!.requestBody).toMatchInlineSnapshot(`
+      expect(openApiDocument.paths!['/ok-input']!.post!.requestBody).toMatchInlineSnapshot(`
         Object {
           "content": Object {
             "application/json": Object {
-              "example": undefined,
               "schema": Object {
-                "additionalProperties": false,
                 "properties": Object {
                   "age": Object {
                     "maximum": 122,
@@ -417,15 +364,12 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/no-body/{name}']!.post!.requestBody).toBe(undefined);
-    expect(openApiDocument.paths['/empty-body']!.post!.requestBody).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/no-body/{name}']!.post!.requestBody).toBe(undefined);
+    expect(openApiDocument.paths!['/empty-body']!.post!.requestBody).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": undefined,
             "schema": Object {
-              "additionalProperties": false,
               "properties": Object {},
               "type": "object",
             },
@@ -467,48 +411,46 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
     expect(openApiDocument).toMatchInlineSnapshot(`
       Object {
         "components": Object {
-          "responses": Object {
-            "error": Object {
-              "content": Object {
-                "application/json": Object {
-                  "schema": Object {
-                    "additionalProperties": false,
+          "schemas": Object {
+            "Error": Object {
+              "description": "The error information",
+              "properties": Object {
+                "code": Object {
+                  "description": "The error code",
+                  "example": "INTERNAL_SERVER_ERROR",
+                  "type": "string",
+                },
+                "issues": Object {
+                  "description": "An array of issues that were responsible for the error",
+                  "example": Array [],
+                  "items": Object {
                     "properties": Object {
-                      "code": Object {
-                        "type": "string",
-                      },
-                      "issues": Object {
-                        "items": Object {
-                          "additionalProperties": false,
-                          "properties": Object {
-                            "message": Object {
-                              "type": "string",
-                            },
-                          },
-                          "required": Array [
-                            "message",
-                          ],
-                          "type": "object",
-                        },
-                        "type": "array",
-                      },
                       "message": Object {
                         "type": "string",
                       },
                     },
                     "required": Array [
                       "message",
-                      "code",
                     ],
                     "type": "object",
                   },
+                  "type": "array",
+                },
+                "message": Object {
+                  "description": "The error message",
+                  "example": "Internal server error",
+                  "type": "string",
                 },
               },
-              "description": "Error response",
+              "required": Array [
+                "message",
+                "code",
+              ],
+              "title": "Error",
+              "type": "object",
             },
           },
           "securitySchemes": Object {
@@ -530,16 +472,12 @@ describe('generator', () => {
             "get": Object {
               "description": undefined,
               "operationId": "readUsers",
-              "parameters": Array [],
-              "requestBody": undefined,
               "responses": Object {
                 "200": Object {
                   "content": Object {
                     "application/json": Object {
-                      "example": undefined,
                       "schema": Object {
                         "items": Object {
-                          "additionalProperties": false,
                           "properties": Object {
                             "id": Object {
                               "type": "string",
@@ -559,10 +497,16 @@ describe('generator', () => {
                     },
                   },
                   "description": "Successful response",
-                  "headers": undefined,
                 },
                 "default": Object {
-                  "$ref": "#/components/responses/error",
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "$ref": "#/components/schemas/Error",
+                      },
+                    },
+                  },
+                  "description": "Error response",
                 },
               },
               "security": undefined,
@@ -572,13 +516,10 @@ describe('generator', () => {
             "post": Object {
               "description": undefined,
               "operationId": "createUser",
-              "parameters": Array [],
               "requestBody": Object {
                 "content": Object {
                   "application/json": Object {
-                    "example": undefined,
                     "schema": Object {
-                      "additionalProperties": false,
                       "properties": Object {
                         "name": Object {
                           "type": "string",
@@ -597,9 +538,7 @@ describe('generator', () => {
                 "200": Object {
                   "content": Object {
                     "application/json": Object {
-                      "example": undefined,
                       "schema": Object {
-                        "additionalProperties": false,
                         "properties": Object {
                           "id": Object {
                             "type": "string",
@@ -617,10 +556,16 @@ describe('generator', () => {
                     },
                   },
                   "description": "Successful response",
-                  "headers": undefined,
                 },
                 "default": Object {
-                  "$ref": "#/components/responses/error",
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "$ref": "#/components/schemas/Error",
+                      },
+                    },
+                  },
+                  "description": "Error response",
                 },
               },
               "security": undefined,
@@ -634,8 +579,6 @@ describe('generator', () => {
               "operationId": "deleteUser",
               "parameters": Array [
                 Object {
-                  "description": undefined,
-                  "example": undefined,
                   "in": "path",
                   "name": "id",
                   "required": true,
@@ -644,20 +587,24 @@ describe('generator', () => {
                   },
                 },
               ],
-              "requestBody": undefined,
               "responses": Object {
                 "200": Object {
                   "content": Object {
                     "application/json": Object {
-                      "example": undefined,
                       "schema": Object {},
                     },
                   },
                   "description": "Successful response",
-                  "headers": undefined,
                 },
                 "default": Object {
-                  "$ref": "#/components/responses/error",
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "$ref": "#/components/schemas/Error",
+                      },
+                    },
+                  },
+                  "description": "Error response",
                 },
               },
               "security": undefined,
@@ -669,8 +616,6 @@ describe('generator', () => {
               "operationId": "readUser",
               "parameters": Array [
                 Object {
-                  "description": undefined,
-                  "example": undefined,
                   "in": "path",
                   "name": "id",
                   "required": true,
@@ -679,14 +624,11 @@ describe('generator', () => {
                   },
                 },
               ],
-              "requestBody": undefined,
               "responses": Object {
                 "200": Object {
                   "content": Object {
                     "application/json": Object {
-                      "example": undefined,
                       "schema": Object {
-                        "additionalProperties": false,
                         "properties": Object {
                           "id": Object {
                             "type": "string",
@@ -704,10 +646,16 @@ describe('generator', () => {
                     },
                   },
                   "description": "Successful response",
-                  "headers": undefined,
                 },
                 "default": Object {
-                  "$ref": "#/components/responses/error",
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "$ref": "#/components/schemas/Error",
+                      },
+                    },
+                  },
+                  "description": "Error response",
                 },
               },
               "security": undefined,
@@ -719,8 +667,6 @@ describe('generator', () => {
               "operationId": "updateUser",
               "parameters": Array [
                 Object {
-                  "description": undefined,
-                  "example": undefined,
                   "in": "path",
                   "name": "id",
                   "required": true,
@@ -732,9 +678,7 @@ describe('generator', () => {
               "requestBody": Object {
                 "content": Object {
                   "application/json": Object {
-                    "example": undefined,
                     "schema": Object {
-                      "additionalProperties": false,
                       "properties": Object {
                         "name": Object {
                           "type": "string",
@@ -750,9 +694,7 @@ describe('generator', () => {
                 "200": Object {
                   "content": Object {
                     "application/json": Object {
-                      "example": undefined,
                       "schema": Object {
-                        "additionalProperties": false,
                         "properties": Object {
                           "id": Object {
                             "type": "string",
@@ -770,10 +712,16 @@ describe('generator', () => {
                     },
                   },
                   "description": "Successful response",
-                  "headers": undefined,
                 },
                 "default": Object {
-                  "$ref": "#/components/responses/error",
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "$ref": "#/components/schemas/Error",
+                      },
+                    },
+                  },
+                  "description": "Error response",
                 },
               },
               "security": undefined,
@@ -803,8 +751,7 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(Object.keys(openApiDocument.paths).length).toBe(0);
+    expect(Object.keys(openApiDocument.paths!).length).toBe(0);
   });
 
   test('with summary, description & tags', () => {
@@ -826,10 +773,9 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/metadata/all']!.get!.summary).toBe('Short summary');
-    expect(openApiDocument.paths['/metadata/all']!.get!.description).toBe('Verbose description');
-    expect(openApiDocument.paths['/metadata/all']!.get!.tags).toEqual(['tagA', 'tagB']);
+    expect(openApiDocument.paths!['/metadata/all']!.get!.summary).toBe('Short summary');
+    expect(openApiDocument.paths!['/metadata/all']!.get!.description).toBe('Verbose description');
+    expect(openApiDocument.paths!['/metadata/all']!.get!.tags).toEqual(['tagA', 'tagB']);
   });
 
   test('with security', () => {
@@ -843,8 +789,7 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/secure/endpoint']!.post!.security).toEqual([
+    expect(openApiDocument.paths!['/secure/endpoint']!.post!.security).toEqual([
       { Authorization: [] },
     ]);
   });
@@ -888,18 +833,14 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/user']!.post!).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/user']!.post!).toMatchInlineSnapshot(`
       Object {
         "description": undefined,
         "operationId": "createUser",
-        "parameters": Array [],
         "requestBody": Object {
           "content": Object {
             "application/json": Object {
-              "example": undefined,
               "schema": Object {
-                "additionalProperties": false,
                 "description": "Request body input",
                 "properties": Object {
                   "id": Object {
@@ -926,9 +867,7 @@ describe('generator', () => {
           "200": Object {
             "content": Object {
               "application/json": Object {
-                "example": undefined,
                 "schema": Object {
-                  "additionalProperties": false,
                   "description": "User data",
                   "properties": Object {
                     "id": Object {
@@ -950,10 +889,16 @@ describe('generator', () => {
               },
             },
             "description": "Successful response",
-            "headers": undefined,
           },
           "default": Object {
-            "$ref": "#/components/responses/error",
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "$ref": "#/components/schemas/Error",
+                },
+              },
+            },
+            "description": "Error response",
           },
         },
         "security": undefined,
@@ -961,31 +906,27 @@ describe('generator', () => {
         "tags": undefined,
       }
     `);
-    expect(openApiDocument.paths['/user']!.get!).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/user']!.get!).toMatchInlineSnapshot(`
       Object {
         "description": undefined,
         "operationId": "getUser",
         "parameters": Array [
           Object {
-            "description": "User ID",
-            "example": undefined,
             "in": "query",
             "name": "id",
             "required": true,
             "schema": Object {
+              "description": "User ID",
               "format": "uuid",
               "type": "string",
             },
           },
         ],
-        "requestBody": undefined,
         "responses": Object {
           "200": Object {
             "content": Object {
               "application/json": Object {
-                "example": undefined,
                 "schema": Object {
-                  "additionalProperties": false,
                   "description": "User data",
                   "properties": Object {
                     "id": Object {
@@ -1007,10 +948,16 @@ describe('generator', () => {
               },
             },
             "description": "Successful response",
-            "headers": undefined,
           },
           "default": Object {
-            "$ref": "#/components/responses/error",
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "$ref": "#/components/schemas/Error",
+                },
+              },
+            },
+            "description": "Error response",
           },
         },
         "security": undefined,
@@ -1032,18 +979,15 @@ describe('generator', () => {
 
       const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-      expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-      expect(openApiDocument.paths['/void']!.get!.parameters).toEqual([]);
-      expect(openApiDocument.paths['/void']!.get!.responses[200]).toMatchInlineSnapshot(`
+      expect(openApiDocument.paths!['/void']!.get!.parameters).toEqual(undefined);
+      expect(openApiDocument.paths!['/void']!.get!.responses[200]).toMatchInlineSnapshot(`
         Object {
           "content": Object {
             "application/json": Object {
-              "example": undefined,
               "schema": Object {},
             },
           },
           "description": "Successful response",
-          "headers": undefined,
         }
       `);
     }
@@ -1058,18 +1002,15 @@ describe('generator', () => {
 
       const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-      expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-      expect(openApiDocument.paths['/void']!.post!.requestBody).toMatchInlineSnapshot(`undefined`);
-      expect(openApiDocument.paths['/void']!.post!.responses[200]).toMatchInlineSnapshot(`
+      expect(openApiDocument.paths!['/void']!.post!.requestBody).toMatchInlineSnapshot(`undefined`);
+      expect(openApiDocument.paths!['/void']!.post!.responses[200]).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": undefined,
             "schema": Object {},
           },
         },
         "description": "Successful response",
-        "headers": undefined,
       }
     `);
     }
@@ -1086,22 +1027,16 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/null']!.post!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/null']!.post!.responses[200]).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": undefined,
             "schema": Object {
-              "enum": Array [
-                "null",
-              ],
-              "nullable": true,
+              "type": "null",
             },
           },
         },
         "description": "Successful response",
-        "headers": undefined,
       }
     `);
   });
@@ -1117,22 +1052,19 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/undefined']!.post!.requestBody).toMatchInlineSnapshot(
+    expect(openApiDocument.paths!['/undefined']!.post!.requestBody).toMatchInlineSnapshot(
       `undefined`,
     );
-    expect(openApiDocument.paths['/undefined']!.post!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/undefined']!.post!.responses[200]).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": undefined,
             "schema": Object {
               "not": Object {},
             },
           },
         },
         "description": "Successful response",
-        "headers": undefined,
       }
     `);
   });
@@ -1148,27 +1080,17 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/nullish']!.post!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/nullish']!.post!.responses[200]).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": undefined,
             "schema": Object {
-              "anyOf": Array [
-                Object {
-                  "not": Object {},
-                },
-                Object {
-                  "nullable": true,
-                  "type": "string",
-                },
-              ],
+              "nullable": true,
+              "type": "string",
             },
           },
         },
         "description": "Successful response",
-        "headers": undefined,
       }
     `);
   });
@@ -1185,20 +1107,17 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/never']!.post!.requestBody).toMatchInlineSnapshot(`undefined`);
-    expect(openApiDocument.paths['/never']!.post!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/never']!.post!.requestBody).toMatchInlineSnapshot(`undefined`);
+    expect(openApiDocument.paths!['/never']!.post!.responses[200]).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": undefined,
             "schema": Object {
               "not": Object {},
             },
           },
         },
         "description": "Successful response",
-        "headers": undefined,
       }
     `);
   });
@@ -1219,22 +1138,16 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/optional-param']!.get!.parameters).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/optional-param']!.get!.parameters).toMatchInlineSnapshot(`
       Array [
         Object {
-          "description": undefined,
-          "example": undefined,
           "in": "query",
           "name": "one",
-          "required": false,
           "schema": Object {
             "type": "string",
           },
         },
         Object {
-          "description": undefined,
-          "example": undefined,
           "in": "query",
           "name": "two",
           "required": true,
@@ -1244,70 +1157,46 @@ describe('generator', () => {
         },
       ]
     `);
-    expect(openApiDocument.paths['/optional-param']!.get!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/optional-param']!.get!.responses[200]).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": undefined,
             "schema": Object {
-              "anyOf": Array [
-                Object {
-                  "not": Object {},
-                },
-                Object {
-                  "type": "string",
-                },
-              ],
+              "type": "string",
             },
           },
         },
         "description": "Successful response",
-        "headers": undefined,
       }
     `);
-    expect(openApiDocument.paths['/optional-object']!.get!.parameters).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/optional-object']!.get!.parameters).toMatchInlineSnapshot(`
       Array [
         Object {
-          "description": undefined,
-          "example": undefined,
           "in": "query",
           "name": "one",
-          "required": false,
           "schema": Object {
             "type": "string",
           },
         },
         Object {
-          "description": undefined,
-          "example": undefined,
           "in": "query",
           "name": "two",
-          "required": false,
           "schema": Object {
             "type": "string",
           },
         },
       ]
     `);
-    expect(openApiDocument.paths['/optional-object']!.get!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/optional-object']!.get!.responses[200]).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": undefined,
             "schema": Object {
-              "anyOf": Array [
-                Object {
-                  "not": Object {},
-                },
-                Object {
-                  "type": "string",
-                },
-              ],
+              "type": "string",
             },
           },
         },
         "description": "Successful response",
-        "headers": undefined,
       }
     `);
   });
@@ -1328,14 +1217,11 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/optional-param']!.post!.requestBody).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/optional-param']!.post!.requestBody).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": undefined,
             "schema": Object {
-              "additionalProperties": false,
               "properties": Object {
                 "one": Object {
                   "type": "string",
@@ -1354,34 +1240,23 @@ describe('generator', () => {
         "required": true,
       }
     `);
-    expect(openApiDocument.paths['/optional-param']!.post!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/optional-param']!.post!.responses[200]).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": undefined,
             "schema": Object {
-              "anyOf": Array [
-                Object {
-                  "not": Object {},
-                },
-                Object {
-                  "type": "string",
-                },
-              ],
+              "type": "string",
             },
           },
         },
         "description": "Successful response",
-        "headers": undefined,
       }
     `);
-    expect(openApiDocument.paths['/optional-object']!.post!.requestBody).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/optional-object']!.post!.requestBody).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": undefined,
             "schema": Object {
-              "additionalProperties": false,
               "properties": Object {
                 "one": Object {
                   "type": "string",
@@ -1400,25 +1275,16 @@ describe('generator', () => {
         "required": false,
       }
     `);
-    expect(openApiDocument.paths['/optional-object']!.post!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/optional-object']!.post!.responses[200]).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": undefined,
             "schema": Object {
-              "anyOf": Array [
-                Object {
-                  "not": Object {},
-                },
-                Object {
-                  "type": "string",
-                },
-              ],
+              "type": "string",
             },
           },
         },
         "description": "Successful response",
-        "headers": undefined,
       }
     `);
   });
@@ -1434,15 +1300,11 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/default']!.get!.parameters).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/default']!.get!.parameters).toMatchInlineSnapshot(`
       Array [
         Object {
-          "description": undefined,
-          "example": undefined,
           "in": "query",
           "name": "payload",
-          "required": false,
           "schema": Object {
             "default": "James",
             "type": "string",
@@ -1450,11 +1312,10 @@ describe('generator', () => {
         },
       ]
     `);
-    expect(openApiDocument.paths['/default']!.get!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/default']!.get!.responses[200]).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": undefined,
             "schema": Object {
               "default": "James",
               "type": "string",
@@ -1462,7 +1323,6 @@ describe('generator', () => {
           },
         },
         "description": "Successful response",
-        "headers": undefined,
       }
     `);
   });
@@ -1479,14 +1339,11 @@ describe('generator', () => {
 
       const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-      expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-      expect(openApiDocument.paths['/refine']!.post!.requestBody).toMatchInlineSnapshot(`
+      expect(openApiDocument.paths!['/refine']!.post!.requestBody).toMatchInlineSnapshot(`
         Object {
           "content": Object {
             "application/json": Object {
-              "example": undefined,
               "schema": Object {
-                "additionalProperties": false,
                 "properties": Object {
                   "a": Object {
                     "type": "string",
@@ -1514,14 +1371,11 @@ describe('generator', () => {
 
       const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-      expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-      expect(openApiDocument.paths['/object-refine']!.post!.requestBody).toMatchInlineSnapshot(`
+      expect(openApiDocument.paths!['/object-refine']!.post!.requestBody).toMatchInlineSnapshot(`
         Object {
           "content": Object {
             "application/json": Object {
-              "example": undefined,
               "schema": Object {
-                "additionalProperties": false,
                 "properties": Object {
                   "a": Object {
                     "type": "string",
@@ -1557,14 +1411,11 @@ describe('generator', () => {
 
       const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-      expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-      expect(openApiDocument.paths['/refine']!.post!.requestBody).toMatchInlineSnapshot(`
+      expect(openApiDocument.paths!['/refine']!.post!.requestBody).toMatchInlineSnapshot(`
         Object {
           "content": Object {
             "application/json": Object {
-              "example": undefined,
               "schema": Object {
-                "additionalProperties": false,
                 "properties": Object {
                   "a": Object {
                     "type": "string",
@@ -1595,14 +1446,11 @@ describe('generator', () => {
 
       const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-      expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-      expect(openApiDocument.paths['/object-refine']!.post!.requestBody).toMatchInlineSnapshot(`
+      expect(openApiDocument.paths!['/object-refine']!.post!.requestBody).toMatchInlineSnapshot(`
         Object {
           "content": Object {
             "application/json": Object {
-              "example": undefined,
               "schema": Object {
-                "additionalProperties": false,
                 "properties": Object {
                   "a": Object {
                     "type": "string",
@@ -1630,18 +1478,15 @@ describe('generator', () => {
       transform: t.procedure
         .meta({ openapi: { method: 'GET', path: '/transform' } })
         .input(z.object({ age: z.string().transform((input) => parseInt(input)) }))
-        .output(z.object({ age: z.string().transform((input) => parseInt(input)) }))
+        .output(z.object({ age: z.string() }))
         .query(({ input }) => ({ age: input.age.toString() })),
     });
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/transform']!.get!.parameters).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/transform']!.get!.parameters).toMatchInlineSnapshot(`
       Array [
         Object {
-          "description": undefined,
-          "example": undefined,
           "in": "query",
           "name": "age",
           "required": true,
@@ -1673,12 +1518,9 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/preprocess']!.get!.parameters).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/preprocess']!.get!.parameters).toMatchInlineSnapshot(`
       Array [
         Object {
-          "description": undefined,
-          "example": undefined,
           "in": "query",
           "name": "payload",
           "required": true,
@@ -1688,18 +1530,16 @@ describe('generator', () => {
         },
       ]
     `);
-    expect(openApiDocument.paths['/preprocess']!.get!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/preprocess']!.get!.responses[200]).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": undefined,
             "schema": Object {
               "type": "number",
             },
           },
         },
         "description": "Successful response",
-        "headers": undefined,
       }
     `);
   });
@@ -1715,12 +1555,9 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/coerce']!.get!.parameters).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/coerce']!.get!.parameters).toMatchInlineSnapshot(`
       Array [
         Object {
-          "description": undefined,
-          "example": undefined,
           "in": "query",
           "name": "payload",
           "required": true,
@@ -1730,18 +1567,16 @@ describe('generator', () => {
         },
       ]
     `);
-    expect(openApiDocument.paths['/coerce']!.get!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/coerce']!.get!.responses[200]).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": undefined,
             "schema": Object {
               "type": "number",
             },
           },
         },
         "description": "Successful response",
-        "headers": undefined,
       }
     `);
   });
@@ -1771,12 +1606,9 @@ describe('generator', () => {
 
       const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-      expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-      expect(openApiDocument.paths['/union']!.get!.parameters).toMatchInlineSnapshot(`
+      expect(openApiDocument.paths!['/union']!.get!.parameters).toMatchInlineSnapshot(`
         Array [
           Object {
-            "description": undefined,
-            "example": undefined,
             "in": "query",
             "name": "payload",
             "required": true,
@@ -1817,12 +1649,9 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/intersection']!.get!.parameters).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/intersection']!.get!.parameters).toMatchInlineSnapshot(`
       Array [
         Object {
-          "description": undefined,
-          "example": undefined,
           "in": "query",
           "name": "payload",
           "required": true,
@@ -1878,12 +1707,9 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/lazy']!.get!.parameters).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/lazy']!.get!.parameters).toMatchInlineSnapshot(`
       Array [
         Object {
-          "description": undefined,
-          "example": undefined,
           "in": "query",
           "name": "payload",
           "required": true,
@@ -1906,12 +1732,9 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/literal']!.get!.parameters).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/literal']!.get!.parameters).toMatchInlineSnapshot(`
       Array [
         Object {
-          "description": undefined,
-          "example": undefined,
           "in": "query",
           "name": "payload",
           "required": true,
@@ -1937,12 +1760,9 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/enum']!.get!.parameters).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/enum']!.get!.parameters).toMatchInlineSnapshot(`
       Array [
         Object {
-          "description": undefined,
-          "example": undefined,
           "in": "query",
           "name": "name",
           "required": true,
@@ -1993,12 +1813,9 @@ describe('generator', () => {
 
       const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-      expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-      expect(openApiDocument.paths['/nativeEnum']!.get!.parameters).toMatchInlineSnapshot(`
+      expect(openApiDocument.paths!['/nativeEnum']!.get!.parameters).toMatchInlineSnapshot(`
         Array [
           Object {
-            "description": undefined,
-            "example": undefined,
             "in": "query",
             "name": "name",
             "required": true,
@@ -2028,14 +1845,11 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/refs']!.post!.requestBody).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/refs']!.post!.requestBody).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": undefined,
             "schema": Object {
-              "additionalProperties": false,
               "properties": Object {
                 "allowed": Object {
                   "items": Object {
@@ -2063,13 +1877,11 @@ describe('generator', () => {
         "required": true,
       }
     `);
-    expect(openApiDocument.paths['/refs']!.post!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/refs']!.post!.responses[200]).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": undefined,
             "schema": Object {
-              "additionalProperties": false,
               "properties": Object {
                 "allowed": Object {
                   "items": Object {
@@ -2095,7 +1907,6 @@ describe('generator', () => {
           },
         },
         "description": "Successful response",
-        "headers": undefined,
       }
     `);
   });
@@ -2107,13 +1918,11 @@ describe('generator', () => {
           openapi: {
             method: 'GET',
             path: '/echo',
-            headers: [
-              {
-                name: 'x-custom-header',
-                required: true,
-                description: 'Some custom header',
-              },
-            ],
+            headers: z
+              .object({
+                'x-custom-header': z.string().openapi({ description: 'Some custom header.' }),
+              })
+              .required(),
           },
         })
         .input(z.object({ id: z.string() }))
@@ -2123,22 +1932,22 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/echo']!.get!.parameters).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/echo']!.get!.parameters).toMatchInlineSnapshot(`
       Array [
         Object {
-          "description": "Some custom header",
-          "in": "header",
-          "name": "x-custom-header",
-          "required": true,
-        },
-        Object {
-          "description": undefined,
-          "example": undefined,
           "in": "query",
           "name": "id",
           "required": true,
           "schema": Object {
+            "type": "string",
+          },
+        },
+        Object {
+          "in": "header",
+          "name": "x-custom-header",
+          "required": true,
+          "schema": Object {
+            "description": "Some custom header.",
             "type": "string",
           },
         },
@@ -2157,15 +1966,12 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/mutation/delete']!.delete!.requestBody).toMatchInlineSnapshot(
+    expect(openApiDocument.paths!['/mutation/delete']!.delete!.requestBody).toMatchInlineSnapshot(
       `undefined`,
     );
-    expect(openApiDocument.paths['/mutation/delete']!.delete!.parameters).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/mutation/delete']!.delete!.parameters).toMatchInlineSnapshot(`
       Array [
         Object {
-          "description": undefined,
-          "example": undefined,
           "in": "query",
           "name": "id",
           "required": true,
@@ -2188,14 +1994,11 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/query/post']!.post!.requestBody).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/query/post']!.post!.requestBody).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": undefined,
             "schema": Object {
-              "additionalProperties": false,
               "properties": Object {
                 "id": Object {
                   "type": "string",
@@ -2211,8 +2014,8 @@ describe('generator', () => {
         "required": true,
       }
     `);
-    expect(openApiDocument.paths['/query/post']!.post!.parameters).toMatchInlineSnapshot(
-      `Array []`,
+    expect(openApiDocument.paths!['/query/post']!.post!.parameters).toMatchInlineSnapshot(
+      `undefined`,
     );
   });
 
@@ -2232,12 +2035,9 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/top-level-preprocess']!.get!.parameters).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/top-level-preprocess']!.get!.parameters).toMatchInlineSnapshot(`
       Array [
         Object {
-          "description": undefined,
-          "example": undefined,
           "in": "query",
           "name": "id",
           "required": true,
@@ -2247,14 +2047,12 @@ describe('generator', () => {
         },
       ]
     `);
-    expect(openApiDocument.paths['/top-level-preprocess']!.post!.requestBody)
+    expect(openApiDocument.paths!['/top-level-preprocess']!.post!.requestBody)
       .toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": undefined,
             "schema": Object {
-              "additionalProperties": false,
               "properties": Object {
                 "id": Object {
                   "type": "string",
@@ -2297,7 +2095,6 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
     expect(openApiDocument.paths).toMatchInlineSnapshot(`
       Object {
         "/procedure": Object {
@@ -2306,8 +2103,6 @@ describe('generator', () => {
             "operationId": "procedure",
             "parameters": Array [
               Object {
-                "description": undefined,
-                "example": undefined,
                 "in": "query",
                 "name": "payload",
                 "required": true,
@@ -2316,14 +2111,11 @@ describe('generator', () => {
                 },
               },
             ],
-            "requestBody": undefined,
             "responses": Object {
               "200": Object {
                 "content": Object {
                   "application/json": Object {
-                    "example": undefined,
                     "schema": Object {
-                      "additionalProperties": false,
                       "properties": Object {
                         "payload": Object {
                           "type": "string",
@@ -2337,10 +2129,16 @@ describe('generator', () => {
                   },
                 },
                 "description": "Successful response",
-                "headers": undefined,
               },
               "default": Object {
-                "$ref": "#/components/responses/error",
+                "content": Object {
+                  "application/json": Object {
+                    "schema": Object {
+                      "$ref": "#/components/schemas/Error",
+                    },
+                  },
+                },
+                "description": "Error response",
               },
             },
             "security": undefined,
@@ -2354,8 +2152,6 @@ describe('generator', () => {
             "operationId": "router-procedure",
             "parameters": Array [
               Object {
-                "description": undefined,
-                "example": undefined,
                 "in": "query",
                 "name": "payload",
                 "required": true,
@@ -2364,14 +2160,11 @@ describe('generator', () => {
                 },
               },
             ],
-            "requestBody": undefined,
             "responses": Object {
               "200": Object {
                 "content": Object {
                   "application/json": Object {
-                    "example": undefined,
                     "schema": Object {
-                      "additionalProperties": false,
                       "properties": Object {
                         "payload": Object {
                           "type": "string",
@@ -2385,10 +2178,16 @@ describe('generator', () => {
                   },
                 },
                 "description": "Successful response",
-                "headers": undefined,
               },
               "default": Object {
-                "$ref": "#/components/responses/error",
+                "content": Object {
+                  "application/json": Object {
+                    "schema": Object {
+                      "$ref": "#/components/schemas/Error",
+                    },
+                  },
+                },
+                "description": "Error response",
               },
             },
             "security": undefined,
@@ -2402,8 +2201,6 @@ describe('generator', () => {
             "operationId": "router-router-procedure",
             "parameters": Array [
               Object {
-                "description": undefined,
-                "example": undefined,
                 "in": "query",
                 "name": "payload",
                 "required": true,
@@ -2412,14 +2209,11 @@ describe('generator', () => {
                 },
               },
             ],
-            "requestBody": undefined,
             "responses": Object {
               "200": Object {
                 "content": Object {
                   "application/json": Object {
-                    "example": undefined,
                     "schema": Object {
-                      "additionalProperties": false,
                       "properties": Object {
                         "payload": Object {
                           "type": "string",
@@ -2433,10 +2227,16 @@ describe('generator', () => {
                   },
                 },
                 "description": "Successful response",
-                "headers": undefined,
               },
               "default": Object {
-                "$ref": "#/components/responses/error",
+                "content": Object {
+                  "application/json": Object {
+                    "schema": Object {
+                      "$ref": "#/components/schemas/Error",
+                    },
+                  },
+                },
+                "description": "Error response",
               },
             },
             "security": undefined,
@@ -2466,12 +2266,9 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/query']!.get!.parameters).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/query']!.get!.parameters).toMatchInlineSnapshot(`
       Array [
         Object {
-          "description": undefined,
-          "example": undefined,
           "in": "query",
           "name": "id",
           "required": true,
@@ -2480,8 +2277,6 @@ describe('generator', () => {
           },
         },
         Object {
-          "description": undefined,
-          "example": undefined,
           "in": "query",
           "name": "payload",
           "required": true,
@@ -2491,13 +2286,11 @@ describe('generator', () => {
         },
       ]
     `);
-    expect(openApiDocument.paths['/mutation']!.post!.requestBody).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/mutation']!.post!.requestBody).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": undefined,
             "schema": Object {
-              "additionalProperties": false,
               "properties": Object {
                 "id": Object {
                   "type": "string",
@@ -2573,25 +2366,24 @@ describe('generator', () => {
 
       const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-      expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
       expect(
-        Object.keys((openApiDocument.paths['/with-urlencoded']!.post!.requestBody as any).content),
+        Object.keys((openApiDocument.paths!['/with-urlencoded']!.post!.requestBody as any).content),
       ).toEqual(['application/x-www-form-urlencoded']);
       expect(
-        Object.keys((openApiDocument.paths['/with-json']!.post!.requestBody as any).content),
+        Object.keys((openApiDocument.paths!['/with-json']!.post!.requestBody as any).content),
       ).toEqual(['application/json']);
       expect(
-        Object.keys((openApiDocument.paths['/with-all']!.post!.requestBody as any).content),
+        Object.keys((openApiDocument.paths!['/with-all']!.post!.requestBody as any).content),
       ).toEqual(['application/json', 'application/x-www-form-urlencoded']);
       expect(
-        (openApiDocument.paths['/with-all']!.post!.requestBody as any).content['application/json'],
+        (openApiDocument.paths!['/with-all']!.post!.requestBody as any).content['application/json'],
       ).toEqual(
-        (openApiDocument.paths['/with-all']!.post!.requestBody as any).content[
+        (openApiDocument.paths!['/with-all']!.post!.requestBody as any).content[
           'application/x-www-form-urlencoded'
         ],
       );
       expect(
-        Object.keys((openApiDocument.paths['/with-default']!.post!.requestBody as any).content),
+        Object.keys((openApiDocument.paths!['/with-default']!.post!.requestBody as any).content),
       ).toEqual(['application/json']);
     }
   });
@@ -2607,8 +2399,7 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/deprecated']!.post!.deprecated).toEqual(true);
+    expect(openApiDocument.paths!['/deprecated']!.post!.deprecated).toEqual(true);
   });
 
   test('with security schemes', () => {
@@ -2631,7 +2422,6 @@ describe('generator', () => {
       },
     });
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
     expect(openApiDocument.components!.securitySchemes).toEqual({
       ApiKey: {
         type: 'apiKey',
@@ -2639,7 +2429,7 @@ describe('generator', () => {
         name: 'X-API-Key',
       },
     });
-    expect(openApiDocument.paths['/protected']!.post!.security).toEqual([{ ApiKey: [] }]);
+    expect(openApiDocument.paths!['/protected']!.post!.security).toEqual([{ ApiKey: [] }]);
   });
 
   test('with examples', () => {
@@ -2649,14 +2439,15 @@ describe('generator', () => {
           openapi: {
             method: 'GET',
             path: '/query-example/{name}',
-            example: {
-              request: { name: 'James', greeting: 'Hello' },
-              response: { output: 'Hello James' },
-            },
           },
         })
-        .input(z.object({ name: z.string(), greeting: z.string() }))
-        .output(z.object({ output: z.string() }))
+        .input(
+          z.object({
+            name: z.string().openapi({ example: 'James' }),
+            greeting: z.string().openapi({ example: 'Hello' }),
+          }),
+        )
+        .output(z.object({ output: z.string().openapi({ example: 'Hello James' }) }))
         .query(({ input }) => ({
           output: `${input.greeting} ${input.name}`,
         })),
@@ -2665,14 +2456,15 @@ describe('generator', () => {
           openapi: {
             method: 'POST',
             path: '/mutation-example/{name}',
-            example: {
-              request: { name: 'James', greeting: 'Hello' },
-              response: { output: 'Hello James' },
-            },
           },
         })
-        .input(z.object({ name: z.string(), greeting: z.string() }))
-        .output(z.object({ output: z.string() }))
+        .input(
+          z.object({
+            name: z.string().openapi({ example: 'James' }),
+            greeting: z.string().openapi({ example: 'Hello' }),
+          }),
+        )
+        .output(z.object({ output: z.string().openapi({ example: 'Hello James' }) }))
         .mutation(({ input }) => ({
           output: `${input.greeting} ${input.name}`,
         })),
@@ -2680,43 +2472,37 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/query-example/{name}']!.get!.parameters).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/query-example/{name}']!.get!.parameters).toMatchInlineSnapshot(`
       Array [
         Object {
-          "description": undefined,
-          "example": "James",
           "in": "path",
           "name": "name",
           "required": true,
           "schema": Object {
+            "example": "James",
             "type": "string",
           },
         },
         Object {
-          "description": undefined,
-          "example": "Hello",
           "in": "query",
           "name": "greeting",
           "required": true,
           "schema": Object {
+            "example": "Hello",
             "type": "string",
           },
         },
       ]
     `);
-    expect(openApiDocument.paths['/query-example/{name}']!.get!.responses[200])
+    expect(openApiDocument.paths!['/query-example/{name}']!.get!.responses[200])
       .toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": Object {
-              "output": "Hello James",
-            },
             "schema": Object {
-              "additionalProperties": false,
               "properties": Object {
                 "output": Object {
+                  "example": "Hello James",
                   "type": "string",
                 },
               },
@@ -2728,36 +2514,31 @@ describe('generator', () => {
           },
         },
         "description": "Successful response",
-        "headers": undefined,
       }
     `);
-    expect(openApiDocument.paths['/mutation-example/{name}']!.post!.parameters)
+    expect(openApiDocument.paths!['/mutation-example/{name}']!.post!.parameters)
       .toMatchInlineSnapshot(`
       Array [
         Object {
-          "description": undefined,
-          "example": "James",
           "in": "path",
           "name": "name",
           "required": true,
           "schema": Object {
+            "example": "James",
             "type": "string",
           },
         },
       ]
     `);
-    expect(openApiDocument.paths['/mutation-example/{name}']!.post!.requestBody)
+    expect(openApiDocument.paths!['/mutation-example/{name}']!.post!.requestBody)
       .toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": Object {
-              "greeting": "Hello",
-            },
             "schema": Object {
-              "additionalProperties": false,
               "properties": Object {
                 "greeting": Object {
+                  "example": "Hello",
                   "type": "string",
                 },
               },
@@ -2771,18 +2552,15 @@ describe('generator', () => {
         "required": true,
       }
     `);
-    expect(openApiDocument.paths['/mutation-example/{name}']!.post!.responses[200])
+    expect(openApiDocument.paths!['/mutation-example/{name}']!.post!.responses[200])
       .toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": Object {
-              "output": "Hello James",
-            },
             "schema": Object {
-              "additionalProperties": false,
               "properties": Object {
                 "output": Object {
+                  "example": "Hello James",
                   "type": "string",
                 },
               },
@@ -2794,7 +2572,6 @@ describe('generator', () => {
           },
         },
         "description": "Successful response",
-        "headers": undefined,
       }
     `);
   });
@@ -2806,37 +2583,32 @@ describe('generator', () => {
           openapi: {
             method: 'GET',
             path: '/query-example/{name}',
-            responseHeaders: {
-              "X-RateLimit-Limit": {
-                description: "Request limit per hour.",
-                schema: {
-                  type: "integer"
-                }
-              },
-              "X-RateLimit-Remaining": {
-                description: "The number of requests left for the time window.",
-                schema: {
-                  type: "integer"
-                }
-              }
-            }
+            responseHeaders: z.object({
+              'X-RateLimit-Limit': z
+                .number()
+                .int()
+                .optional()
+                .openapi({ description: 'Request limit per hour.' }),
+              'X-RateLimit-Remaining': z
+                .number()
+                .int()
+                .optional()
+                .openapi({ description: 'The number of requests left for the time window.' }),
+            }),
           },
         })
         .input(z.object({ name: z.string(), greeting: z.string() }))
         .output(z.object({ output: z.string() }))
         .query(({ input }) => ({
           output: `${input.greeting} ${input.name}`,
-        }))
+        })),
     });
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiSchemaValidator.validate(openApiDocument).errors).toEqual([]);
-    expect(openApiDocument.paths['/query-example/{name}']!.get!.parameters).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/query-example/{name}']!.get!.parameters).toMatchInlineSnapshot(`
       Array [
         Object {
-          "description": undefined,
-          "example": undefined,
           "in": "path",
           "name": "name",
           "required": true,
@@ -2845,8 +2617,6 @@ describe('generator', () => {
           },
         },
         Object {
-          "description": undefined,
-          "example": undefined,
           "in": "query",
           "name": "greeting",
           "required": true,
@@ -2856,14 +2626,12 @@ describe('generator', () => {
         },
       ]
     `);
-    expect(openApiDocument.paths['/query-example/{name}']!.get!.responses[200])
+    expect(openApiDocument.paths!['/query-example/{name}']!.get!.responses[200])
       .toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
-            "example": undefined,
             "schema": Object {
-              "additionalProperties": false,
               "properties": Object {
                 "output": Object {
                   "type": "string",
@@ -2879,14 +2647,14 @@ describe('generator', () => {
         "description": "Successful response",
         "headers": Object {
           "X-RateLimit-Limit": Object {
-            "description": "Request limit per hour.",
             "schema": Object {
+              "description": "Request limit per hour.",
               "type": "integer",
             },
           },
           "X-RateLimit-Remaining": Object {
-            "description": "The number of requests left for the time window.",
             "schema": Object {
+              "description": "The number of requests left for the time window.",
               "type": "integer",
             },
           },

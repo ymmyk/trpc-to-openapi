@@ -1,12 +1,19 @@
 import { TRPCError } from '@trpc/server';
-import { OpenAPIV3 } from 'openapi-types';
-import { z } from 'zod';
-import zodToJsonSchema from 'zod-to-json-schema';
+import { AnyZodObject, ZodTypeAny, z } from 'zod';
+import {
+  ZodOpenApiContentObject,
+  ZodOpenApiParameters,
+  ZodOpenApiRequestBodyObject,
+  ZodOpenApiResponseObject,
+  ZodOpenApiResponsesObject,
+  extendZodWithOpenApi,
+} from 'zod-openapi';
 
 import { OpenApiContentType } from '../types';
 import {
   instanceofZodType,
   instanceofZodTypeCoercible,
+  instanceofZodTypeKind,
   instanceofZodTypeLikeString,
   instanceofZodTypeLikeVoid,
   instanceofZodTypeObject,
@@ -15,17 +22,14 @@ import {
   zodSupportsCoerce,
 } from '../utils/zod';
 
-const zodSchemaToOpenApiSchemaObject = (zodSchema: z.ZodType): OpenAPIV3.SchemaObject => {
-  // FIXME: https://github.com/StefanTerdell/zod-to-json-schema/issues/35
-  return zodToJsonSchema(zodSchema, { target: 'openApi3', $refStrategy: 'none' }) as any;
-};
+extendZodWithOpenApi(z);
 
 export const getParameterObjects = (
   schema: unknown,
   pathParameters: string[],
+  headersSchema: AnyZodObject | undefined,
   inType: 'all' | 'path' | 'query',
-  example: Record<string, any> | undefined,
-): OpenAPIV3.ParameterObject[] | undefined => {
+): ZodOpenApiParameters | undefined => {
   if (!instanceofZodType(schema)) {
     throw new TRPCError({
       message: 'Input parser expects a Zod validator',
@@ -59,7 +63,7 @@ export const getParameterObjects = (
     }
   }
 
-  return shapeKeys
+  const { path, query } = shapeKeys
     .filter((shapeKey) => {
       const isPathParameter = pathParameters.includes(shapeKey);
       if (inType === 'path') {
@@ -100,25 +104,29 @@ export const getParameterObjects = (
         shapeSchema = shapeSchema.unwrap();
       }
 
-      const { description, ...openApiSchemaObject } = zodSchemaToOpenApiSchemaObject(shapeSchema);
-
       return {
         name: shapeKey,
-        in: isPathParameter ? 'path' : 'query',
+        paramType: isPathParameter ? 'path' : 'query',
         required: isPathParameter || (isRequired && isShapeRequired),
-        schema: openApiSchemaObject,
-        description: description,
-        example: example?.[shapeKey],
+        schema: shapeSchema,
       };
-    });
+    })
+    .reduce(
+      ({ path, query }, { name, paramType, schema, required }) =>
+        paramType === 'path'
+          ? { path: { ...path, [name]: required ? schema : schema.optional() }, query }
+          : { path, query: { ...query, [name]: required ? schema : schema.optional() } },
+      { path: {} as Record<string, ZodTypeAny>, query: {} as Record<string, ZodTypeAny> },
+    );
+
+  return { header: headersSchema, path: z.object(path), query: z.object(query) };
 };
 
 export const getRequestBodyObject = (
   schema: unknown,
   pathParameters: string[],
   contentTypes: OpenApiContentType[],
-  example: Record<string, any> | undefined,
-): OpenAPIV3.RequestBodyObject | undefined => {
+): ZodOpenApiRequestBodyObject | undefined => {
   if (!instanceofZodType(schema)) {
     throw new TRPCError({
       message: 'Input parser expects a Zod validator',
@@ -142,12 +150,8 @@ export const getRequestBodyObject = (
 
   // remove path parameters
   const mask: Record<string, true> = {};
-  const dedupedExample = example && { ...example };
   pathParameters.forEach((pathParameter) => {
     mask[pathParameter] = true;
-    if (dedupedExample) {
-      delete dedupedExample[pathParameter];
-    }
   });
   const dedupedSchema = unwrappedSchema.omit(mask);
 
@@ -156,12 +160,10 @@ export const getRequestBodyObject = (
     return undefined;
   }
 
-  const openApiSchemaObject = zodSchemaToOpenApiSchemaObject(dedupedSchema);
-  const content: OpenAPIV3.RequestBodyObject['content'] = {};
+  const content: ZodOpenApiContentObject = {};
   for (const contentType of contentTypes) {
     content[contentType] = {
-      schema: openApiSchemaObject,
-      example: dedupedExample,
+      schema: dedupedSchema,
     };
   }
 
@@ -171,26 +173,35 @@ export const getRequestBodyObject = (
   };
 };
 
-export const errorResponseObject: OpenAPIV3.ResponseObject = {
+export const errorResponseObject: ZodOpenApiResponseObject = {
   description: 'Error response',
   content: {
     'application/json': {
-      schema: zodSchemaToOpenApiSchemaObject(
-        z.object({
-          message: z.string(),
-          code: z.string(),
-          issues: z.array(z.object({ message: z.string() })).optional(),
-        }),
-      ),
+      schema: z
+        .object({
+          message: z
+            .string()
+            .openapi({ description: 'The error message', example: 'Internal server error' }),
+          code: z
+            .string()
+            .openapi({ description: 'The error code', example: 'INTERNAL_SERVER_ERROR' }),
+          issues: z
+            .array(z.object({ message: z.string() }))
+            .optional()
+            .openapi({
+              description: 'An array of issues that were responsible for the error',
+              example: [],
+            }),
+        })
+        .openapi({ ref: 'Error', title: 'Error', description: 'The error information' }),
     },
   },
 };
 
 export const getResponsesObject = (
   schema: unknown,
-  example: Record<string, any> | undefined,
-  headers: Record<string, OpenAPIV3.HeaderObject | OpenAPIV3.ReferenceObject> | undefined
-): OpenAPIV3.ResponsesObject => {
+  headers: AnyZodObject | undefined,
+): ZodOpenApiResponsesObject => {
   if (!instanceofZodType(schema)) {
     throw new TRPCError({
       message: 'Output parser expects a Zod validator',
@@ -198,21 +209,23 @@ export const getResponsesObject = (
     });
   }
 
-  const successResponseObject: OpenAPIV3.ResponseObject = {
+  const successResponseObject: ZodOpenApiResponseObject = {
     description: 'Successful response',
     headers: headers,
     content: {
       'application/json': {
-        schema: zodSchemaToOpenApiSchemaObject(schema),
-        example,
+        schema: instanceofZodTypeKind(schema, z.ZodFirstPartyTypeKind.ZodVoid)
+          ? {}
+          : instanceofZodTypeKind(schema, z.ZodFirstPartyTypeKind.ZodNever) ||
+            instanceofZodTypeKind(schema, z.ZodFirstPartyTypeKind.ZodUndefined)
+          ? { not: {} }
+          : schema,
       },
     },
   };
 
   return {
     200: successResponseObject,
-    default: {
-      $ref: '#/components/responses/error',
-    },
+    default: errorResponseObject,
   };
 };
