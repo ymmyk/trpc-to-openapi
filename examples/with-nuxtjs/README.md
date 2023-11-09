@@ -1,4 +1,4 @@
-# [**`trpc-openapi`**](../../README.md) (with-nuxtjs)
+# [**`@lilyrose2798/trpc-openapi`**](../../README.md) (with-nuxtjs)
 
 ### Getting started
 

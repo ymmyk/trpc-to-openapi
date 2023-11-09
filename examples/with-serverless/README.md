@@ -1,4 +1,4 @@
-# [**`trpc-openapi`**](../../README.md) (with-serverless)
+# [**`@lilyrose2798/trpc-openapi`**](../../README.md) (with-serverless)
 
 ### Getting started
 

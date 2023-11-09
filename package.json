@@ -1,8 +1,8 @@
 {
-  "name": "trpc-openapi",
+  "name": "@lilyrose2798/trpc-openapi",
   "version": "1.2.9",
   "description": "tRPC OpenAPI",
-  "author": "James Berry <jb@jamesbe.com>",
+  "author": "LilyRose2798 <lily@rose.place>",
   "private": false,
   "license": "MIT",
   "keywords": [
@@ -10,9 +10,9 @@
     "openapi",
     "swagger"
   ],
-  "homepage": "https://github.com/jlalmes/trpc-openapi",
-  "repository": "github:jlalmes/trpc-openapi",
-  "bugs": "https://github.com/jlalmes/trpc-openapi/issues",
+  "homepage": "https://github.com/lilyrose2798/trpc-openapi",
+  "repository": "github:lilyrose2798/trpc-openapi",
+  "bugs": "https://github.com/lilyrose2798/trpc-openapi/issues",
   "main": "dist/index.js",
   "typings": "dist/index.d.ts",
   "workspaces": [

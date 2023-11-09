@@ -1,4 +1,4 @@
-# [**`trpc-openapi`**](../../README.md) (with-express)
+# [**`@lilyrose2798/trpc-openapi`**](../../README.md) (with-express)
 
 ### Getting started
 

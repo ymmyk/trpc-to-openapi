@@ -83,11 +83,11 @@ describe('fastify adapter', () => {
     const { url, close } = await createFastifyServerWithRouter({ router: appRouter });
 
     {
-      const res = await fetch(`${url}/say-hello?name=James`, { method: 'GET' });
+      const res = await fetch(`${url}/say-hello?name=Lily`, { method: 'GET' });
       const body = await res.json();
 
       expect(res.status).toBe(200);
-      expect(body).toEqual({ greeting: 'Hello James!' });
+      expect(body).toEqual({ greeting: 'Hello Lily!' });
       expect(createContextMock).toHaveBeenCalledTimes(1);
       expect(responseMetaMock).toHaveBeenCalledTimes(1);
       expect(onErrorMock).toHaveBeenCalledTimes(0);
@@ -98,12 +98,12 @@ describe('fastify adapter', () => {
       const res = await fetch(`${url}/say-hello`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: 'James' }),
+        body: JSON.stringify({ name: 'Lily' }),
       });
       const body = await res.json();
 
       expect(res.status).toBe(200);
-      expect(body).toEqual({ greeting: 'Hello James!' });
+      expect(body).toEqual({ greeting: 'Hello Lily!' });
       expect(createContextMock).toHaveBeenCalledTimes(1);
       expect(responseMetaMock).toHaveBeenCalledTimes(1);
       expect(onErrorMock).toHaveBeenCalledTimes(0);
@@ -111,11 +111,11 @@ describe('fastify adapter', () => {
       clearMocks();
     }
     {
-      const res = await fetch(`${url}/say/hello?name=James`, { method: 'GET' });
+      const res = await fetch(`${url}/say/hello?name=Lily`, { method: 'GET' });
       const body = await res.json();
 
       expect(res.status).toBe(200);
-      expect(body).toEqual({ greeting: 'Hello James!' });
+      expect(body).toEqual({ greeting: 'Hello Lily!' });
       expect(createContextMock).toHaveBeenCalledTimes(1);
       expect(responseMetaMock).toHaveBeenCalledTimes(1);
       expect(onErrorMock).toHaveBeenCalledTimes(0);
@@ -138,12 +138,12 @@ describe('fastify adapter', () => {
       { serverOpts: { basePath: '/open-api' } },
     );
 
-    const res = await fetch(`${url}/open-api/echo?payload=jlalmes`, { method: 'GET' });
+    const res = await fetch(`${url}/open-api/echo?payload=lilyrose2798`, { method: 'GET' });
     const body = await res.json();
 
     expect(res.status).toBe(200);
     expect(body).toEqual({
-      payload: 'jlalmes',
+      payload: 'lilyrose2798',
     });
     expect(createContextMock).toHaveBeenCalledTimes(1);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
@@ -168,14 +168,14 @@ describe('fastify adapter', () => {
       },
     );
 
-    const res = await fetch(`${url}/api-prefix/echo?payload=jlalmes`, {
+    const res = await fetch(`${url}/api-prefix/echo?payload=lilyrose2798`, {
       method: 'GET',
     });
     const body = await res.json();
 
     expect(res.status).toBe(200);
     expect(body).toEqual({
-      payload: 'jlalmes',
+      payload: 'lilyrose2798',
     });
     expect(createContextMock).toHaveBeenCalledTimes(1);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);

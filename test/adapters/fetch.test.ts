@@ -140,7 +140,7 @@ describe('fetch adapter', () => {
 
     const req = new Request('https://localhost:3000/echo', {
       method: 'POST',
-      body: JSON.stringify('James'),
+      body: JSON.stringify('Lily'),
     });
 
     const res = await createFetchHandlerCaller({
@@ -306,7 +306,7 @@ describe('fetch adapter', () => {
     const req = new Request('https://localhost:3000/echo', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ payload: '@jlalmes' }),
+      body: JSON.stringify({ payload: '@lilyrose2798' }),
     });
 
     const res = await createFetchHandlerCaller({
@@ -343,7 +343,7 @@ describe('fetch adapter', () => {
 
     {
       const url = new URL('https://localhost:3000/say-hello');
-      url.searchParams.set('name', 'James');
+      url.searchParams.set('name', 'Lily');
       const req = new Request(url, {
         method: 'GET',
       });
@@ -355,7 +355,7 @@ describe('fetch adapter', () => {
       const body = await res.json();
 
       expect(res.status).toBe(200);
-      expect(body).toEqual({ greeting: 'Hello James!' });
+      expect(body).toEqual({ greeting: 'Hello Lily!' });
       expect(createContextMock).toHaveBeenCalledTimes(1);
       expect(responseMetaMock).toHaveBeenCalledTimes(1);
       expect(onErrorMock).toHaveBeenCalledTimes(0);
@@ -366,7 +366,7 @@ describe('fetch adapter', () => {
       const req = new Request('https://localhost:3000/say-hello', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: 'James' }),
+        body: JSON.stringify({ name: 'Lily' }),
       });
       const res = await createFetchHandlerCaller({
         router: appRouter,
@@ -376,7 +376,7 @@ describe('fetch adapter', () => {
       const body = await res.json();
 
       expect(res.status).toBe(200);
-      expect(body).toEqual({ greeting: 'Hello James!' });
+      expect(body).toEqual({ greeting: 'Hello Lily!' });
       expect(createContextMock).toHaveBeenCalledTimes(1);
       expect(responseMetaMock).toHaveBeenCalledTimes(1);
       expect(onErrorMock).toHaveBeenCalledTimes(0);
@@ -480,7 +480,7 @@ describe('fetch adapter', () => {
         .query(({ input, ctx }) => ({ payload: input.payload, context: ctx })),
     });
 
-    const req = new Request('https://localhost:3000/echo?payload=jlalmes', {
+    const req = new Request('https://localhost:3000/echo?payload=lilyrose2798', {
       method: 'GET',
     });
     const res = await createFetchHandlerCaller({
@@ -494,7 +494,7 @@ describe('fetch adapter', () => {
 
     expect(res.status).toBe(200);
     expect(body).toEqual({
-      payload: 'jlalmes',
+      payload: 'lilyrose2798',
       context: { id: 1234567890 },
     });
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
@@ -510,7 +510,7 @@ describe('fetch adapter', () => {
         .query(({ input }) => ({ payload: input.payload })),
     });
 
-    const req = new Request('https://localhost:3000/echo?payload=jlalmes', {
+    const req = new Request('https://localhost:3000/echo?payload=lilyrose2798', {
       method: 'GET',
     });
     const res = await createFetchHandlerCaller({
@@ -525,7 +525,7 @@ describe('fetch adapter', () => {
     expect(res.status).toBe(202);
     expect(res.headers.get('x-custom')).toBe('custom header');
     expect(body).toEqual({
-      payload: 'jlalmes',
+      payload: 'lilyrose2798',
       context: undefined,
     });
     expect(createContextMock).toHaveBeenCalledTimes(1);
@@ -545,7 +545,7 @@ describe('fetch adapter', () => {
         .query(({ input }) => ({ payload: input.payload })),
     });
 
-    const req = new Request('https://localhost:3000/echo?payload=jlalmes', {
+    const req = new Request('https://localhost:3000/echo?payload=lilyrose2798', {
       method: 'GET',
     });
     const res = await createFetchHandlerCaller({
@@ -558,7 +558,7 @@ describe('fetch adapter', () => {
 
     expect(res.status).toBe(200);
     expect(body).toEqual({
-      payload: 'jlalmes',
+      payload: 'lilyrose2798',
     });
     expect(createContextMock).toHaveBeenCalledTimes(1);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
@@ -596,7 +596,7 @@ describe('fetch adapter', () => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       // @ts-expect-error - not JSON.stringified
-      body: { payload: 'James' },
+      body: { payload: 'Lily' },
     });
 
     const res = await createFetchHandlerCaller({
@@ -626,7 +626,7 @@ describe('fetch adapter', () => {
     });
 
     {
-      const req = new Request('https://localhost:3000/say-hello?name=James&name=jlalmes', {
+      const req = new Request('https://localhost:3000/say-hello?name=Lily&name=lilyrose2798', {
         method: 'GET',
       });
 
@@ -638,7 +638,7 @@ describe('fetch adapter', () => {
       const body = await res.json();
 
       expect(res.status).toBe(200);
-      expect(body).toEqual({ greeting: 'Hello James!' });
+      expect(body).toEqual({ greeting: 'Hello Lily!' });
       expect(createContextMock).toHaveBeenCalledTimes(1);
       expect(responseMetaMock).toHaveBeenCalledTimes(1);
       expect(onErrorMock).toHaveBeenCalledTimes(0);
@@ -660,7 +660,7 @@ describe('fetch adapter', () => {
     });
 
     {
-      const req = new Request('https://localhost:3000/LOWER?name=James', {
+      const req = new Request('https://localhost:3000/LOWER?name=Lily', {
         method: 'GET',
       });
 
@@ -672,7 +672,7 @@ describe('fetch adapter', () => {
       const body = await res.json();
 
       expect(res.status).toBe(200);
-      expect(body).toEqual({ greeting: 'Hello James!' });
+      expect(body).toEqual({ greeting: 'Hello Lily!' });
       expect(createContextMock).toHaveBeenCalledTimes(1);
       expect(responseMetaMock).toHaveBeenCalledTimes(1);
       expect(onErrorMock).toHaveBeenCalledTimes(0);
@@ -680,7 +680,7 @@ describe('fetch adapter', () => {
       clearMocks();
     }
     {
-      const req = new Request('https://localhost:3000/upper?name=James', {
+      const req = new Request('https://localhost:3000/upper?name=Lily', {
         method: 'GET',
       });
 
@@ -692,7 +692,7 @@ describe('fetch adapter', () => {
       const body = await res.json();
 
       expect(res.status).toBe(200);
-      expect(body).toEqual({ greeting: 'Hello James!' });
+      expect(body).toEqual({ greeting: 'Hello Lily!' });
       expect(createContextMock).toHaveBeenCalledTimes(1);
       expect(responseMetaMock).toHaveBeenCalledTimes(1);
       expect(onErrorMock).toHaveBeenCalledTimes(0);
@@ -727,7 +727,7 @@ describe('fetch adapter', () => {
     });
 
     {
-      const req = new Request('https://localhost:3000/say-hello/James', {
+      const req = new Request('https://localhost:3000/say-hello/Lily', {
         method: 'GET',
       });
 
@@ -740,7 +740,7 @@ describe('fetch adapter', () => {
       const body = await res.json();
 
       expect(res.status).toBe(200);
-      expect(body).toEqual({ greeting: 'Hello James!' });
+      expect(body).toEqual({ greeting: 'Hello Lily!' });
       expect(createContextMock).toHaveBeenCalledTimes(1);
       expect(responseMetaMock).toHaveBeenCalledTimes(1);
       expect(onErrorMock).toHaveBeenCalledTimes(0);
@@ -748,10 +748,10 @@ describe('fetch adapter', () => {
       clearMocks();
     }
     {
-      const req = new Request('https://localhost:3000/say-hello/James', {
+      const req = new Request('https://localhost:3000/say-hello/Lily', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: 'jlalmes' }),
+        body: JSON.stringify({ name: 'lilyrose2798' }),
       });
 
       const res = await createFetchHandlerCaller({
@@ -763,7 +763,7 @@ describe('fetch adapter', () => {
       const body = await res.json();
 
       expect(res.status).toBe(200);
-      expect(body).toEqual({ greeting: 'Hello James!' });
+      expect(body).toEqual({ greeting: 'Hello Lily!' });
       expect(createContextMock).toHaveBeenCalledTimes(1);
       expect(responseMetaMock).toHaveBeenCalledTimes(1);
       expect(onErrorMock).toHaveBeenCalledTimes(0);
@@ -772,7 +772,7 @@ describe('fetch adapter', () => {
     }
     {
       const req = new Request(
-        'https://localhost:3000/say-hello/James/Berry?greeting=Hello&first=jlalmes',
+        'https://localhost:3000/say-hello/Lily/Rose?greeting=Hello&first=lilyrose2798',
         {
           method: 'GET',
         },
@@ -787,7 +787,7 @@ describe('fetch adapter', () => {
       const body = await res.json();
 
       expect(res.status).toBe(200);
-      expect(body).toEqual({ greeting: 'Hello James Berry!' });
+      expect(body).toEqual({ greeting: 'Hello Lily Rose!' });
       expect(createContextMock).toHaveBeenCalledTimes(1);
       expect(responseMetaMock).toHaveBeenCalledTimes(1);
       expect(onErrorMock).toHaveBeenCalledTimes(0);
@@ -834,7 +834,7 @@ describe('fetch adapter', () => {
         .mutation(({ input }) => input),
     });
 
-    const req = new Request('https://localhost:3000/echo-delete?payload=jlalmes', {
+    const req = new Request('https://localhost:3000/echo-delete?payload=lilyrose2798', {
       method: 'DELETE',
     });
 
@@ -847,7 +847,7 @@ describe('fetch adapter', () => {
     const body = await res.json();
 
     expect(res.status).toBe(200);
-    expect(body).toEqual({ payload: 'jlalmes' });
+    expect(body).toEqual({ payload: 'lilyrose2798' });
     expect(createContextMock).toHaveBeenCalledTimes(1);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
     expect(onErrorMock).toHaveBeenCalledTimes(0);
@@ -865,7 +865,7 @@ describe('fetch adapter', () => {
     const req = new Request('https://localhost:3000/echo-post', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ payload: 'jlalmes' }),
+      body: JSON.stringify({ payload: 'lilyrose2798' }),
     });
 
     const res = await createFetchHandlerCaller({
@@ -877,7 +877,7 @@ describe('fetch adapter', () => {
     const body = await res.json();
 
     expect(res.status).toBe(200);
-    expect(body).toEqual({ payload: 'jlalmes' });
+    expect(body).toEqual({ payload: 'lilyrose2798' });
     expect(createContextMock).toHaveBeenCalledTimes(1);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
     expect(onErrorMock).toHaveBeenCalledTimes(0);
@@ -1093,7 +1093,7 @@ describe('fetch adapter', () => {
         .query(({ input }) => ({ fullName: `${input.firstName} ${input.lastName}` })),
     });
 
-    const req = new Request('https://localhost:3000/multi-input?firstName=James&lastName=Berry', {
+    const req = new Request('https://localhost:3000/multi-input?firstName=Lily&lastName=Rose', {
       method: 'GET',
     });
 
@@ -1106,7 +1106,7 @@ describe('fetch adapter', () => {
     const body = await res.json();
 
     expect(res.status).toBe(200);
-    expect(body).toEqual({ fullName: 'James Berry' });
+    expect(body).toEqual({ fullName: 'Lily Rose' });
     expect(createContextMock).toHaveBeenCalledTimes(1);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
     expect(onErrorMock).toHaveBeenCalledTimes(0);

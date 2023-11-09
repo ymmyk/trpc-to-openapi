@@ -1,4 +1,4 @@
-# [**`trpc-openapi`**](../../README.md) (with-nextjs)
+# [**`@lilyrose2798/trpc-openapi`**](../../README.md) (with-nextjs)
 
 ### Getting started
 

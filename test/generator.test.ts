@@ -67,7 +67,7 @@ describe('generator', () => {
         noInput: t.procedure
           .meta({ openapi: { method: 'GET', path: '/no-input' } })
           .output(z.object({ name: z.string() }))
-          .query(() => ({ name: 'jlalmes' })),
+          .query(() => ({ name: 'lilyrose2798' })),
       });
 
       expect(() => {
@@ -79,7 +79,7 @@ describe('generator', () => {
         noInput: t.procedure
           .meta({ openapi: { method: 'POST', path: '/no-input' } })
           .output(z.object({ name: z.string() }))
-          .mutation(() => ({ name: 'jlalmes' })),
+          .mutation(() => ({ name: 'lilyrose2798' })),
       });
 
       expect(() => {
@@ -186,7 +186,7 @@ describe('generator', () => {
           .meta({ openapi: { method: 'GET', path: '/bad-input' } })
           .input(z.object({ age: z.number().min(0).max(122) })) // RIP Jeanne Calment
           .output(z.object({ name: z.string() }))
-          .query(() => ({ name: 'jlalmes' })),
+          .query(() => ({ name: 'lilyrose2798' })),
       });
 
       expect(() => {
@@ -199,7 +199,7 @@ describe('generator', () => {
           .meta({ openapi: { method: 'POST', path: '/ok-input' } })
           .input(z.object({ age: z.number().min(0).max(122) }))
           .output(z.object({ name: z.string() }))
-          .mutation(() => ({ name: 'jlalmes' })),
+          .mutation(() => ({ name: 'lilyrose2798' })),
       });
 
       const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
@@ -347,7 +347,6 @@ describe('generator', () => {
     }).toThrowError('[query.pathParameters] - Input parser expects key from path: "name"');
   });
 
-  // test for https://github.com/jlalmes/trpc-openapi/issues/296
   test('with post & only path paramters', () => {
     const appRouter = t.router({
       noBody: t.procedure
@@ -359,7 +358,7 @@ describe('generator', () => {
         .meta({ openapi: { method: 'POST', path: '/empty-body' } })
         .input(z.object({}))
         .output(z.object({ name: z.string() }))
-        .mutation(() => ({ name: 'James' })),
+        .mutation(() => ({ name: 'Lily' })),
     });
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
@@ -1313,7 +1312,7 @@ describe('generator', () => {
             })
             .describe('User data'),
         )
-        .mutation(({ input }) => ({ id: input.id, name: 'James' })),
+        .mutation(({ input }) => ({ id: input.id, name: 'Lily' })),
       getUser: t.procedure
         .meta({ openapi: { method: 'GET', path: '/user' } })
         .input(
@@ -1327,7 +1326,7 @@ describe('generator', () => {
             })
             .describe('User data'),
         )
-        .query(({ input }) => ({ id: input.id, name: 'James' })),
+        .query(({ input }) => ({ id: input.id, name: 'Lily' })),
     });
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
@@ -2017,8 +2016,8 @@ describe('generator', () => {
     const appRouter = t.router({
       default: t.procedure
         .meta({ openapi: { method: 'GET', path: '/default' } })
-        .input(z.object({ payload: z.string().default('James') }))
-        .output(z.string().default('James'))
+        .input(z.object({ payload: z.string().default('Lily') }))
+        .output(z.string().default('Lily'))
         .query(({ input }) => input.payload),
     });
 
@@ -2030,7 +2029,7 @@ describe('generator', () => {
           "in": "query",
           "name": "payload",
           "schema": Object {
-            "default": "James",
+            "default": "Lily",
             "type": "string",
           },
         },
@@ -2041,7 +2040,7 @@ describe('generator', () => {
         "content": Object {
           "application/json": Object {
             "schema": Object {
-              "default": "James",
+              "default": "Lily",
               "type": "string",
             },
           },
@@ -2323,7 +2322,7 @@ describe('generator', () => {
       const appRouter = t.router({
         union: t.procedure
           .meta({ openapi: { method: 'GET', path: '/union' } })
-          .input(z.object({ payload: z.string().or(z.literal('James')) }))
+          .input(z.object({ payload: z.string().or(z.literal('Lily')) }))
           .output(z.null())
           .query(() => null),
       });
@@ -2343,7 +2342,7 @@ describe('generator', () => {
                 },
                 Object {
                   "enum": Array [
-                    "James",
+                    "Lily",
                   ],
                   "type": "string",
                 },
@@ -2477,7 +2476,7 @@ describe('generator', () => {
     const appRouter = t.router({
       enum: t.procedure
         .meta({ openapi: { method: 'GET', path: '/enum' } })
-        .input(z.object({ name: z.enum(['James', 'jlalmes']) }))
+        .input(z.object({ name: z.enum(['Lily', 'lilyrose2798']) }))
         .output(z.null())
         .query(() => null),
     });
@@ -2492,8 +2491,8 @@ describe('generator', () => {
           "required": true,
           "schema": Object {
             "enum": Array [
-              "James",
-              "jlalmes",
+              "Lily",
+              "lilyrose2798",
             ],
             "type": "string",
           },
@@ -2505,8 +2504,8 @@ describe('generator', () => {
   test('with native-enum', () => {
     {
       enum InvalidEnum {
-        James,
-        jlalmes,
+        Lily,
+        lilyrose2798,
       }
 
       const appRouter = t.router({
@@ -2523,8 +2522,8 @@ describe('generator', () => {
     }
     {
       enum ValidEnum {
-        James = 'James',
-        jlalmes = 'jlalmes',
+        Lily = 'Lily',
+        lilyrose2798 = 'lilyrose2798',
       }
 
       const appRouter = t.router({
@@ -2545,8 +2544,8 @@ describe('generator', () => {
             "required": true,
             "schema": Object {
               "enum": Array [
-                "James",
-                "jlalmes",
+                "Lily",
+                "lilyrose2798",
               ],
               "type": "string",
             },
@@ -3578,11 +3577,11 @@ describe('generator', () => {
         })
         .input(
           z.object({
-            name: z.string().openapi({ example: 'James' }),
+            name: z.string().openapi({ example: 'Lily' }),
             greeting: z.string().openapi({ example: 'Hello' }),
           }),
         )
-        .output(z.object({ output: z.string().openapi({ example: 'Hello James' }) }))
+        .output(z.object({ output: z.string().openapi({ example: 'Hello Lily' }) }))
         .query(({ input }) => ({
           output: `${input.greeting} ${input.name}`,
         })),
@@ -3595,11 +3594,11 @@ describe('generator', () => {
         })
         .input(
           z.object({
-            name: z.string().openapi({ example: 'James' }),
+            name: z.string().openapi({ example: 'Lily' }),
             greeting: z.string().openapi({ example: 'Hello' }),
           }),
         )
-        .output(z.object({ output: z.string().openapi({ example: 'Hello James' }) }))
+        .output(z.object({ output: z.string().openapi({ example: 'Hello Lily' }) }))
         .mutation(({ input }) => ({
           output: `${input.greeting} ${input.name}`,
         })),
@@ -3614,7 +3613,7 @@ describe('generator', () => {
           "name": "name",
           "required": true,
           "schema": Object {
-            "example": "James",
+            "example": "Lily",
             "type": "string",
           },
         },
@@ -3637,7 +3636,7 @@ describe('generator', () => {
             "schema": Object {
               "properties": Object {
                 "output": Object {
-                  "example": "Hello James",
+                  "example": "Hello Lily",
                   "type": "string",
                 },
               },
@@ -3659,7 +3658,7 @@ describe('generator', () => {
           "name": "name",
           "required": true,
           "schema": Object {
-            "example": "James",
+            "example": "Lily",
             "type": "string",
           },
         },
@@ -3695,7 +3694,7 @@ describe('generator', () => {
             "schema": Object {
               "properties": Object {
                 "output": Object {
-                  "example": "Hello James",
+                  "example": "Hello Lily",
                   "type": "string",
                 },
               },

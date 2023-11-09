@@ -1,4 +1,4 @@
-# [**`trpc-openapi`**](../../README.md) (with-fastify)
+# [**`@lilyrose2798/trpc-openapi`**](../../README.md) (with-fastify)
 
 ### Getting started
 

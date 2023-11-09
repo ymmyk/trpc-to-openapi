@@ -67,7 +67,7 @@ describe('v1', () => {
         method: 'GET',
         path: 'hello',
         queryStringParameters: {
-          name: 'James',
+          name: 'Lily',
         },
         resource: '/hello',
       }),
@@ -80,7 +80,7 @@ describe('v1', () => {
       'content-type': 'application/json',
     });
     expect(body).toEqual({
-      greeting: 'Hello James',
+      greeting: 'Hello Lily',
     });
   });
 
@@ -287,7 +287,7 @@ describe('v2', () => {
         method: 'GET',
         path: 'hello',
         queryStringParameters: {
-          name: 'James',
+          name: 'Lily',
         },
         routeKey: '$default',
       }),
@@ -300,7 +300,7 @@ describe('v2', () => {
       'content-type': 'application/json',
     });
     expect(body).toEqual({
-      greeting: 'Hello James',
+      greeting: 'Hello Lily',
     });
   });
 
