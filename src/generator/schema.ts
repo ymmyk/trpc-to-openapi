@@ -26,6 +26,7 @@ import {
   unwrapZodType,
   zodSupportsCoerce,
 } from '../utils/zod';
+import { HttpMethods } from './paths';
 
 extendZodWithOpenApi(z);
 
@@ -221,6 +222,7 @@ export const errorResponseObject = (
 
 export const getResponsesObject = (
   schema: unknown,
+  httpMethod: HttpMethods,
   headers: AnyZodObject | undefined,
   isProtected: boolean,
   hasInputs: boolean,
@@ -271,14 +273,20 @@ export const getResponsesObject = (
           ...(isProtected
             ? {
                 401: errorResponseObject('UNAUTHORIZED', 'Authorization not provided'),
+                403: errorResponseObject('FORBIDDEN', 'Insufficient access'),
               }
             : {}),
           ...(hasInputs
             ? {
-                '4XX': errorResponseObject('BAD_REQUEST', 'Bad request'),
+                400: errorResponseObject('BAD_REQUEST', 'Invalid input data'),
+                ...(httpMethod !== HttpMethods.POST
+                  ? {
+                      404: errorResponseObject('NOT_FOUND', 'Not found'),
+                    }
+                  : {}),
               }
             : {}),
-          '5XX': errorResponseObject('INTERNAL_SERVER_ERROR', 'Internal server error'),
+          500: errorResponseObject('INTERNAL_SERVER_ERROR', 'Internal server error'),
         }),
   };
 };

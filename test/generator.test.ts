@@ -459,7 +459,7 @@ describe('generator', () => {
                   },
                   "description": "Successful response",
                 },
-                "5XX": Object {
+                "500": Object {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
@@ -557,7 +557,7 @@ describe('generator', () => {
                   },
                   "description": "Successful response",
                 },
-                "4XX": Object {
+                "400": Object {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
@@ -565,7 +565,7 @@ describe('generator', () => {
                         "example": Object {
                           "code": "BAD_REQUEST",
                           "issues": Array [],
-                          "message": "Bad request",
+                          "message": "Invalid input data",
                         },
                         "properties": Object {
                           "code": Object {
@@ -591,7 +591,7 @@ describe('generator', () => {
                           },
                           "message": Object {
                             "description": "The error message",
-                            "example": "Bad request",
+                            "example": "Invalid input data",
                             "type": "string",
                           },
                         },
@@ -604,9 +604,9 @@ describe('generator', () => {
                       },
                     },
                   },
-                  "description": "Bad request",
+                  "description": "Invalid input data",
                 },
-                "5XX": Object {
+                "500": Object {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
@@ -684,7 +684,7 @@ describe('generator', () => {
                   },
                   "description": "Successful response",
                 },
-                "4XX": Object {
+                "400": Object {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
@@ -692,7 +692,7 @@ describe('generator', () => {
                         "example": Object {
                           "code": "BAD_REQUEST",
                           "issues": Array [],
-                          "message": "Bad request",
+                          "message": "Invalid input data",
                         },
                         "properties": Object {
                           "code": Object {
@@ -718,7 +718,7 @@ describe('generator', () => {
                           },
                           "message": Object {
                             "description": "The error message",
-                            "example": "Bad request",
+                            "example": "Invalid input data",
                             "type": "string",
                           },
                         },
@@ -731,9 +731,58 @@ describe('generator', () => {
                       },
                     },
                   },
-                  "description": "Bad request",
+                  "description": "Invalid input data",
                 },
-                "5XX": Object {
+                "404": Object {
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "description": "The error information",
+                        "example": Object {
+                          "code": "NOT_FOUND",
+                          "issues": Array [],
+                          "message": "Not found",
+                        },
+                        "properties": Object {
+                          "code": Object {
+                            "description": "The error code",
+                            "example": "NOT_FOUND",
+                            "type": "string",
+                          },
+                          "issues": Object {
+                            "description": "An array of issues that were responsible for the error",
+                            "example": Array [],
+                            "items": Object {
+                              "properties": Object {
+                                "message": Object {
+                                  "type": "string",
+                                },
+                              },
+                              "required": Array [
+                                "message",
+                              ],
+                              "type": "object",
+                            },
+                            "type": "array",
+                          },
+                          "message": Object {
+                            "description": "The error message",
+                            "example": "Not found",
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "message",
+                          "code",
+                        ],
+                        "title": "Error",
+                        "type": "object",
+                      },
+                    },
+                  },
+                  "description": "Not found",
+                },
+                "500": Object {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
@@ -823,7 +872,7 @@ describe('generator', () => {
                   },
                   "description": "Successful response",
                 },
-                "4XX": Object {
+                "400": Object {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
@@ -831,7 +880,7 @@ describe('generator', () => {
                         "example": Object {
                           "code": "BAD_REQUEST",
                           "issues": Array [],
-                          "message": "Bad request",
+                          "message": "Invalid input data",
                         },
                         "properties": Object {
                           "code": Object {
@@ -857,7 +906,7 @@ describe('generator', () => {
                           },
                           "message": Object {
                             "description": "The error message",
-                            "example": "Bad request",
+                            "example": "Invalid input data",
                             "type": "string",
                           },
                         },
@@ -870,9 +919,58 @@ describe('generator', () => {
                       },
                     },
                   },
-                  "description": "Bad request",
+                  "description": "Invalid input data",
                 },
-                "5XX": Object {
+                "404": Object {
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "description": "The error information",
+                        "example": Object {
+                          "code": "NOT_FOUND",
+                          "issues": Array [],
+                          "message": "Not found",
+                        },
+                        "properties": Object {
+                          "code": Object {
+                            "description": "The error code",
+                            "example": "NOT_FOUND",
+                            "type": "string",
+                          },
+                          "issues": Object {
+                            "description": "An array of issues that were responsible for the error",
+                            "example": Array [],
+                            "items": Object {
+                              "properties": Object {
+                                "message": Object {
+                                  "type": "string",
+                                },
+                              },
+                              "required": Array [
+                                "message",
+                              ],
+                              "type": "object",
+                            },
+                            "type": "array",
+                          },
+                          "message": Object {
+                            "description": "The error message",
+                            "example": "Not found",
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "message",
+                          "code",
+                        ],
+                        "title": "Error",
+                        "type": "object",
+                      },
+                    },
+                  },
+                  "description": "Not found",
+                },
+                "500": Object {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
@@ -977,7 +1075,7 @@ describe('generator', () => {
                   },
                   "description": "Successful response",
                 },
-                "4XX": Object {
+                "400": Object {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
@@ -985,7 +1083,7 @@ describe('generator', () => {
                         "example": Object {
                           "code": "BAD_REQUEST",
                           "issues": Array [],
-                          "message": "Bad request",
+                          "message": "Invalid input data",
                         },
                         "properties": Object {
                           "code": Object {
@@ -1011,7 +1109,7 @@ describe('generator', () => {
                           },
                           "message": Object {
                             "description": "The error message",
-                            "example": "Bad request",
+                            "example": "Invalid input data",
                             "type": "string",
                           },
                         },
@@ -1024,9 +1122,58 @@ describe('generator', () => {
                       },
                     },
                   },
-                  "description": "Bad request",
+                  "description": "Invalid input data",
                 },
-                "5XX": Object {
+                "404": Object {
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "description": "The error information",
+                        "example": Object {
+                          "code": "NOT_FOUND",
+                          "issues": Array [],
+                          "message": "Not found",
+                        },
+                        "properties": Object {
+                          "code": Object {
+                            "description": "The error code",
+                            "example": "NOT_FOUND",
+                            "type": "string",
+                          },
+                          "issues": Object {
+                            "description": "An array of issues that were responsible for the error",
+                            "example": Array [],
+                            "items": Object {
+                              "properties": Object {
+                                "message": Object {
+                                  "type": "string",
+                                },
+                              },
+                              "required": Array [
+                                "message",
+                              ],
+                              "type": "object",
+                            },
+                            "type": "array",
+                          },
+                          "message": Object {
+                            "description": "The error message",
+                            "example": "Not found",
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "message",
+                          "code",
+                        ],
+                        "title": "Error",
+                        "type": "object",
+                      },
+                    },
+                  },
+                  "description": "Not found",
+                },
+                "500": Object {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
@@ -1242,7 +1389,7 @@ describe('generator', () => {
             },
             "description": "Successful response",
           },
-          "4XX": Object {
+          "400": Object {
             "content": Object {
               "application/json": Object {
                 "schema": Object {
@@ -1250,7 +1397,7 @@ describe('generator', () => {
                   "example": Object {
                     "code": "BAD_REQUEST",
                     "issues": Array [],
-                    "message": "Bad request",
+                    "message": "Invalid input data",
                   },
                   "properties": Object {
                     "code": Object {
@@ -1276,7 +1423,7 @@ describe('generator', () => {
                     },
                     "message": Object {
                       "description": "The error message",
-                      "example": "Bad request",
+                      "example": "Invalid input data",
                       "type": "string",
                     },
                   },
@@ -1289,9 +1436,9 @@ describe('generator', () => {
                 },
               },
             },
-            "description": "Bad request",
+            "description": "Invalid input data",
           },
-          "5XX": Object {
+          "500": Object {
             "content": Object {
               "application/json": Object {
                 "schema": Object {
@@ -1389,7 +1536,7 @@ describe('generator', () => {
             },
             "description": "Successful response",
           },
-          "4XX": Object {
+          "400": Object {
             "content": Object {
               "application/json": Object {
                 "schema": Object {
@@ -1397,7 +1544,7 @@ describe('generator', () => {
                   "example": Object {
                     "code": "BAD_REQUEST",
                     "issues": Array [],
-                    "message": "Bad request",
+                    "message": "Invalid input data",
                   },
                   "properties": Object {
                     "code": Object {
@@ -1423,7 +1570,7 @@ describe('generator', () => {
                     },
                     "message": Object {
                       "description": "The error message",
-                      "example": "Bad request",
+                      "example": "Invalid input data",
                       "type": "string",
                     },
                   },
@@ -1436,9 +1583,58 @@ describe('generator', () => {
                 },
               },
             },
-            "description": "Bad request",
+            "description": "Invalid input data",
           },
-          "5XX": Object {
+          "404": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "description": "The error information",
+                  "example": Object {
+                    "code": "NOT_FOUND",
+                    "issues": Array [],
+                    "message": "Not found",
+                  },
+                  "properties": Object {
+                    "code": Object {
+                      "description": "The error code",
+                      "example": "NOT_FOUND",
+                      "type": "string",
+                    },
+                    "issues": Object {
+                      "description": "An array of issues that were responsible for the error",
+                      "example": Array [],
+                      "items": Object {
+                        "properties": Object {
+                          "message": Object {
+                            "type": "string",
+                          },
+                        },
+                        "required": Array [
+                          "message",
+                        ],
+                        "type": "object",
+                      },
+                      "type": "array",
+                    },
+                    "message": Object {
+                      "description": "The error message",
+                      "example": "Not found",
+                      "type": "string",
+                    },
+                  },
+                  "required": Array [
+                    "message",
+                    "code",
+                  ],
+                  "title": "Error",
+                  "type": "object",
+                },
+              },
+            },
+            "description": "Not found",
+          },
+          "500": Object {
             "content": Object {
               "application/json": Object {
                 "schema": Object {
@@ -2658,7 +2854,7 @@ describe('generator', () => {
                 },
                 "description": "Successful response",
               },
-              "4XX": Object {
+              "400": Object {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
@@ -2666,7 +2862,7 @@ describe('generator', () => {
                       "example": Object {
                         "code": "BAD_REQUEST",
                         "issues": Array [],
-                        "message": "Bad request",
+                        "message": "Invalid input data",
                       },
                       "properties": Object {
                         "code": Object {
@@ -2692,7 +2888,7 @@ describe('generator', () => {
                         },
                         "message": Object {
                           "description": "The error message",
-                          "example": "Bad request",
+                          "example": "Invalid input data",
                           "type": "string",
                         },
                       },
@@ -2705,9 +2901,58 @@ describe('generator', () => {
                     },
                   },
                 },
-                "description": "Bad request",
+                "description": "Invalid input data",
               },
-              "5XX": Object {
+              "404": Object {
+                "content": Object {
+                  "application/json": Object {
+                    "schema": Object {
+                      "description": "The error information",
+                      "example": Object {
+                        "code": "NOT_FOUND",
+                        "issues": Array [],
+                        "message": "Not found",
+                      },
+                      "properties": Object {
+                        "code": Object {
+                          "description": "The error code",
+                          "example": "NOT_FOUND",
+                          "type": "string",
+                        },
+                        "issues": Object {
+                          "description": "An array of issues that were responsible for the error",
+                          "example": Array [],
+                          "items": Object {
+                            "properties": Object {
+                              "message": Object {
+                                "type": "string",
+                              },
+                            },
+                            "required": Array [
+                              "message",
+                            ],
+                            "type": "object",
+                          },
+                          "type": "array",
+                        },
+                        "message": Object {
+                          "description": "The error message",
+                          "example": "Not found",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "message",
+                        "code",
+                      ],
+                      "title": "Error",
+                      "type": "object",
+                    },
+                  },
+                },
+                "description": "Not found",
+              },
+              "500": Object {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
@@ -2795,7 +3040,7 @@ describe('generator', () => {
                 },
                 "description": "Successful response",
               },
-              "4XX": Object {
+              "400": Object {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
@@ -2803,7 +3048,7 @@ describe('generator', () => {
                       "example": Object {
                         "code": "BAD_REQUEST",
                         "issues": Array [],
-                        "message": "Bad request",
+                        "message": "Invalid input data",
                       },
                       "properties": Object {
                         "code": Object {
@@ -2829,7 +3074,7 @@ describe('generator', () => {
                         },
                         "message": Object {
                           "description": "The error message",
-                          "example": "Bad request",
+                          "example": "Invalid input data",
                           "type": "string",
                         },
                       },
@@ -2842,9 +3087,58 @@ describe('generator', () => {
                     },
                   },
                 },
-                "description": "Bad request",
+                "description": "Invalid input data",
               },
-              "5XX": Object {
+              "404": Object {
+                "content": Object {
+                  "application/json": Object {
+                    "schema": Object {
+                      "description": "The error information",
+                      "example": Object {
+                        "code": "NOT_FOUND",
+                        "issues": Array [],
+                        "message": "Not found",
+                      },
+                      "properties": Object {
+                        "code": Object {
+                          "description": "The error code",
+                          "example": "NOT_FOUND",
+                          "type": "string",
+                        },
+                        "issues": Object {
+                          "description": "An array of issues that were responsible for the error",
+                          "example": Array [],
+                          "items": Object {
+                            "properties": Object {
+                              "message": Object {
+                                "type": "string",
+                              },
+                            },
+                            "required": Array [
+                              "message",
+                            ],
+                            "type": "object",
+                          },
+                          "type": "array",
+                        },
+                        "message": Object {
+                          "description": "The error message",
+                          "example": "Not found",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "message",
+                        "code",
+                      ],
+                      "title": "Error",
+                      "type": "object",
+                    },
+                  },
+                },
+                "description": "Not found",
+              },
+              "500": Object {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
@@ -2932,7 +3226,7 @@ describe('generator', () => {
                 },
                 "description": "Successful response",
               },
-              "4XX": Object {
+              "400": Object {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
@@ -2940,7 +3234,7 @@ describe('generator', () => {
                       "example": Object {
                         "code": "BAD_REQUEST",
                         "issues": Array [],
-                        "message": "Bad request",
+                        "message": "Invalid input data",
                       },
                       "properties": Object {
                         "code": Object {
@@ -2966,7 +3260,7 @@ describe('generator', () => {
                         },
                         "message": Object {
                           "description": "The error message",
-                          "example": "Bad request",
+                          "example": "Invalid input data",
                           "type": "string",
                         },
                       },
@@ -2979,9 +3273,58 @@ describe('generator', () => {
                     },
                   },
                 },
-                "description": "Bad request",
+                "description": "Invalid input data",
               },
-              "5XX": Object {
+              "404": Object {
+                "content": Object {
+                  "application/json": Object {
+                    "schema": Object {
+                      "description": "The error information",
+                      "example": Object {
+                        "code": "NOT_FOUND",
+                        "issues": Array [],
+                        "message": "Not found",
+                      },
+                      "properties": Object {
+                        "code": Object {
+                          "description": "The error code",
+                          "example": "NOT_FOUND",
+                          "type": "string",
+                        },
+                        "issues": Object {
+                          "description": "An array of issues that were responsible for the error",
+                          "example": Array [],
+                          "items": Object {
+                            "properties": Object {
+                              "message": Object {
+                                "type": "string",
+                              },
+                            },
+                            "required": Array [
+                              "message",
+                            ],
+                            "type": "object",
+                          },
+                          "type": "array",
+                        },
+                        "message": Object {
+                          "description": "The error message",
+                          "example": "Not found",
+                          "type": "string",
+                        },
+                      },
+                      "required": Array [
+                        "message",
+                        "code",
+                      ],
+                      "title": "Error",
+                      "type": "object",
+                    },
+                  },
+                },
+                "description": "Not found",
+              },
+              "500": Object {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {

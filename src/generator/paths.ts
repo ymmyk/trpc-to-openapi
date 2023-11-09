@@ -7,7 +7,7 @@ import { getPathParameters, normalizePath } from '../utils/path';
 import { forEachOpenApiProcedure, getInputOutputParsers } from '../utils/procedure';
 import { getParameterObjects, getRequestBodyObject, getResponsesObject, hasInputs } from './schema';
 
-enum HttpMethods {
+export enum HttpMethods {
   GET = 'get',
   POST = 'post',
   PATCH = 'patch',
@@ -94,6 +94,7 @@ export const getOpenApiPathsObject = (
               }),
           responses: getResponsesObject(
             outputParser,
+            httpMethod,
             responseHeaders,
             protect ?? false,
             hasInputs(inputParser),
