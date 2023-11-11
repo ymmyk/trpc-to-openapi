@@ -14,14 +14,16 @@ import {
   OpenApiResponse,
   OpenApiRouter,
   OpenApiSuccessResponse,
+  ZodSchemaTransformers,
 } from '../../types';
 import { acceptsRequestBody } from '../../utils/method';
 import { normalizePath } from '../../utils/path';
 import { getInputOutputParsers } from '../../utils/procedure';
 import {
-  instanceofZodTypeCoercible,
+  coerceSchema,
   instanceofZodTypeLikeVoid,
   instanceofZodTypeObject,
+  replaceInputSchemaDates,
   unwrapZodType,
   zodSupportsCoerce,
 } from '../../utils/zod';
@@ -36,7 +38,7 @@ export type CreateOpenApiNodeHttpHandlerOptions<
 > = Pick<
   NodeHTTPHandlerOptions<TRouter, TRequest, TResponse>,
   'router' | 'createContext' | 'responseMeta' | 'onError' | 'maxBodySize'
->;
+> & { transforms?: ZodSchemaTransformers };
 
 export type OpenApiNextFunction = () => void;
 
@@ -114,15 +116,10 @@ export const createOpenApiNodeHttpHandler = <
       }
 
       // if supported, coerce all string values to correct types
-      if (zodSupportsCoerce) {
-        if (instanceofZodTypeObject(unwrappedSchema)) {
-          Object.values(unwrappedSchema.shape).forEach((shapeSchema) => {
-            const unwrappedShapeSchema = unwrapZodType(shapeSchema, false);
-            if (instanceofZodTypeCoercible(unwrappedShapeSchema)) {
-              unwrappedShapeSchema._def.coerce = true;
-            }
-          });
-        }
+      if (instanceofZodTypeObject(unwrappedSchema)) {
+        if (opts.transforms?.dateRequest)
+          replaceInputSchemaDates(unwrappedSchema, opts.transforms.dateRequest);
+        if (zodSupportsCoerce) coerceSchema(unwrappedSchema);
       }
 
       ctx = await createContext?.({ req, res });

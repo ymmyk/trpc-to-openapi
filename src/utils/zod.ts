@@ -1,4 +1,7 @@
-import { z } from 'zod';
+import { ZodObject, ZodRawShape, ZodTypeAny, z } from 'zod';
+
+import { GenerateOpenApiDocumentOptions } from '..';
+import { ZodSchemaTransformers } from '../types';
 
 export const instanceofZodType = (type: any): type is z.ZodTypeAny => {
   return !!type?._def?.typeName;
@@ -19,6 +22,32 @@ export const instanceofZodTypeOptional = (
 
 export const instanceofZodTypeObject = (type: z.ZodTypeAny): type is z.ZodObject<z.ZodRawShape> => {
   return instanceofZodTypeKind(type, z.ZodFirstPartyTypeKind.ZodObject);
+};
+
+export const instanceofZodTypeDate = (type: z.ZodTypeAny): type is z.ZodDate => {
+  return instanceofZodTypeKind(type, z.ZodFirstPartyTypeKind.ZodDate);
+};
+
+export const replaceInputSchemaDates = (
+  schema: ZodObject<ZodRawShape>,
+  transformer: NonNullable<ZodSchemaTransformers['dateRequest']>,
+) => {
+  for (const [k, v] of Object.entries(schema.shape)) {
+    if (instanceofZodTypeDate(v)) schema.shape[k] = transformer(v);
+    else if (instanceofZodTypeObject(v)) replaceInputSchemaDates(v, transformer);
+  }
+};
+
+export const replaceOutputSchemaDates = (
+  schema: ZodTypeAny,
+  transformer: NonNullable<ZodSchemaTransformers['dateResponse']>,
+) => {
+  if (instanceofZodTypeDate(schema)) return transformer(schema);
+  else if (instanceofZodTypeObject(schema)) {
+    for (const [k, v] of Object.entries(schema.shape))
+      schema.shape[k] = replaceOutputSchemaDates(v, transformer);
+    return schema;
+  } else return schema;
 };
 
 export type ZodTypeLikeVoid = z.ZodVoid | z.ZodUndefined | z.ZodNever;
@@ -112,4 +141,12 @@ export const instanceofZodTypeCoercible = (_type: z.ZodTypeAny): _type is ZodTyp
     instanceofZodTypeKind(type, z.ZodFirstPartyTypeKind.ZodBigInt) ||
     instanceofZodTypeKind(type, z.ZodFirstPartyTypeKind.ZodDate)
   );
+};
+
+export const coerceSchema = (schema: ZodObject<ZodRawShape>) => {
+  Object.values(schema.shape).forEach((shapeSchema) => {
+    const unwrappedShapeSchema = unwrapZodType(shapeSchema, false);
+    if (instanceofZodTypeCoercible(unwrappedShapeSchema)) unwrappedShapeSchema._def.coerce = true;
+    else if (instanceofZodTypeObject(unwrappedShapeSchema)) coerceSchema(unwrappedShapeSchema);
+  });
 };

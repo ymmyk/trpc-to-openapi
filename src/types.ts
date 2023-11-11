@@ -2,7 +2,16 @@ import { Procedure, ProcedureParams, Router } from '@trpc/server';
 import type { RootConfig } from '@trpc/server/dist/core/internals/config';
 import { TRPC_ERROR_CODE_KEY } from '@trpc/server/rpc';
 import type { RouterDef } from '@trpc/server/src/core/router';
-import { AnyZodObject, ZodIssue } from 'zod';
+import {
+  AnyZodObject,
+  ZodBigInt,
+  ZodDate,
+  ZodEffects,
+  ZodIssue,
+  ZodNumber,
+  ZodString,
+  ZodTypeAny,
+} from 'zod';
 
 export type OpenApiMethod = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
 
@@ -74,3 +83,18 @@ export type OpenApiErrorResponse = {
 };
 
 export type OpenApiResponse<D = any> = OpenApiSuccessResponse<D> | OpenApiErrorResponse;
+
+export type ZodSchemaTransformers = {
+  dateRequest?: (
+    schema: ZodDate,
+  ) =>
+    | ZodEffects<ZodString, Date, string>
+    | ZodEffects<ZodNumber, Date, number>
+    | ZodEffects<ZodBigInt, Date, bigint>;
+  dateResponse?: (
+    schema: ZodDate,
+  ) =>
+    | ZodEffects<ZodDate, string, Date>
+    | ZodEffects<ZodDate, number, Date>
+    | ZodEffects<ZodDate, bigint, Date>;
+};

@@ -15,7 +15,7 @@ import { EventEmitter } from 'events';
 import type { RequestMethod } from 'node-mocks-http';
 import { createRequest, createResponse } from 'node-mocks-http';
 
-import type { OpenApiErrorResponse, OpenApiRouter } from '../types';
+import type { OpenApiErrorResponse, OpenApiRouter, ZodSchemaTransformers } from '../types';
 import { createOpenApiNodeHttpHandler } from './node-http/core';
 import { TRPC_ERROR_CODE_HTTP_STATUS, getErrorFromUnknown } from './node-http/errors';
 
@@ -25,7 +25,7 @@ export type CreateOpenApiAwsLambdaHandlerOptions<
 > = Pick<
   AWSLambdaOptions<TRouter, TEvent>,
   'router' | 'createContext' | 'responseMeta' | 'onError'
->;
+> & { transformers?: ZodSchemaTransformers };
 
 const createMockNodeHTTPPath = (event: APIGatewayEvent) => {
   let path = getPath(event);

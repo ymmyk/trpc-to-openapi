@@ -9,11 +9,8 @@ import {
   extendZodWithOpenApi,
 } from 'zod-openapi';
 
-import {
-  HTTP_STATUS_TRPC_ERROR_CODE,
-  TRPC_ERROR_CODE_HTTP_STATUS,
-  TRPC_ERROR_CODE_MESSAGE,
-} from '../adapters/node-http/errors';
+import { GenerateOpenApiDocumentOptions } from '.';
+import { HTTP_STATUS_TRPC_ERROR_CODE, TRPC_ERROR_CODE_MESSAGE } from '../adapters/node-http/errors';
 import { OpenApiContentType } from '../types';
 import {
   instanceofZodType,
@@ -21,7 +18,6 @@ import {
   instanceofZodTypeKind,
   instanceofZodTypeLikeString,
   instanceofZodTypeLikeVoid,
-  instanceofZodTypeObject,
   instanceofZodTypeOptional,
   unwrapZodType,
   zodSupportsCoerce,
@@ -31,33 +27,13 @@ import { HttpMethods } from './paths';
 extendZodWithOpenApi(z);
 
 export const getParameterObjects = (
-  schema: unknown,
+  schema: z.ZodObject<z.ZodRawShape>,
+  required: boolean,
   pathParameters: string[],
   headersSchema: AnyZodObject | undefined,
   inType: 'all' | 'path' | 'query',
 ): ZodOpenApiParameters | undefined => {
-  if (!instanceofZodType(schema)) {
-    throw new TRPCError({
-      message: 'Input parser expects a Zod validator',
-      code: 'INTERNAL_SERVER_ERROR',
-    });
-  }
-
-  const isRequired = !schema.isOptional();
-  const unwrappedSchema = unwrapZodType(schema, true);
-
-  if (pathParameters.length === 0 && instanceofZodTypeLikeVoid(unwrappedSchema)) {
-    return undefined;
-  }
-
-  if (!instanceofZodTypeObject(unwrappedSchema)) {
-    throw new TRPCError({
-      message: 'Input parser must be a ZodObject',
-      code: 'INTERNAL_SERVER_ERROR',
-    });
-  }
-
-  const shape = unwrappedSchema.shape;
+  const shape = schema.shape;
   const shapeKeys = Object.keys(shape);
 
   for (const pathParameter of pathParameters) {
@@ -113,7 +89,7 @@ export const getParameterObjects = (
       return {
         name: shapeKey,
         paramType: isPathParameter ? 'path' : 'query',
-        required: isPathParameter || (isRequired && isShapeRequired),
+        required: isPathParameter || (required && isShapeRequired),
         schema: shapeSchema,
       };
     })
@@ -129,37 +105,17 @@ export const getParameterObjects = (
 };
 
 export const getRequestBodyObject = (
-  schema: unknown,
+  schema: z.ZodObject<z.ZodRawShape>,
+  required: boolean,
   pathParameters: string[],
   contentTypes: OpenApiContentType[],
 ): ZodOpenApiRequestBodyObject | undefined => {
-  if (!instanceofZodType(schema)) {
-    throw new TRPCError({
-      message: 'Input parser expects a Zod validator',
-      code: 'INTERNAL_SERVER_ERROR',
-    });
-  }
-
-  const isRequired = !schema.isOptional();
-  const unwrappedSchema = unwrapZodType(schema, true);
-
-  if (pathParameters.length === 0 && instanceofZodTypeLikeVoid(unwrappedSchema)) {
-    return undefined;
-  }
-
-  if (!instanceofZodTypeObject(unwrappedSchema)) {
-    throw new TRPCError({
-      message: 'Input parser must be a ZodObject',
-      code: 'INTERNAL_SERVER_ERROR',
-    });
-  }
-
   // remove path parameters
   const mask: Record<string, true> = {};
   pathParameters.forEach((pathParameter) => {
     mask[pathParameter] = true;
   });
-  const dedupedSchema = unwrappedSchema.omit(mask);
+  const dedupedSchema = schema.omit(mask);
 
   // if all keys are path parameters
   if (pathParameters.length > 0 && Object.keys(dedupedSchema.shape).length === 0) {
@@ -172,9 +128,8 @@ export const getRequestBodyObject = (
       schema: dedupedSchema,
     };
   }
-
   return {
-    required: isRequired,
+    required,
     content,
   };
 };
@@ -221,22 +176,15 @@ export const errorResponseObject = (
 });
 
 export const getResponsesObject = (
-  schema: unknown,
+  schema: ZodTypeAny,
   httpMethod: HttpMethods,
   headers: AnyZodObject | undefined,
   isProtected: boolean,
   hasInputs: boolean,
   successDescription?: string,
   errorResponses?: number[] | { [key: number]: string },
-): ZodOpenApiResponsesObject => {
-  if (!instanceofZodType(schema)) {
-    throw new TRPCError({
-      message: 'Output parser expects a Zod validator',
-      code: 'INTERNAL_SERVER_ERROR',
-    });
-  }
-
-  const successResponseObject: ZodOpenApiResponseObject = {
+): ZodOpenApiResponsesObject => ({
+  200: {
     description: successDescription ?? 'Successful response',
     headers: headers,
     content: {
@@ -249,44 +197,37 @@ export const getResponsesObject = (
           : schema,
       },
     },
-  };
-
-  return {
-    200: successResponseObject,
-    ...(errorResponses !== undefined
-      ? Object.fromEntries(
-          Array.isArray(errorResponses)
-            ? errorResponses.map((x) => {
-                const code = HTTP_STATUS_TRPC_ERROR_CODE[x];
-                const message = code && TRPC_ERROR_CODE_MESSAGE[code];
-                return [
-                  x,
-                  errorResponseObject(code ?? 'UNKNOWN_ERROR', message ?? 'Unknown error'),
-                ];
-              })
-            : Object.entries(errorResponses).map(([k, v]) => [
-                k,
-                errorResponseObject(HTTP_STATUS_TRPC_ERROR_CODE[Number(k)] ?? 'UNKNOWN_ERROR', v),
-              ]),
-        )
-      : {
-          ...(isProtected
-            ? {
-                401: errorResponseObject('UNAUTHORIZED', 'Authorization not provided'),
-                403: errorResponseObject('FORBIDDEN', 'Insufficient access'),
-              }
-            : {}),
-          ...(hasInputs
-            ? {
-                400: errorResponseObject('BAD_REQUEST', 'Invalid input data'),
-                ...(httpMethod !== HttpMethods.POST
-                  ? {
-                      404: errorResponseObject('NOT_FOUND', 'Not found'),
-                    }
-                  : {}),
-              }
-            : {}),
-          500: errorResponseObject('INTERNAL_SERVER_ERROR', 'Internal server error'),
-        }),
-  };
-};
+  },
+  ...(errorResponses !== undefined
+    ? Object.fromEntries(
+        Array.isArray(errorResponses)
+          ? errorResponses.map((x) => {
+              const code = HTTP_STATUS_TRPC_ERROR_CODE[x];
+              const message = code && TRPC_ERROR_CODE_MESSAGE[code];
+              return [x, errorResponseObject(code ?? 'UNKNOWN_ERROR', message ?? 'Unknown error')];
+            })
+          : Object.entries(errorResponses).map(([k, v]) => [
+              k,
+              errorResponseObject(HTTP_STATUS_TRPC_ERROR_CODE[Number(k)] ?? 'UNKNOWN_ERROR', v),
+            ]),
+      )
+    : {
+        ...(isProtected
+          ? {
+              401: errorResponseObject('UNAUTHORIZED', 'Authorization not provided'),
+              403: errorResponseObject('FORBIDDEN', 'Insufficient access'),
+            }
+          : {}),
+        ...(hasInputs
+          ? {
+              400: errorResponseObject('BAD_REQUEST', 'Invalid input data'),
+              ...(httpMethod !== HttpMethods.POST
+                ? {
+                    404: errorResponseObject('NOT_FOUND', 'Not found'),
+                  }
+                : {}),
+            }
+          : {}),
+        500: errorResponseObject('INTERNAL_SERVER_ERROR', 'Internal server error'),
+      }),
+});

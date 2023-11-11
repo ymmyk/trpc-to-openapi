@@ -1,10 +1,23 @@
 import { TRPCError } from '@trpc/server';
-import { ZodOpenApiPathsObject } from 'zod-openapi';
+import cloneDeep from 'lodash.clonedeep';
+import {
+  ZodOpenApiParameters,
+  ZodOpenApiPathsObject,
+  ZodOpenApiRequestBodyObject,
+} from 'zod-openapi';
 
-import { OpenApiProcedureRecord, OpenApiRouter } from '../types';
+import { OpenApiProcedureRecord, OpenApiRouter, ZodSchemaTransformers } from '../types';
 import { acceptsRequestBody } from '../utils/method';
 import { getPathParameters, normalizePath } from '../utils/path';
 import { forEachOpenApiProcedure, getInputOutputParsers } from '../utils/procedure';
+import {
+  instanceofZodType,
+  instanceofZodTypeLikeVoid,
+  instanceofZodTypeObject,
+  replaceInputSchemaDates,
+  replaceOutputSchemaDates,
+  unwrapZodType,
+} from '../utils/zod';
 import { getParameterObjects, getRequestBodyObject, getResponsesObject, hasInputs } from './schema';
 
 export enum HttpMethods {
@@ -18,6 +31,7 @@ export enum HttpMethods {
 export const getOpenApiPathsObject = (
   appRouter: OpenApiRouter,
   securitySchemeNames: string[],
+  transformers?: ZodSchemaTransformers,
 ): ZodOpenApiPathsObject => {
   const pathsObject: ZodOpenApiPathsObject = {};
   const procedures = appRouter._def.procedures as OpenApiProcedureRecord;
@@ -73,34 +87,89 @@ export const getOpenApiPathsObject = (
 
       const { inputParser, outputParser } = getInputOutputParsers(procedure);
 
+      if (!instanceofZodType(inputParser)) {
+        throw new TRPCError({
+          message: 'Input parser expects a Zod validator',
+          code: 'INTERNAL_SERVER_ERROR',
+        });
+      }
+      if (!instanceofZodType(outputParser)) {
+        throw new TRPCError({
+          message: 'Output parser expects a Zod validator',
+          code: 'INTERNAL_SERVER_ERROR',
+        });
+      }
+      const isInputRequired = !inputParser.isOptional();
+      const inputSchema = cloneDeep(unwrapZodType(inputParser, true));
+
+      const requestData: {
+        requestBody?: ZodOpenApiRequestBodyObject;
+        requestParams?: ZodOpenApiParameters;
+      } = {};
+      if (!(pathParameters.length === 0 && instanceofZodTypeLikeVoid(inputSchema))) {
+        if (!instanceofZodTypeObject(inputSchema)) {
+          throw new TRPCError({
+            message: 'Input parser must be a ZodObject',
+            code: 'INTERNAL_SERVER_ERROR',
+          });
+        }
+
+        if (transformers?.dateRequest)
+          replaceInputSchemaDates(inputSchema, transformers.dateRequest);
+
+        if (acceptsRequestBody(method)) {
+          requestData.requestBody = getRequestBodyObject(
+            inputSchema,
+            isInputRequired,
+            pathParameters,
+            contentTypes,
+          );
+          requestData.requestParams =
+            getParameterObjects(
+              inputSchema,
+              isInputRequired,
+              pathParameters,
+              requestHeaders,
+              'path',
+            ) || {};
+        } else {
+          requestData.requestParams =
+            getParameterObjects(
+              inputSchema,
+              isInputRequired,
+              pathParameters,
+              requestHeaders,
+              'all',
+            ) || {};
+        }
+      }
+
+      const outputSchema = transformers?.dateResponse
+        ? replaceOutputSchemaDates(cloneDeep(outputParser), transformers.dateResponse)
+        : outputParser;
+
+      const responses = getResponsesObject(
+        outputSchema,
+        httpMethod,
+        responseHeaders,
+        protect ?? false,
+        hasInputs(inputParser),
+        successDescription,
+        errorResponses,
+      );
+
+      const security = protect ? securitySchemeNames.map((name) => ({ [name]: [] })) : undefined;
+
       pathsObject[path] = {
         ...pathsObject[path],
         [httpMethod]: {
           operationId: procedurePath.replace(/\./g, '-'),
           summary,
           description,
-          tags: tags,
-          security: protect ? securitySchemeNames.map((name) => ({ [name]: [] })) : undefined,
-          ...(acceptsRequestBody(method)
-            ? {
-                requestBody: getRequestBodyObject(inputParser, pathParameters, contentTypes),
-                requestParams:
-                  getParameterObjects(inputParser, pathParameters, requestHeaders, 'path') || {},
-              }
-            : {
-                requestBody: undefined,
-                requestParams:
-                  getParameterObjects(inputParser, pathParameters, requestHeaders, 'all') || {},
-              }),
-          responses: getResponsesObject(
-            outputParser,
-            httpMethod,
-            responseHeaders,
-            protect ?? false,
-            hasInputs(inputParser),
-            successDescription,
-            errorResponses,
-          ),
+          tags,
+          security,
+          ...requestData,
+          responses,
           ...(openapi.deprecated ? { deprecated: openapi.deprecated } : {}),
         },
       };
