@@ -117,7 +117,7 @@ export const getRequestBodyObject = (
   const o = schema._def.openapi;
   const dedupedSchema = schema.omit(mask).openapi({
     ...(o?.title ? { title: o?.title } : {}),
-    ...(o?.description ? { title: o?.description } : {}),
+    ...(o?.description ? { description: o?.description } : {}),
   });
 
   // if all keys are path parameters

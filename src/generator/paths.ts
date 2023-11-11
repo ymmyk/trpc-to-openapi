@@ -104,7 +104,7 @@ export const getOpenApiPathsObject = (
       const o = inputParser?._def?.openapi;
       const inputSchema = unwrapZodType(inputParser, true).openapi({
         ...(o?.title ? { title: o?.title } : {}),
-        ...(o?.description ? { title: o?.description } : {}),
+        ...(o?.description ? { description: o?.description } : {}),
       });
 
       const requestData: {
