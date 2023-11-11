@@ -14,7 +14,6 @@ import {
   OpenApiResponse,
   OpenApiRouter,
   OpenApiSuccessResponse,
-  OpenApiTransformers,
 } from '../../types';
 import { acceptsRequestBody } from '../../utils/method';
 import { normalizePath } from '../../utils/path';
@@ -23,8 +22,6 @@ import {
   coerceSchema,
   instanceofZodTypeLikeVoid,
   instanceofZodTypeObject,
-  replaceInputSchemaDates,
-  replaceOutputSchemaDates,
   unwrapZodType,
   zodSupportsCoerce,
 } from '../../utils/zod';
@@ -39,7 +36,7 @@ export type CreateOpenApiNodeHttpHandlerOptions<
 > = Pick<
   NodeHTTPHandlerOptions<TRouter, TRequest, TResponse>,
   'router' | 'createContext' | 'responseMeta' | 'onError' | 'maxBodySize'
-> & { transformers?: OpenApiTransformers };
+>;
 
 export type OpenApiNextFunction = () => void;
 
@@ -57,7 +54,7 @@ export const createOpenApiNodeHttpHandler = <
     generateOpenApiDocument(router, { title: '', version: '', baseUrl: '' });
   }
 
-  const { createContext, responseMeta, onError, maxBodySize, transformers } = opts;
+  const { createContext, responseMeta, onError, maxBodySize } = opts;
   const getProcedure = createProcedureCache(router);
 
   return async (req: TRequest, res: TResponse, next?: OpenApiNextFunction) => {
@@ -105,9 +102,8 @@ export const createOpenApiNodeHttpHandler = <
       }
 
       const useBody = acceptsRequestBody(method);
-      const { inputParser, outputParser } = getInputOutputParsers(procedure.procedure);
-      const unwrappedSchema = unwrapZodType(inputParser as ZodTypeAny, true);
-      const outputSchema = outputParser as ZodTypeAny;
+      const inputParser = getInputOutputParsers(procedure.procedure).inputParser as ZodTypeAny;
+      const unwrappedSchema = unwrapZodType(inputParser, true);
 
       // input should stay undefined if z.void()
       if (!instanceofZodTypeLikeVoid(unwrappedSchema)) {
@@ -118,11 +114,8 @@ export const createOpenApiNodeHttpHandler = <
       }
 
       // if supported, coerce all string values to correct types
-      if (instanceofZodTypeObject(unwrappedSchema)) {
-        if (transformers?.dateRequest)
-          replaceInputSchemaDates(unwrappedSchema, transformers.dateRequest);
-        if (zodSupportsCoerce) coerceSchema(unwrappedSchema);
-      }
+      if (zodSupportsCoerce && instanceofZodTypeObject(unwrappedSchema))
+        coerceSchema(unwrappedSchema);
 
       ctx = await createContext?.({ req, res });
       const caller = router.createCaller(ctx);
@@ -130,10 +123,7 @@ export const createOpenApiNodeHttpHandler = <
       const segments = procedure.path.split('.');
       const procedureFn = segments.reduce((acc, curr) => acc[curr], caller as any) as AnyProcedure;
 
-      const modifiedOutputSchema = transformers?.dateResponse
-        ? replaceOutputSchemaDates(outputSchema, transformers.dateResponse)
-        : outputSchema;
-      data = await procedureFn(input).then((x) => modifiedOutputSchema.parseAsync(x));
+      data = await procedureFn(input);
 
       const meta = responseMeta?.({
         type: procedure.type,

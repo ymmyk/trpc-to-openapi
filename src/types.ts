@@ -83,18 +83,3 @@ export type OpenApiErrorResponse = {
 };
 
 export type OpenApiResponse<D = any> = OpenApiSuccessResponse<D> | OpenApiErrorResponse;
-
-export type OpenApiTransformers = {
-  dateRequest?: (
-    schema: ZodDate,
-  ) =>
-    | ZodEffects<ZodString, Date, string>
-    | ZodEffects<ZodNumber, Date, number>
-    | ZodEffects<ZodBigInt, Date, bigint>;
-  dateResponse?: (
-    schema: ZodDate,
-  ) =>
-    | ZodEffects<ZodDate, string, Date>
-    | ZodEffects<ZodDate, number, Date>
-    | ZodEffects<ZodDate, bigint, Date>;
-};

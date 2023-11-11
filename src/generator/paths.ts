@@ -6,7 +6,7 @@ import {
   ZodOpenApiRequestBodyObject,
 } from 'zod-openapi';
 
-import { OpenApiProcedureRecord, OpenApiRouter, OpenApiTransformers } from '../types';
+import { OpenApiProcedureRecord, OpenApiRouter } from '../types';
 import { acceptsRequestBody } from '../utils/method';
 import { getPathParameters, normalizePath } from '../utils/path';
 import { forEachOpenApiProcedure, getInputOutputParsers } from '../utils/procedure';
@@ -14,8 +14,6 @@ import {
   instanceofZodType,
   instanceofZodTypeLikeVoid,
   instanceofZodTypeObject,
-  replaceInputSchemaDates,
-  replaceOutputSchemaDates,
   unwrapZodType,
 } from '../utils/zod';
 import { getParameterObjects, getRequestBodyObject, getResponsesObject, hasInputs } from './schema';
@@ -31,10 +29,9 @@ export enum HttpMethods {
 export const getOpenApiPathsObject = (
   appRouter: OpenApiRouter,
   securitySchemeNames: string[],
-  transformers?: OpenApiTransformers,
 ): ZodOpenApiPathsObject => {
   const pathsObject: ZodOpenApiPathsObject = {};
-  const procedures = appRouter._def.procedures as OpenApiProcedureRecord;
+  const procedures = cloneDeep(appRouter._def.procedures as OpenApiProcedureRecord);
 
   forEachOpenApiProcedure(procedures, ({ path: procedurePath, type, procedure, openapi }) => {
     const procedureName = `${type}.${procedurePath}`;
@@ -100,7 +97,7 @@ export const getOpenApiPathsObject = (
         });
       }
       const isInputRequired = !inputParser.isOptional();
-      const inputSchema = cloneDeep(unwrapZodType(inputParser, true));
+      const inputSchema = unwrapZodType(inputParser, true);
 
       const requestData: {
         requestBody?: ZodOpenApiRequestBodyObject;
@@ -113,9 +110,6 @@ export const getOpenApiPathsObject = (
             code: 'INTERNAL_SERVER_ERROR',
           });
         }
-
-        if (transformers?.dateRequest)
-          replaceInputSchemaDates(inputSchema, transformers.dateRequest);
 
         if (acceptsRequestBody(method)) {
           requestData.requestBody = getRequestBodyObject(
@@ -144,12 +138,8 @@ export const getOpenApiPathsObject = (
         }
       }
 
-      const outputSchema = transformers?.dateResponse
-        ? replaceOutputSchemaDates(cloneDeep(outputParser), transformers.dateResponse)
-        : outputParser;
-
       const responses = getResponsesObject(
-        outputSchema,
+        outputParser,
         httpMethod,
         responseHeaders,
         protect ?? false,
