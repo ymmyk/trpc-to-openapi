@@ -5,7 +5,7 @@ import {
   NodeHTTPResponse,
 } from '@trpc/server/dist/adapters/node-http';
 import cloneDeep from 'lodash.clonedeep';
-import { ZodError, z } from 'zod';
+import { ZodError, ZodTypeAny, z } from 'zod';
 
 import { generateOpenApiDocument } from '../../generator';
 import {
@@ -104,8 +104,8 @@ export const createOpenApiNodeHttpHandler = <
       }
 
       const useBody = acceptsRequestBody(method);
-      const schema = getInputOutputParsers(procedure.procedure).inputParser as z.ZodTypeAny;
-      const unwrappedSchema = unwrapZodType(schema, true);
+      const { inputParser, outputParser } = getInputOutputParsers(procedure.procedure);
+      const unwrappedSchema = unwrapZodType(inputParser as ZodTypeAny, true);
 
       // input should stay undefined if z.void()
       if (!instanceofZodTypeLikeVoid(unwrappedSchema)) {
@@ -128,7 +128,7 @@ export const createOpenApiNodeHttpHandler = <
       const segments = procedure.path.split('.');
       const procedureFn = segments.reduce((acc, curr) => acc[curr], caller as any) as AnyProcedure;
 
-      data = await procedureFn(input);
+      data = await procedureFn(input).then((x) => (outputParser as ZodTypeAny).parseAsync(x));
 
       const meta = responseMeta?.({
         type: procedure.type,
