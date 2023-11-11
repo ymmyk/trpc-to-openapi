@@ -6,7 +6,7 @@ import {
   ZodOpenApiRequestBodyObject,
 } from 'zod-openapi';
 
-import { OpenApiProcedureRecord, OpenApiRouter, ZodSchemaTransformers } from '../types';
+import { OpenApiProcedureRecord, OpenApiRouter, OpenApiTransformers } from '../types';
 import { acceptsRequestBody } from '../utils/method';
 import { getPathParameters, normalizePath } from '../utils/path';
 import { forEachOpenApiProcedure, getInputOutputParsers } from '../utils/procedure';
@@ -31,7 +31,7 @@ export enum HttpMethods {
 export const getOpenApiPathsObject = (
   appRouter: OpenApiRouter,
   securitySchemeNames: string[],
-  transformers?: ZodSchemaTransformers,
+  transformers?: OpenApiTransformers,
 ): ZodOpenApiPathsObject => {
   const pathsObject: ZodOpenApiPathsObject = {};
   const procedures = appRouter._def.procedures as OpenApiProcedureRecord;

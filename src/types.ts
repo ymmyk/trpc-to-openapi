@@ -84,7 +84,7 @@ export type OpenApiErrorResponse = {
 
 export type OpenApiResponse<D = any> = OpenApiSuccessResponse<D> | OpenApiErrorResponse;
 
-export type ZodSchemaTransformers = {
+export type OpenApiTransformers = {
   dateRequest?: (
     schema: ZodDate,
   ) =>

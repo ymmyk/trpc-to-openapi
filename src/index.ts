@@ -22,6 +22,7 @@ import {
   OpenApiResponse,
   OpenApiRouter,
   OpenApiSuccessResponse,
+  OpenApiTransformers,
 } from './types';
 import { ZodTypeLikeString, ZodTypeLikeVoid } from './utils/zod';
 
@@ -48,6 +49,7 @@ export {
   OpenApiResponse,
   OpenApiSuccessResponse,
   OpenApiErrorResponse,
+  OpenApiTransformers,
   ZodTypeLikeString,
   ZodTypeLikeVoid,
 };

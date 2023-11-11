@@ -14,7 +14,7 @@ import {
   OpenApiResponse,
   OpenApiRouter,
   OpenApiSuccessResponse,
-  ZodSchemaTransformers,
+  OpenApiTransformers,
 } from '../../types';
 import { acceptsRequestBody } from '../../utils/method';
 import { normalizePath } from '../../utils/path';
@@ -38,7 +38,7 @@ export type CreateOpenApiNodeHttpHandlerOptions<
 > = Pick<
   NodeHTTPHandlerOptions<TRouter, TRequest, TResponse>,
   'router' | 'createContext' | 'responseMeta' | 'onError' | 'maxBodySize'
-> & { transforms?: ZodSchemaTransformers };
+> & { transforms?: OpenApiTransformers };
 
 export type OpenApiNextFunction = () => void;
 

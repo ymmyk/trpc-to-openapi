@@ -1,7 +1,7 @@
 import { ZodObject, ZodRawShape, ZodTypeAny, z } from 'zod';
 
 import { GenerateOpenApiDocumentOptions } from '..';
-import { ZodSchemaTransformers } from '../types';
+import { OpenApiTransformers } from '../types';
 
 export const instanceofZodType = (type: any): type is z.ZodTypeAny => {
   return !!type?._def?.typeName;
@@ -30,7 +30,7 @@ export const instanceofZodTypeDate = (type: z.ZodTypeAny): type is z.ZodDate => 
 
 export const replaceInputSchemaDates = (
   schema: ZodObject<ZodRawShape>,
-  transformer: NonNullable<ZodSchemaTransformers['dateRequest']>,
+  transformer: NonNullable<OpenApiTransformers['dateRequest']>,
 ) => {
   for (const [k, v] of Object.entries(schema.shape)) {
     if (instanceofZodTypeDate(v)) schema.shape[k] = transformer(v);
@@ -40,7 +40,7 @@ export const replaceInputSchemaDates = (
 
 export const replaceOutputSchemaDates = (
   schema: ZodTypeAny,
-  transformer: NonNullable<ZodSchemaTransformers['dateResponse']>,
+  transformer: NonNullable<OpenApiTransformers['dateResponse']>,
 ) => {
   if (instanceofZodTypeDate(schema)) return transformer(schema);
   else if (instanceofZodTypeObject(schema)) {

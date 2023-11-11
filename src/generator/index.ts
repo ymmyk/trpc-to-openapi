@@ -2,7 +2,7 @@ import { OpenAPIObject, SecuritySchemeObject } from 'openapi3-ts/dist/oas31';
 import { ZodBigInt, ZodDate, ZodEffects, ZodNumber, ZodString, ZodTypeAny, z } from 'zod';
 import { ZodOpenApiObject, ZodOpenApiPathsObject, createDocument } from 'zod-openapi';
 
-import { OpenApiRouter, ZodSchemaTransformers } from '../types';
+import { OpenApiRouter, OpenApiTransformers } from '../types';
 import { getOpenApiPathsObject } from './paths';
 
 export type GenerateOpenApiDocumentOptions = {
@@ -15,7 +15,7 @@ export type GenerateOpenApiDocumentOptions = {
   tags?: string[];
   securitySchemes?: Record<string, SecuritySchemeObject>;
   paths?: ZodOpenApiPathsObject;
-  transformers?: ZodSchemaTransformers;
+  transformers?: OpenApiTransformers;
 };
 
 export const generateOpenApiDocument = (

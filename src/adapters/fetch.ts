@@ -2,7 +2,7 @@ import { TRPCError } from '@trpc/server';
 import { FetchHandlerOptions } from '@trpc/server/adapters/fetch';
 import { IncomingMessage, ServerResponse } from 'http';
 
-import { OpenApiRouter, ZodSchemaTransformers } from '../types';
+import { OpenApiRouter, OpenApiTransformers } from '../types';
 import {
   CreateOpenApiNodeHttpHandlerOptions,
   createOpenApiNodeHttpHandler,
@@ -14,7 +14,7 @@ export type CreateOpenApiFetchHandlerOptions<TRouter extends OpenApiRouter> = Om
 > & {
   req: Request;
   endpoint: `/${string}`;
-  transformers?: ZodSchemaTransformers;
+  transformers?: OpenApiTransformers;
 };
 
 const getUrlEncodedBody = async (req: Request) => {
