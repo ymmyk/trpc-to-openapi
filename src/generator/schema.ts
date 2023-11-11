@@ -9,7 +9,6 @@ import {
   extendZodWithOpenApi,
 } from 'zod-openapi';
 
-import { GenerateOpenApiDocumentOptions } from '.';
 import { HTTP_STATUS_TRPC_ERROR_CODE, TRPC_ERROR_CODE_MESSAGE } from '../adapters/node-http/errors';
 import { OpenApiContentType } from '../types';
 import {
@@ -115,7 +114,11 @@ export const getRequestBodyObject = (
   pathParameters.forEach((pathParameter) => {
     mask[pathParameter] = true;
   });
-  const dedupedSchema = schema.omit(mask);
+  const o = schema._def.openapi;
+  const dedupedSchema = schema.omit(mask).openapi({
+    ...(o?.title ? { title: o?.title } : {}),
+    ...(o?.description ? { title: o?.description } : {}),
+  });
 
   // if all keys are path parameters
   if (pathParameters.length > 0 && Object.keys(dedupedSchema.shape).length === 0) {

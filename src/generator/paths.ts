@@ -1,9 +1,11 @@
 import { TRPCError } from '@trpc/server';
 import cloneDeep from 'lodash.clonedeep';
+import { z } from 'zod';
 import {
   ZodOpenApiParameters,
   ZodOpenApiPathsObject,
   ZodOpenApiRequestBodyObject,
+  extendZodWithOpenApi,
 } from 'zod-openapi';
 
 import { OpenApiProcedureRecord, OpenApiRouter } from '../types';
@@ -17,6 +19,8 @@ import {
   unwrapZodType,
 } from '../utils/zod';
 import { getParameterObjects, getRequestBodyObject, getResponsesObject, hasInputs } from './schema';
+
+extendZodWithOpenApi(z);
 
 export enum HttpMethods {
   GET = 'get',
@@ -97,7 +101,11 @@ export const getOpenApiPathsObject = (
         });
       }
       const isInputRequired = !inputParser.isOptional();
-      const inputSchema = unwrapZodType(inputParser, true);
+      const o = inputParser?._def?.openapi;
+      const inputSchema = unwrapZodType(inputParser, true).openapi({
+        ...(o?.title ? { title: o?.title } : {}),
+        ...(o?.description ? { title: o?.description } : {}),
+      });
 
       const requestData: {
         requestBody?: ZodOpenApiRequestBodyObject;
