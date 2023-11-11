@@ -24,6 +24,7 @@ import {
   instanceofZodTypeLikeVoid,
   instanceofZodTypeObject,
   replaceInputSchemaDates,
+  replaceOutputSchemaDates,
   unwrapZodType,
   zodSupportsCoerce,
 } from '../../utils/zod';
@@ -38,7 +39,7 @@ export type CreateOpenApiNodeHttpHandlerOptions<
 > = Pick<
   NodeHTTPHandlerOptions<TRouter, TRequest, TResponse>,
   'router' | 'createContext' | 'responseMeta' | 'onError' | 'maxBodySize'
-> & { transforms?: OpenApiTransformers };
+> & { transformers?: OpenApiTransformers };
 
 export type OpenApiNextFunction = () => void;
 
@@ -56,7 +57,7 @@ export const createOpenApiNodeHttpHandler = <
     generateOpenApiDocument(router, { title: '', version: '', baseUrl: '' });
   }
 
-  const { createContext, responseMeta, onError, maxBodySize } = opts;
+  const { createContext, responseMeta, onError, maxBodySize, transformers } = opts;
   const getProcedure = createProcedureCache(router);
 
   return async (req: TRequest, res: TResponse, next?: OpenApiNextFunction) => {
@@ -106,6 +107,7 @@ export const createOpenApiNodeHttpHandler = <
       const useBody = acceptsRequestBody(method);
       const { inputParser, outputParser } = getInputOutputParsers(procedure.procedure);
       const unwrappedSchema = unwrapZodType(inputParser as ZodTypeAny, true);
+      const outputSchema = outputParser as ZodTypeAny;
 
       // input should stay undefined if z.void()
       if (!instanceofZodTypeLikeVoid(unwrappedSchema)) {
@@ -117,8 +119,8 @@ export const createOpenApiNodeHttpHandler = <
 
       // if supported, coerce all string values to correct types
       if (instanceofZodTypeObject(unwrappedSchema)) {
-        if (opts.transforms?.dateRequest)
-          replaceInputSchemaDates(unwrappedSchema, opts.transforms.dateRequest);
+        if (transformers?.dateRequest)
+          replaceInputSchemaDates(unwrappedSchema, transformers.dateRequest);
         if (zodSupportsCoerce) coerceSchema(unwrappedSchema);
       }
 
@@ -128,7 +130,10 @@ export const createOpenApiNodeHttpHandler = <
       const segments = procedure.path.split('.');
       const procedureFn = segments.reduce((acc, curr) => acc[curr], caller as any) as AnyProcedure;
 
-      data = await procedureFn(input).then((x) => (outputParser as ZodTypeAny).parseAsync(x));
+      const modifiedOutputSchema = transformers?.dateResponse
+        ? replaceOutputSchemaDates(outputSchema, transformers.dateResponse)
+        : outputSchema;
+      data = await procedureFn(input).then((x) => modifiedOutputSchema.parseAsync(x));
 
       const meta = responseMeta?.({
         type: procedure.type,

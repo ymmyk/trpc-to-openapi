@@ -1,5 +1,4 @@
 import { OpenAPIObject, SecuritySchemeObject } from 'openapi3-ts/dist/oas31';
-import { ZodBigInt, ZodDate, ZodEffects, ZodNumber, ZodString, ZodTypeAny, z } from 'zod';
 import { ZodOpenApiObject, ZodOpenApiPathsObject, createDocument } from 'zod-openapi';
 
 import { OpenApiRouter, OpenApiTransformers } from '../types';

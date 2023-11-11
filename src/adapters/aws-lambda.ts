@@ -117,6 +117,8 @@ export const createOpenApiAwsLambdaHandler = <
       const req = createMockNodeHTTPRequest(path, event);
       const res = createMockNodeHTTPResponse();
 
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       await openApiHttpHandler(req, res);
 
       return {

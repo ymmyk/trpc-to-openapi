@@ -15,6 +15,7 @@ export const TRPC_ERROR_CODE_HTTP_STATUS: Record<TRPCError['code'], number> = {
   METHOD_NOT_SUPPORTED: 405,
   TOO_MANY_REQUESTS: 429,
   UNPROCESSABLE_CONTENT: 422,
+  NOT_IMPLEMENTED: 501,
 };
 
 export const HTTP_STATUS_TRPC_ERROR_CODE: Record<number, TRPCError['code']> = {
@@ -31,6 +32,7 @@ export const HTTP_STATUS_TRPC_ERROR_CODE: Record<number, TRPCError['code']> = {
   405: 'METHOD_NOT_SUPPORTED',
   429: 'TOO_MANY_REQUESTS',
   422: 'UNPROCESSABLE_CONTENT',
+  501: 'NOT_IMPLEMENTED',
 };
 
 export const TRPC_ERROR_CODE_MESSAGE: Record<TRPCError['code'], string> = {
@@ -48,6 +50,7 @@ export const TRPC_ERROR_CODE_MESSAGE: Record<TRPCError['code'], string> = {
   METHOD_NOT_SUPPORTED: 'Method not supported',
   TOO_MANY_REQUESTS: 'Too many requests',
   UNPROCESSABLE_CONTENT: 'Unprocessable content',
+  NOT_IMPLEMENTED: 'Not implemented',
 };
 
 export function getErrorFromUnknown(cause: unknown): TRPCError {
