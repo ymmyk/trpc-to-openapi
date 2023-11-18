@@ -32,6 +32,19 @@ export const instanceofZodTypeLikeVoid = (type: z.ZodTypeAny): type is ZodTypeLi
 };
 
 export const unwrapZodType = (type: z.ZodTypeAny, unwrapPreprocess: boolean): z.ZodTypeAny => {
+  // TODO: Allow parsing array query params
+  // if (instanceofZodTypeKind(type, z.ZodFirstPartyTypeKind.ZodArray)) {
+  //   return unwrapZodType(type.element, unwrapPreprocess);
+  // }
+  if (instanceofZodTypeKind(type, z.ZodFirstPartyTypeKind.ZodEnum)) {
+    return unwrapZodType(z.string(), unwrapPreprocess);
+  }
+  if (instanceofZodTypeKind(type, z.ZodFirstPartyTypeKind.ZodNullable)) {
+    return unwrapZodType(type.unwrap(), unwrapPreprocess);
+  }
+  if (instanceofZodTypeKind(type, z.ZodFirstPartyTypeKind.ZodBranded)) {
+    return unwrapZodType(type.unwrap(), unwrapPreprocess);
+  }
   if (instanceofZodTypeKind(type, z.ZodFirstPartyTypeKind.ZodOptional)) {
     return unwrapZodType(type.unwrap(), unwrapPreprocess);
   }
