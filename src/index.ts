@@ -16,6 +16,11 @@ import {
 } from './adapters';
 import { GenerateOpenApiDocumentOptions, generateOpenApiDocument } from './generator';
 import {
+  errorResponseFromMessage,
+  errorResponseFromStatusCode,
+  errorResponseObject,
+} from './generator/schema';
+import {
   OpenApiErrorResponse,
   OpenApiMeta,
   OpenApiMethod,
@@ -41,6 +46,9 @@ export {
   createOpenApiAwsLambdaHandler,
   fastifyTRPCOpenApiPlugin,
   generateOpenApiDocument,
+  errorResponseObject,
+  errorResponseFromStatusCode,
+  errorResponseFromMessage,
   GenerateOpenApiDocumentOptions,
   OpenApiRouter,
   OpenApiMeta,

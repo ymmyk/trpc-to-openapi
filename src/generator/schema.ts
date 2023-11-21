@@ -178,6 +178,15 @@ export const errorResponseObject = (
   },
 });
 
+export const errorResponseFromStatusCode = (status: number) => {
+  const code = HTTP_STATUS_TRPC_ERROR_CODE[status];
+  const message = code && TRPC_ERROR_CODE_MESSAGE[code];
+  return errorResponseObject(code ?? 'UNKNOWN_ERROR', message ?? 'Unknown error');
+};
+
+export const errorResponseFromMessage = (status: number, message: string) =>
+  errorResponseObject(HTTP_STATUS_TRPC_ERROR_CODE[status] ?? 'UNKNOWN_ERROR', message);
+
 export const getResponsesObject = (
   schema: ZodTypeAny,
   httpMethod: HttpMethods,
@@ -204,14 +213,10 @@ export const getResponsesObject = (
   ...(errorResponses !== undefined
     ? Object.fromEntries(
         Array.isArray(errorResponses)
-          ? errorResponses.map((x) => {
-              const code = HTTP_STATUS_TRPC_ERROR_CODE[x];
-              const message = code && TRPC_ERROR_CODE_MESSAGE[code];
-              return [x, errorResponseObject(code ?? 'UNKNOWN_ERROR', message ?? 'Unknown error')];
-            })
+          ? errorResponses.map((x) => [x, errorResponseFromStatusCode(x)])
           : Object.entries(errorResponses).map(([k, v]) => [
               k,
-              errorResponseObject(HTTP_STATUS_TRPC_ERROR_CODE[Number(k)] ?? 'UNKNOWN_ERROR', v),
+              errorResponseFromMessage(Number(k), v),
             ]),
       )
     : {
