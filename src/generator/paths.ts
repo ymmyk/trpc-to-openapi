@@ -180,3 +180,14 @@ export const getOpenApiPathsObject = (
 
   return pathsObject;
 };
+
+export const mergePaths = (x?: ZodOpenApiPathsObject, y?: ZodOpenApiPathsObject) => {
+  if (x === undefined) return y;
+  if (y === undefined) return x;
+  const obj: ZodOpenApiPathsObject = x;
+  for (const [k, v] of Object.entries(y)) {
+    if (k in obj) obj[k] = { ...obj[k], ...v };
+    else obj[k] = v;
+  }
+  return obj;
+};

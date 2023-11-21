@@ -2,7 +2,7 @@ import { OpenAPIObject, SecuritySchemeObject } from 'openapi3-ts/dist/oas31';
 import { ZodOpenApiObject, ZodOpenApiPathsObject, createDocument } from 'zod-openapi';
 
 import { OpenApiRouter } from '../types';
-import { getOpenApiPathsObject } from './paths';
+import { getOpenApiPathsObject, mergePaths } from './paths';
 
 export type GenerateOpenApiDocumentOptions = {
   title: string;
@@ -38,10 +38,7 @@ export const generateOpenApiDocument = (
         url: opts.baseUrl,
       },
     ],
-    paths: {
-      ...getOpenApiPathsObject(appRouter, Object.keys(securitySchemes)),
-      ...(opts.paths ?? {}),
-    },
+    paths: mergePaths(getOpenApiPathsObject(appRouter, Object.keys(securitySchemes)), opts.paths),
     components: {
       securitySchemes,
     },
