@@ -140,43 +140,54 @@ export const getRequestBodyObject = (
 export const hasInputs = (schema: unknown) =>
   instanceofZodType(schema) && !instanceofZodTypeLikeVoid(unwrapZodType(schema, true));
 
+const errorResponseObjectByCode: Record<string, ZodOpenApiResponseObject> = {};
+
 export const errorResponseObject = (
-  code?: string,
+  code = 'INTERNAL_SERVER_ERROR',
   message?: string,
   issues?: { message: string }[],
-): ZodOpenApiResponseObject => ({
-  description: message ?? 'An error response',
-  content: {
-    'application/json': {
-      schema: z
-        .object({
-          message: z.string().openapi({
-            description: 'The error message',
-            example: message ?? 'Internal server error',
-          }),
-          code: z
-            .string()
-            .openapi({ description: 'The error code', example: code ?? 'INTERNAL_SERVER_ERROR' }),
-          issues: z
-            .array(z.object({ message: z.string() }))
-            .optional()
+): ZodOpenApiResponseObject => {
+  if (!errorResponseObjectByCode[code]) {
+    errorResponseObjectByCode[code] = {
+      description: message ?? 'An error response',
+      content: {
+        'application/json': {
+          schema: z
+            .object({
+              message: z.string().openapi({
+                description: 'The error message',
+                example: message ?? 'Internal server error',
+              }),
+              code: z
+                .string()
+                .openapi({
+                  description: 'The error code',
+                  example: code ?? 'INTERNAL_SERVER_ERROR',
+                }),
+              issues: z
+                .array(z.object({ message: z.string() }))
+                .optional()
+                .openapi({
+                  description: 'An array of issues that were responsible for the error',
+                  example: issues ?? [],
+                }),
+            })
             .openapi({
-              description: 'An array of issues that were responsible for the error',
-              example: issues ?? [],
+              title: 'Error',
+              description: 'The error information',
+              example: {
+                code: code ?? 'INTERNAL_SERVER_ERROR',
+                message: message ?? 'Internal server error',
+                issues: issues ?? [],
+              },
+              ref: `error.${code}`,
             }),
-        })
-        .openapi({
-          title: 'Error',
-          description: 'The error information',
-          example: {
-            code: code ?? 'INTERNAL_SERVER_ERROR',
-            message: message ?? 'Internal server error',
-            issues: issues ?? [],
-          },
-        }),
-    },
-  },
-});
+        },
+      },
+    };
+  }
+  return errorResponseObjectByCode[code]!;
+};
 
 export const errorResponseFromStatusCode = (status: number) => {
   const code = HTTP_STATUS_TRPC_ERROR_CODE[status];
