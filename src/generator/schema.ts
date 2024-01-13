@@ -158,12 +158,10 @@ export const errorResponseObject = (
                 description: 'The error message',
                 example: message ?? 'Internal server error',
               }),
-              code: z
-                .string()
-                .openapi({
-                  description: 'The error code',
-                  example: code ?? 'INTERNAL_SERVER_ERROR',
-                }),
+              code: z.string().openapi({
+                description: 'The error code',
+                example: code ?? 'INTERNAL_SERVER_ERROR',
+              }),
               issues: z
                 .array(z.object({ message: z.string() }))
                 .optional()
