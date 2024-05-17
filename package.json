@@ -14,7 +14,7 @@
   "repository": "github:lilyrose2798/trpc-openapi",
   "bugs": "https://github.com/lilyrose2798/trpc-openapi/issues",
   "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "module": "dist/esm/index.mjs",
   "typings": "dist/cjs/index.d.ts",
   "files": [
     "dist/cjs",
@@ -23,7 +23,7 @@
   "exports": {
     ".": {
       "require": "./dist/cjs/index.js",
-      "import": "./dist/esm/index.js",
+      "import": "./dist/esm/index.mjs",
       "types": "./dist/cjs/index.d.ts"
     }
   },
