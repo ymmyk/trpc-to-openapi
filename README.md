@@ -1,4 +1,4 @@
-![trpc-to-openapi](assets/trpc-to-openapi-readme.png)
+![trpc-to-openapi](assets/trpc-openapi.svg)
 
 <div align="center">
   <h1>trpc-to-openapi</h1>
