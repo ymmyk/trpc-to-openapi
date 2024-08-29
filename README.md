@@ -1,5 +1,6 @@
-![trpc-to-openapi](assets/trpc-openapi.svg)
-
+<p align="center">
+  <img src="assets/trpc-openapi.svg">
+</p>
 <div align="center">
   <h1>trpc-to-openapi</h1>
   <a href="https://www.npmjs.com/package/trpc-to-openapi"><img src="https://img.shields.io/npm/v/trpc-to-openapi.svg?style=flat&color=brightgreen" target="_blank" /></a>
@@ -8,13 +9,13 @@
   <hr />
 </div>
 
----
-
 ## **[OpenAPI](https://swagger.io/specification/) support for [tRPC](https://trpc.io/)** 🧩
 
 - Easy REST endpoints for your tRPC procedures.
 - Perfect for incremental adoption.
 - Supports all OpenAPI versions.
+
+Note: This project is a fork of a fork, with full credit to the original authors. It appears that the original author has abandoned the project, so I plan to add new features in the near future.
 
 ## Usage
 
