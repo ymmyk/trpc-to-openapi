@@ -369,7 +369,6 @@ describe('generator', () => {
         "content": Object {
           "application/json": Object {
             "schema": Object {
-              "properties": Object {},
               "type": "object",
             },
           },
@@ -1080,6 +1079,7 @@ describe('generator', () => {
         "operationId": "getUser",
         "parameters": Array [
           Object {
+            "description": "User ID",
             "in": "query",
             "name": "id",
             "required": true,
@@ -1168,7 +1168,7 @@ describe('generator', () => {
       const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
       expect(openApiDocument.paths!['/void']!.get!.parameters).toEqual(undefined);
-      expect(openApiDocument.paths!['/void']!.get!.responses[200]).toMatchInlineSnapshot(`
+      expect(openApiDocument.paths!['/void']!.get!.responses?.[200]).toMatchInlineSnapshot(`
         Object {
           "content": Object {
             "application/json": Object {
@@ -1191,7 +1191,7 @@ describe('generator', () => {
       const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
       expect(openApiDocument.paths!['/void']!.post!.requestBody).toMatchInlineSnapshot(`undefined`);
-      expect(openApiDocument.paths!['/void']!.post!.responses[200]).toMatchInlineSnapshot(`
+      expect(openApiDocument.paths!['/void']!.post!.responses?.[200]).toMatchInlineSnapshot(`
               Object {
                 "content": Object {
                   "application/json": Object {
@@ -1215,7 +1215,7 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiDocument.paths!['/null']!.post!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/null']!.post!.responses?.[200]).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
@@ -1243,7 +1243,7 @@ describe('generator', () => {
     expect(openApiDocument.paths!['/undefined']!.post!.requestBody).toMatchInlineSnapshot(
       `undefined`,
     );
-    expect(openApiDocument.paths!['/undefined']!.post!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/undefined']!.post!.responses?.[200]).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
@@ -1268,7 +1268,7 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiDocument.paths!['/nullish']!.post!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/nullish']!.post!.responses?.[200]).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
@@ -1289,14 +1289,13 @@ describe('generator', () => {
         .meta({ openapi: { method: 'POST', path: '/never' } })
         .input(z.never())
         .output(z.never())
-        // @ts-expect-error - cannot return never
-        .mutation(() => undefined),
+        .mutation(() => undefined as unknown as Promise<never>),
     });
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
     expect(openApiDocument.paths!['/never']!.post!.requestBody).toMatchInlineSnapshot(`undefined`);
-    expect(openApiDocument.paths!['/never']!.post!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/never']!.post!.responses?.[200]).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
@@ -1345,7 +1344,7 @@ describe('generator', () => {
         },
       ]
     `);
-    expect(openApiDocument.paths!['/optional-param']!.get!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/optional-param']!.get!.responses?.[200]).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
@@ -1375,7 +1374,8 @@ describe('generator', () => {
         },
       ]
     `);
-    expect(openApiDocument.paths!['/optional-object']!.get!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/optional-object']!.get!.responses?.[200])
+      .toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
@@ -1428,7 +1428,8 @@ describe('generator', () => {
         "required": true,
       }
     `);
-    expect(openApiDocument.paths!['/optional-param']!.post!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/optional-param']!.post!.responses?.[200])
+      .toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
@@ -1463,7 +1464,8 @@ describe('generator', () => {
         "required": false,
       }
     `);
-    expect(openApiDocument.paths!['/optional-object']!.post!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/optional-object']!.post!.responses?.[200])
+      .toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
@@ -1500,7 +1502,7 @@ describe('generator', () => {
         },
       ]
     `);
-    expect(openApiDocument.paths!['/default']!.get!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/default']!.get!.responses?.[200]).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
@@ -1718,7 +1720,7 @@ describe('generator', () => {
         },
       ]
     `);
-    expect(openApiDocument.paths!['/preprocess']!.get!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/preprocess']!.get!.responses?.[200]).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
@@ -1755,7 +1757,7 @@ describe('generator', () => {
         },
       ]
     `);
-    expect(openApiDocument.paths!['/coerce']!.get!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/coerce']!.get!.responses?.[200]).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
@@ -2065,7 +2067,7 @@ describe('generator', () => {
         "required": true,
       }
     `);
-    expect(openApiDocument.paths!['/refs']!.post!.responses[200]).toMatchInlineSnapshot(`
+    expect(openApiDocument.paths!['/refs']!.post!.responses?.[200]).toMatchInlineSnapshot(`
       Object {
         "content": Object {
           "application/json": Object {
@@ -2131,6 +2133,7 @@ describe('generator', () => {
           },
         },
         Object {
+          "description": "Some custom header.",
           "in": "header",
           "name": "x-custom-header",
           "required": true,
@@ -2742,7 +2745,7 @@ describe('generator', () => {
         },
       ]
     `);
-    expect(openApiDocument.paths!['/query-example/{name}']!.get!.responses[200])
+    expect(openApiDocument.paths!['/query-example/{name}']!.get!.responses?.[200])
       .toMatchInlineSnapshot(`
       Object {
         "content": Object {
@@ -2800,7 +2803,7 @@ describe('generator', () => {
         "required": true,
       }
     `);
-    expect(openApiDocument.paths!['/mutation-example/{name}']!.post!.responses[200])
+    expect(openApiDocument.paths!['/mutation-example/{name}']!.post!.responses?.[200])
       .toMatchInlineSnapshot(`
       Object {
         "content": Object {
@@ -2874,7 +2877,7 @@ describe('generator', () => {
         },
       ]
     `);
-    expect(openApiDocument.paths!['/query-example/{name}']!.get!.responses[200])
+    expect(openApiDocument.paths!['/query-example/{name}']!.get!.responses?.[200])
       .toMatchInlineSnapshot(`
       Object {
         "content": Object {
