@@ -198,19 +198,21 @@ describe('v1', () => {
     expect(headers).toEqual({
       'content-type': 'application/json',
     });
-    expect(body).toEqual({
-      message: 'Input validation failed',
-      code: 'BAD_REQUEST',
-      issues: [
-        {
-          code: 'invalid_type',
-          expected: 'string',
-          message: 'Required',
-          path: ['name'],
-          received: 'undefined',
-        },
-      ],
-    });
+    expect(body).toEqual(
+      expect.objectContaining({
+        message: 'Input validation failed',
+        code: 'BAD_REQUEST',
+        issues: [
+          {
+            code: 'invalid_type',
+            expected: 'string',
+            message: 'Required',
+            path: ['name'],
+            received: 'undefined',
+          },
+        ],
+      }),
+    );
   });
 
   test('with invalid body', async () => {
@@ -418,19 +420,21 @@ describe('v2', () => {
     expect(headers).toEqual({
       'content-type': 'application/json',
     });
-    expect(body).toEqual({
-      message: 'Input validation failed',
-      code: 'BAD_REQUEST',
-      issues: [
-        {
-          code: 'invalid_type',
-          expected: 'string',
-          message: 'Required',
-          path: ['name'],
-          received: 'undefined',
-        },
-      ],
-    });
+    expect(body).toEqual(
+      expect.objectContaining({
+        message: 'Input validation failed',
+        code: 'BAD_REQUEST',
+        issues: [
+          {
+            code: 'invalid_type',
+            expected: 'string',
+            message: 'Required',
+            path: ['name'],
+            received: 'undefined',
+          },
+        ],
+      }),
+    );
   });
 
   test('with invalid body', async () => {

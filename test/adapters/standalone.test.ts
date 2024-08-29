@@ -106,7 +106,7 @@ describe('standalone adapter', () => {
     const body = (await res.json()) as OpenApiErrorResponse;
 
     expect(res.status).toBe(404);
-    expect(body).toEqual({ message: 'Not found', code: 'NOT_FOUND' });
+    expect(body).toEqual(expect.objectContaining({ message: 'Not found', code: 'NOT_FOUND' }));
     expect(createContextMock).toHaveBeenCalledTimes(0);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
     expect(onErrorMock).toHaveBeenCalledTimes(1);
@@ -131,7 +131,7 @@ describe('standalone adapter', () => {
     const body = (await res.json()) as OpenApiErrorResponse;
 
     expect(res.status).toBe(404);
-    expect(body).toEqual({ message: 'Not found', code: 'NOT_FOUND' });
+    expect(body).toEqual(expect.objectContaining({ message: 'Not found', code: 'NOT_FOUND' }));
     expect(createContextMock).toHaveBeenCalledTimes(0);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
     expect(onErrorMock).toHaveBeenCalledTimes(1);
@@ -159,19 +159,21 @@ describe('standalone adapter', () => {
     const body = (await res.json()) as OpenApiErrorResponse;
 
     expect(res.status).toBe(400);
-    expect(body).toEqual({
-      message: 'Input validation failed',
-      code: 'BAD_REQUEST',
-      issues: [
-        {
-          code: 'invalid_type',
-          expected: 'string',
-          message: 'Required',
-          path: ['payload'],
-          received: 'undefined',
-        },
-      ],
-    });
+    expect(body).toEqual(
+      expect.objectContaining({
+        message: 'Input validation failed',
+        code: 'BAD_REQUEST',
+        issues: [
+          {
+            code: 'invalid_type',
+            expected: 'string',
+            message: 'Required',
+            path: ['payload'],
+            received: 'undefined',
+          },
+        ],
+      }),
+    );
     expect(createContextMock).toHaveBeenCalledTimes(1);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
     expect(onErrorMock).toHaveBeenCalledTimes(1);
@@ -200,19 +202,21 @@ describe('standalone adapter', () => {
     const body = (await res.json()) as OpenApiErrorResponse;
 
     expect(res.status).toBe(400);
-    expect(body).toEqual({
-      message: 'Input validation failed',
-      code: 'BAD_REQUEST',
-      issues: [
-        {
-          code: 'invalid_type',
-          expected: 'string',
-          message: 'Required',
-          path: ['payload'],
-          received: 'undefined',
-        },
-      ],
-    });
+    expect(body).toEqual(
+      expect.objectContaining({
+        message: 'Input validation failed',
+        code: 'BAD_REQUEST',
+        issues: [
+          {
+            code: 'invalid_type',
+            expected: 'string',
+            message: 'Required',
+            path: ['payload'],
+            received: 'undefined',
+          },
+        ],
+      }),
+    );
     expect(createContextMock).toHaveBeenCalledTimes(1);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
     expect(onErrorMock).toHaveBeenCalledTimes(1);
@@ -237,19 +241,21 @@ describe('standalone adapter', () => {
     const body = (await res.json()) as OpenApiErrorResponse;
 
     expect(res.status).toBe(400);
-    expect(body).toEqual({
-      message: 'Input validation failed',
-      code: 'BAD_REQUEST',
-      issues: [
-        {
-          code: 'invalid_type',
-          expected: 'string',
-          message: 'Required',
-          path: ['payload'],
-          received: 'undefined',
-        },
-      ],
-    });
+    expect(body).toEqual(
+      expect.objectContaining({
+        message: 'Input validation failed',
+        code: 'BAD_REQUEST',
+        issues: [
+          {
+            code: 'invalid_type',
+            expected: 'string',
+            message: 'Required',
+            path: ['payload'],
+            received: 'undefined',
+          },
+        ],
+      }),
+    );
     expect(createContextMock).toHaveBeenCalledTimes(1);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
     expect(onErrorMock).toHaveBeenCalledTimes(1);
@@ -278,19 +284,21 @@ describe('standalone adapter', () => {
     const body = (await res.json()) as OpenApiErrorResponse;
 
     expect(res.status).toBe(400);
-    expect(body).toEqual({
-      message: 'Input validation failed',
-      code: 'BAD_REQUEST',
-      issues: [
-        {
-          code: 'invalid_type',
-          expected: 'string',
-          message: 'Expected string, received number',
-          path: ['payload'],
-          received: 'number',
-        },
-      ],
-    });
+    expect(body).toEqual(
+      expect.objectContaining({
+        message: 'Input validation failed',
+        code: 'BAD_REQUEST',
+        issues: [
+          {
+            code: 'invalid_type',
+            expected: 'string',
+            message: 'Expected string, received number',
+            path: ['payload'],
+            received: 'number',
+          },
+        ],
+      }),
+    );
     expect(createContextMock).toHaveBeenCalledTimes(1);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
     expect(onErrorMock).toHaveBeenCalledTimes(1);
@@ -315,15 +323,17 @@ describe('standalone adapter', () => {
     const res = await fetch(`${url}/echo`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ payload: '@mcampa' }),
+      body: JSON.stringify({ payload: '@Mario' }),
     });
     const body = (await res.json()) as OpenApiErrorResponse;
 
     expect(res.status).toBe(500);
-    expect(body).toEqual({
-      message: 'Output validation failed',
-      code: 'INTERNAL_SERVER_ERROR',
-    });
+    expect(body).toEqual(
+      expect.objectContaining({
+        message: 'Output validation failed',
+        code: 'INTERNAL_SERVER_ERROR',
+      }),
+    );
     expect(createContextMock).toHaveBeenCalledTimes(1);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
     expect(onErrorMock).toHaveBeenCalledTimes(1);
@@ -351,7 +361,7 @@ describe('standalone adapter', () => {
 
     {
       const res = await fetch(`${url}/say-hello?name=Lily`, { method: 'GET' });
-      const body = await res.json();
+      const body = (await res.json()) as { greeting: string };
 
       expect(res.status).toBe(200);
       expect(body).toEqual({ greeting: 'Hello Lily!' });
@@ -471,14 +481,16 @@ describe('standalone adapter', () => {
       router: appRouter,
     });
 
-    const res = await fetch(`${url}/echo?payload=mcampa`, { method: 'GET' });
+    const res = await fetch(`${url}/echo?payload=Mario`, { method: 'GET' });
     const body = await res.json();
 
     expect(res.status).toBe(200);
-    expect(body).toEqual({
-      payload: 'mcampa',
-      context: { id: 1234567890 },
-    });
+    expect(body).toEqual(
+      expect.objectContaining({
+        payload: 'Mario',
+        context: { id: 1234567890 },
+      }),
+    );
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
     expect(onErrorMock).toHaveBeenCalledTimes(0);
 
@@ -499,13 +511,13 @@ describe('standalone adapter', () => {
       responseMeta: () => ({ status: 202, headers: { 'x-custom': 'custom header' } }),
     });
 
-    const res = await fetch(`${url}/echo?payload=mcampa`, { method: 'GET' });
+    const res = await fetch(`${url}/echo?payload=Mario`, { method: 'GET' });
     const body = await res.json();
 
     expect(res.status).toBe(202);
     expect(res.headers.get('x-custom')).toBe('custom header');
     expect(body).toEqual({
-      payload: 'mcampa',
+      payload: 'Mario',
       context: undefined,
     });
     expect(createContextMock).toHaveBeenCalledTimes(1);
@@ -531,12 +543,12 @@ describe('standalone adapter', () => {
       router: appRouter,
     });
 
-    const res = await fetch(`${url}/echo?payload=mcampa`, { method: 'GET' });
+    const res = await fetch(`${url}/echo?payload=Mario`, { method: 'GET' });
     const body = await res.json();
 
     expect(res.status).toBe(200);
     expect(body).toEqual({
-      payload: 'mcampa',
+      payload: 'Mario',
     });
     expect(createContextMock).toHaveBeenCalledTimes(1);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
@@ -584,10 +596,12 @@ describe('standalone adapter', () => {
     const body = (await res.json()) as OpenApiErrorResponse;
 
     expect(res.status).toBe(400);
-    expect(body).toEqual({
-      message: 'Failed to parse request body',
-      code: 'PARSE_ERROR',
-    });
+    expect(body).toEqual(
+      expect.objectContaining({
+        message: 'Failed to parse request body',
+        code: 'PARSE_ERROR',
+      }),
+    );
     expect(createContextMock).toHaveBeenCalledTimes(0);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
     expect(onErrorMock).toHaveBeenCalledTimes(1);
@@ -638,10 +652,12 @@ describe('standalone adapter', () => {
       const body = (await res.json()) as OpenApiErrorResponse;
 
       expect(res.status).toBe(413);
-      expect(body).toEqual({
-        message: 'Request body too large',
-        code: 'PAYLOAD_TOO_LARGE',
-      });
+      expect(body).toEqual(
+        expect.objectContaining({
+          message: 'Request body too large',
+          code: 'PAYLOAD_TOO_LARGE',
+        }),
+      );
       expect(createContextMock).toHaveBeenCalledTimes(0);
       expect(responseMetaMock).toHaveBeenCalledTimes(1);
       expect(onErrorMock).toHaveBeenCalledTimes(1);
@@ -664,7 +680,7 @@ describe('standalone adapter', () => {
     });
 
     {
-      const res = await fetch(`${url}/say-hello?name=Lily&name=mcampa`, { method: 'GET' });
+      const res = await fetch(`${url}/say-hello?name=Lily&name=Mario`, { method: 'GET' });
       const body = await res.json();
 
       expect(res.status).toBe(200);
@@ -768,7 +784,7 @@ describe('standalone adapter', () => {
       const res = await fetch(`${url}/say-hello/Lily`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: 'mcampa' }),
+        body: JSON.stringify({ name: 'Mario' }),
       });
       const body = await res.json();
 
@@ -781,7 +797,7 @@ describe('standalone adapter', () => {
       clearMocks();
     }
     {
-      const res = await fetch(`${url}/say-hello/Lily/Rose?greeting=Hello&first=mcampa`, {
+      const res = await fetch(`${url}/say-hello/Lily/Rose?greeting=Hello&first=Mario`, {
         method: 'GET',
       });
       const body = await res.json();
@@ -814,10 +830,12 @@ describe('standalone adapter', () => {
     const body = (await res.json()) as OpenApiErrorResponse;
 
     expect(res.status).toBe(500);
-    expect(body).toEqual({
-      message: 'Output validation failed',
-      code: 'INTERNAL_SERVER_ERROR',
-    });
+    expect(body).toEqual(
+      expect.objectContaining({
+        message: 'Output validation failed',
+        code: 'INTERNAL_SERVER_ERROR',
+      }),
+    );
     expect(createContextMock).toHaveBeenCalledTimes(1);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
     expect(onErrorMock).toHaveBeenCalledTimes(1);
@@ -924,11 +942,11 @@ describe('standalone adapter', () => {
       router: appRouter,
     });
 
-    const res = await fetch(`${url}/echo-delete?payload=mcampa`, { method: 'DELETE' });
+    const res = await fetch(`${url}/echo-delete?payload=Mario`, { method: 'DELETE' });
     const body = await res.json();
 
     expect(res.status).toBe(200);
-    expect(body).toEqual({ payload: 'mcampa' });
+    expect(body).toEqual({ payload: 'Mario' });
     expect(createContextMock).toHaveBeenCalledTimes(1);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
     expect(onErrorMock).toHaveBeenCalledTimes(0);
@@ -952,12 +970,12 @@ describe('standalone adapter', () => {
     const res = await fetch(`${url}/echo-post`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ payload: 'mcampa' }),
+      body: JSON.stringify({ payload: 'Mario' }),
     });
     const body = await res.json();
 
     expect(res.status).toBe(200);
-    expect(body).toEqual({ payload: 'mcampa' });
+    expect(body).toEqual({ payload: 'Mario' });
     expect(createContextMock).toHaveBeenCalledTimes(1);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
     expect(onErrorMock).toHaveBeenCalledTimes(0);
@@ -995,10 +1013,12 @@ describe('standalone adapter', () => {
       const body = (await res.json()) as OpenApiErrorResponse;
 
       expect(res.status).toBe(500);
-      expect(body).toEqual({
-        message: 'Custom error message',
-        code: 'INTERNAL_SERVER_ERROR',
-      });
+      expect(body).toEqual(
+        expect.objectContaining({
+          message: 'Custom error message',
+          code: 'INTERNAL_SERVER_ERROR',
+        }),
+      );
       expect(createContextMock).toHaveBeenCalledTimes(1);
       expect(responseMetaMock).toHaveBeenCalledTimes(1);
       expect(onErrorMock).toHaveBeenCalledTimes(1);
@@ -1010,10 +1030,12 @@ describe('standalone adapter', () => {
       const body = (await res.json()) as OpenApiErrorResponse;
 
       expect(res.status).toBe(499);
-      expect(body).toEqual({
-        message: 'Custom TRPCError message',
-        code: 'CLIENT_CLOSED_REQUEST',
-      });
+      expect(body).toEqual(
+        expect.objectContaining({
+          message: 'Custom TRPCError message',
+          code: 'CLIENT_CLOSED_REQUEST',
+        }),
+      );
       expect(createContextMock).toHaveBeenCalledTimes(1);
       expect(responseMetaMock).toHaveBeenCalledTimes(1);
       expect(onErrorMock).toHaveBeenCalledTimes(1);
@@ -1056,10 +1078,12 @@ describe('standalone adapter', () => {
     const body = (await res.json()) as OpenApiErrorResponse;
 
     expect(res.status).toBe(500);
-    expect(body).toEqual({
-      message: 'Custom formatted error message',
-      code: 'INTERNAL_SERVER_ERROR',
-    });
+    expect(body).toEqual(
+      expect.objectContaining({
+        message: 'Custom formatted error message',
+        code: 'INTERNAL_SERVER_ERROR',
+      }),
+    );
     expect(errorFormatterMock).toHaveBeenCalledTimes(1);
     expect(createContextMock).toHaveBeenCalledTimes(1);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);

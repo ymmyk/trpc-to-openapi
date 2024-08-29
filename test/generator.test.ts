@@ -413,6 +413,134 @@ describe('generator', () => {
     expect(openApiDocument).toMatchInlineSnapshot(`
       Object {
         "components": Object {
+          "schemas": Object {
+            "error.BAD_REQUEST": Object {
+              "description": "The error information",
+              "example": Object {
+                "code": "BAD_REQUEST",
+                "issues": Array [],
+                "message": "Invalid input data",
+              },
+              "properties": Object {
+                "code": Object {
+                  "description": "The error code",
+                  "example": "BAD_REQUEST",
+                  "type": "string",
+                },
+                "issues": Object {
+                  "description": "An array of issues that were responsible for the error",
+                  "example": Array [],
+                  "items": Object {
+                    "properties": Object {
+                      "message": Object {
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "message",
+                    ],
+                    "type": "object",
+                  },
+                  "type": "array",
+                },
+                "message": Object {
+                  "description": "The error message",
+                  "example": "Invalid input data",
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "message",
+                "code",
+              ],
+              "title": "Error",
+              "type": "object",
+            },
+            "error.INTERNAL_SERVER_ERROR": Object {
+              "description": "The error information",
+              "example": Object {
+                "code": "INTERNAL_SERVER_ERROR",
+                "issues": Array [],
+                "message": "Internal server error",
+              },
+              "properties": Object {
+                "code": Object {
+                  "description": "The error code",
+                  "example": "INTERNAL_SERVER_ERROR",
+                  "type": "string",
+                },
+                "issues": Object {
+                  "description": "An array of issues that were responsible for the error",
+                  "example": Array [],
+                  "items": Object {
+                    "properties": Object {
+                      "message": Object {
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "message",
+                    ],
+                    "type": "object",
+                  },
+                  "type": "array",
+                },
+                "message": Object {
+                  "description": "The error message",
+                  "example": "Internal server error",
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "message",
+                "code",
+              ],
+              "title": "Error",
+              "type": "object",
+            },
+            "error.NOT_FOUND": Object {
+              "description": "The error information",
+              "example": Object {
+                "code": "NOT_FOUND",
+                "issues": Array [],
+                "message": "Not found",
+              },
+              "properties": Object {
+                "code": Object {
+                  "description": "The error code",
+                  "example": "NOT_FOUND",
+                  "type": "string",
+                },
+                "issues": Object {
+                  "description": "An array of issues that were responsible for the error",
+                  "example": Array [],
+                  "items": Object {
+                    "properties": Object {
+                      "message": Object {
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "message",
+                    ],
+                    "type": "object",
+                  },
+                  "type": "array",
+                },
+                "message": Object {
+                  "description": "The error message",
+                  "example": "Not found",
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "message",
+                "code",
+              ],
+              "title": "Error",
+              "type": "object",
+            },
+          },
           "securitySchemes": Object {
             "Authorization": Object {
               "scheme": "bearer",
@@ -462,46 +590,7 @@ describe('generator', () => {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
-                        "description": "The error information",
-                        "example": Object {
-                          "code": "INTERNAL_SERVER_ERROR",
-                          "issues": Array [],
-                          "message": "Internal server error",
-                        },
-                        "properties": Object {
-                          "code": Object {
-                            "description": "The error code",
-                            "example": "INTERNAL_SERVER_ERROR",
-                            "type": "string",
-                          },
-                          "issues": Object {
-                            "description": "An array of issues that were responsible for the error",
-                            "example": Array [],
-                            "items": Object {
-                              "properties": Object {
-                                "message": Object {
-                                  "type": "string",
-                                },
-                              },
-                              "required": Array [
-                                "message",
-                              ],
-                              "type": "object",
-                            },
-                            "type": "array",
-                          },
-                          "message": Object {
-                            "description": "The error message",
-                            "example": "Internal server error",
-                            "type": "string",
-                          },
-                        },
-                        "required": Array [
-                          "message",
-                          "code",
-                        ],
-                        "title": "Error",
-                        "type": "object",
+                        "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR",
                       },
                     },
                   },
@@ -560,46 +649,7 @@ describe('generator', () => {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
-                        "description": "The error information",
-                        "example": Object {
-                          "code": "BAD_REQUEST",
-                          "issues": Array [],
-                          "message": "Invalid input data",
-                        },
-                        "properties": Object {
-                          "code": Object {
-                            "description": "The error code",
-                            "example": "BAD_REQUEST",
-                            "type": "string",
-                          },
-                          "issues": Object {
-                            "description": "An array of issues that were responsible for the error",
-                            "example": Array [],
-                            "items": Object {
-                              "properties": Object {
-                                "message": Object {
-                                  "type": "string",
-                                },
-                              },
-                              "required": Array [
-                                "message",
-                              ],
-                              "type": "object",
-                            },
-                            "type": "array",
-                          },
-                          "message": Object {
-                            "description": "The error message",
-                            "example": "Invalid input data",
-                            "type": "string",
-                          },
-                        },
-                        "required": Array [
-                          "message",
-                          "code",
-                        ],
-                        "title": "Error",
-                        "type": "object",
+                        "$ref": "#/components/schemas/error.BAD_REQUEST",
                       },
                     },
                   },
@@ -609,46 +659,7 @@ describe('generator', () => {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
-                        "description": "The error information",
-                        "example": Object {
-                          "code": "INTERNAL_SERVER_ERROR",
-                          "issues": Array [],
-                          "message": "Internal server error",
-                        },
-                        "properties": Object {
-                          "code": Object {
-                            "description": "The error code",
-                            "example": "INTERNAL_SERVER_ERROR",
-                            "type": "string",
-                          },
-                          "issues": Object {
-                            "description": "An array of issues that were responsible for the error",
-                            "example": Array [],
-                            "items": Object {
-                              "properties": Object {
-                                "message": Object {
-                                  "type": "string",
-                                },
-                              },
-                              "required": Array [
-                                "message",
-                              ],
-                              "type": "object",
-                            },
-                            "type": "array",
-                          },
-                          "message": Object {
-                            "description": "The error message",
-                            "example": "Internal server error",
-                            "type": "string",
-                          },
-                        },
-                        "required": Array [
-                          "message",
-                          "code",
-                        ],
-                        "title": "Error",
-                        "type": "object",
+                        "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR",
                       },
                     },
                   },
@@ -687,46 +698,7 @@ describe('generator', () => {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
-                        "description": "The error information",
-                        "example": Object {
-                          "code": "BAD_REQUEST",
-                          "issues": Array [],
-                          "message": "Invalid input data",
-                        },
-                        "properties": Object {
-                          "code": Object {
-                            "description": "The error code",
-                            "example": "BAD_REQUEST",
-                            "type": "string",
-                          },
-                          "issues": Object {
-                            "description": "An array of issues that were responsible for the error",
-                            "example": Array [],
-                            "items": Object {
-                              "properties": Object {
-                                "message": Object {
-                                  "type": "string",
-                                },
-                              },
-                              "required": Array [
-                                "message",
-                              ],
-                              "type": "object",
-                            },
-                            "type": "array",
-                          },
-                          "message": Object {
-                            "description": "The error message",
-                            "example": "Invalid input data",
-                            "type": "string",
-                          },
-                        },
-                        "required": Array [
-                          "message",
-                          "code",
-                        ],
-                        "title": "Error",
-                        "type": "object",
+                        "$ref": "#/components/schemas/error.BAD_REQUEST",
                       },
                     },
                   },
@@ -736,46 +708,7 @@ describe('generator', () => {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
-                        "description": "The error information",
-                        "example": Object {
-                          "code": "NOT_FOUND",
-                          "issues": Array [],
-                          "message": "Not found",
-                        },
-                        "properties": Object {
-                          "code": Object {
-                            "description": "The error code",
-                            "example": "NOT_FOUND",
-                            "type": "string",
-                          },
-                          "issues": Object {
-                            "description": "An array of issues that were responsible for the error",
-                            "example": Array [],
-                            "items": Object {
-                              "properties": Object {
-                                "message": Object {
-                                  "type": "string",
-                                },
-                              },
-                              "required": Array [
-                                "message",
-                              ],
-                              "type": "object",
-                            },
-                            "type": "array",
-                          },
-                          "message": Object {
-                            "description": "The error message",
-                            "example": "Not found",
-                            "type": "string",
-                          },
-                        },
-                        "required": Array [
-                          "message",
-                          "code",
-                        ],
-                        "title": "Error",
-                        "type": "object",
+                        "$ref": "#/components/schemas/error.NOT_FOUND",
                       },
                     },
                   },
@@ -785,46 +718,7 @@ describe('generator', () => {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
-                        "description": "The error information",
-                        "example": Object {
-                          "code": "INTERNAL_SERVER_ERROR",
-                          "issues": Array [],
-                          "message": "Internal server error",
-                        },
-                        "properties": Object {
-                          "code": Object {
-                            "description": "The error code",
-                            "example": "INTERNAL_SERVER_ERROR",
-                            "type": "string",
-                          },
-                          "issues": Object {
-                            "description": "An array of issues that were responsible for the error",
-                            "example": Array [],
-                            "items": Object {
-                              "properties": Object {
-                                "message": Object {
-                                  "type": "string",
-                                },
-                              },
-                              "required": Array [
-                                "message",
-                              ],
-                              "type": "object",
-                            },
-                            "type": "array",
-                          },
-                          "message": Object {
-                            "description": "The error message",
-                            "example": "Internal server error",
-                            "type": "string",
-                          },
-                        },
-                        "required": Array [
-                          "message",
-                          "code",
-                        ],
-                        "title": "Error",
-                        "type": "object",
+                        "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR",
                       },
                     },
                   },
@@ -875,46 +769,7 @@ describe('generator', () => {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
-                        "description": "The error information",
-                        "example": Object {
-                          "code": "BAD_REQUEST",
-                          "issues": Array [],
-                          "message": "Invalid input data",
-                        },
-                        "properties": Object {
-                          "code": Object {
-                            "description": "The error code",
-                            "example": "BAD_REQUEST",
-                            "type": "string",
-                          },
-                          "issues": Object {
-                            "description": "An array of issues that were responsible for the error",
-                            "example": Array [],
-                            "items": Object {
-                              "properties": Object {
-                                "message": Object {
-                                  "type": "string",
-                                },
-                              },
-                              "required": Array [
-                                "message",
-                              ],
-                              "type": "object",
-                            },
-                            "type": "array",
-                          },
-                          "message": Object {
-                            "description": "The error message",
-                            "example": "Invalid input data",
-                            "type": "string",
-                          },
-                        },
-                        "required": Array [
-                          "message",
-                          "code",
-                        ],
-                        "title": "Error",
-                        "type": "object",
+                        "$ref": "#/components/schemas/error.BAD_REQUEST",
                       },
                     },
                   },
@@ -924,46 +779,7 @@ describe('generator', () => {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
-                        "description": "The error information",
-                        "example": Object {
-                          "code": "NOT_FOUND",
-                          "issues": Array [],
-                          "message": "Not found",
-                        },
-                        "properties": Object {
-                          "code": Object {
-                            "description": "The error code",
-                            "example": "NOT_FOUND",
-                            "type": "string",
-                          },
-                          "issues": Object {
-                            "description": "An array of issues that were responsible for the error",
-                            "example": Array [],
-                            "items": Object {
-                              "properties": Object {
-                                "message": Object {
-                                  "type": "string",
-                                },
-                              },
-                              "required": Array [
-                                "message",
-                              ],
-                              "type": "object",
-                            },
-                            "type": "array",
-                          },
-                          "message": Object {
-                            "description": "The error message",
-                            "example": "Not found",
-                            "type": "string",
-                          },
-                        },
-                        "required": Array [
-                          "message",
-                          "code",
-                        ],
-                        "title": "Error",
-                        "type": "object",
+                        "$ref": "#/components/schemas/error.NOT_FOUND",
                       },
                     },
                   },
@@ -973,46 +789,7 @@ describe('generator', () => {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
-                        "description": "The error information",
-                        "example": Object {
-                          "code": "INTERNAL_SERVER_ERROR",
-                          "issues": Array [],
-                          "message": "Internal server error",
-                        },
-                        "properties": Object {
-                          "code": Object {
-                            "description": "The error code",
-                            "example": "INTERNAL_SERVER_ERROR",
-                            "type": "string",
-                          },
-                          "issues": Object {
-                            "description": "An array of issues that were responsible for the error",
-                            "example": Array [],
-                            "items": Object {
-                              "properties": Object {
-                                "message": Object {
-                                  "type": "string",
-                                },
-                              },
-                              "required": Array [
-                                "message",
-                              ],
-                              "type": "object",
-                            },
-                            "type": "array",
-                          },
-                          "message": Object {
-                            "description": "The error message",
-                            "example": "Internal server error",
-                            "type": "string",
-                          },
-                        },
-                        "required": Array [
-                          "message",
-                          "code",
-                        ],
-                        "title": "Error",
-                        "type": "object",
+                        "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR",
                       },
                     },
                   },
@@ -1078,46 +855,7 @@ describe('generator', () => {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
-                        "description": "The error information",
-                        "example": Object {
-                          "code": "BAD_REQUEST",
-                          "issues": Array [],
-                          "message": "Invalid input data",
-                        },
-                        "properties": Object {
-                          "code": Object {
-                            "description": "The error code",
-                            "example": "BAD_REQUEST",
-                            "type": "string",
-                          },
-                          "issues": Object {
-                            "description": "An array of issues that were responsible for the error",
-                            "example": Array [],
-                            "items": Object {
-                              "properties": Object {
-                                "message": Object {
-                                  "type": "string",
-                                },
-                              },
-                              "required": Array [
-                                "message",
-                              ],
-                              "type": "object",
-                            },
-                            "type": "array",
-                          },
-                          "message": Object {
-                            "description": "The error message",
-                            "example": "Invalid input data",
-                            "type": "string",
-                          },
-                        },
-                        "required": Array [
-                          "message",
-                          "code",
-                        ],
-                        "title": "Error",
-                        "type": "object",
+                        "$ref": "#/components/schemas/error.BAD_REQUEST",
                       },
                     },
                   },
@@ -1127,46 +865,7 @@ describe('generator', () => {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
-                        "description": "The error information",
-                        "example": Object {
-                          "code": "NOT_FOUND",
-                          "issues": Array [],
-                          "message": "Not found",
-                        },
-                        "properties": Object {
-                          "code": Object {
-                            "description": "The error code",
-                            "example": "NOT_FOUND",
-                            "type": "string",
-                          },
-                          "issues": Object {
-                            "description": "An array of issues that were responsible for the error",
-                            "example": Array [],
-                            "items": Object {
-                              "properties": Object {
-                                "message": Object {
-                                  "type": "string",
-                                },
-                              },
-                              "required": Array [
-                                "message",
-                              ],
-                              "type": "object",
-                            },
-                            "type": "array",
-                          },
-                          "message": Object {
-                            "description": "The error message",
-                            "example": "Not found",
-                            "type": "string",
-                          },
-                        },
-                        "required": Array [
-                          "message",
-                          "code",
-                        ],
-                        "title": "Error",
-                        "type": "object",
+                        "$ref": "#/components/schemas/error.NOT_FOUND",
                       },
                     },
                   },
@@ -1176,46 +875,7 @@ describe('generator', () => {
                   "content": Object {
                     "application/json": Object {
                       "schema": Object {
-                        "description": "The error information",
-                        "example": Object {
-                          "code": "INTERNAL_SERVER_ERROR",
-                          "issues": Array [],
-                          "message": "Internal server error",
-                        },
-                        "properties": Object {
-                          "code": Object {
-                            "description": "The error code",
-                            "example": "INTERNAL_SERVER_ERROR",
-                            "type": "string",
-                          },
-                          "issues": Object {
-                            "description": "An array of issues that were responsible for the error",
-                            "example": Array [],
-                            "items": Object {
-                              "properties": Object {
-                                "message": Object {
-                                  "type": "string",
-                                },
-                              },
-                              "required": Array [
-                                "message",
-                              ],
-                              "type": "object",
-                            },
-                            "type": "array",
-                          },
-                          "message": Object {
-                            "description": "The error message",
-                            "example": "Internal server error",
-                            "type": "string",
-                          },
-                        },
-                        "required": Array [
-                          "message",
-                          "code",
-                        ],
-                        "title": "Error",
-                        "type": "object",
+                        "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR",
                       },
                     },
                   },
@@ -1392,46 +1052,7 @@ describe('generator', () => {
             "content": Object {
               "application/json": Object {
                 "schema": Object {
-                  "description": "The error information",
-                  "example": Object {
-                    "code": "BAD_REQUEST",
-                    "issues": Array [],
-                    "message": "Invalid input data",
-                  },
-                  "properties": Object {
-                    "code": Object {
-                      "description": "The error code",
-                      "example": "BAD_REQUEST",
-                      "type": "string",
-                    },
-                    "issues": Object {
-                      "description": "An array of issues that were responsible for the error",
-                      "example": Array [],
-                      "items": Object {
-                        "properties": Object {
-                          "message": Object {
-                            "type": "string",
-                          },
-                        },
-                        "required": Array [
-                          "message",
-                        ],
-                        "type": "object",
-                      },
-                      "type": "array",
-                    },
-                    "message": Object {
-                      "description": "The error message",
-                      "example": "Invalid input data",
-                      "type": "string",
-                    },
-                  },
-                  "required": Array [
-                    "message",
-                    "code",
-                  ],
-                  "title": "Error",
-                  "type": "object",
+                  "$ref": "#/components/schemas/error.BAD_REQUEST",
                 },
               },
             },
@@ -1441,46 +1062,7 @@ describe('generator', () => {
             "content": Object {
               "application/json": Object {
                 "schema": Object {
-                  "description": "The error information",
-                  "example": Object {
-                    "code": "INTERNAL_SERVER_ERROR",
-                    "issues": Array [],
-                    "message": "Internal server error",
-                  },
-                  "properties": Object {
-                    "code": Object {
-                      "description": "The error code",
-                      "example": "INTERNAL_SERVER_ERROR",
-                      "type": "string",
-                    },
-                    "issues": Object {
-                      "description": "An array of issues that were responsible for the error",
-                      "example": Array [],
-                      "items": Object {
-                        "properties": Object {
-                          "message": Object {
-                            "type": "string",
-                          },
-                        },
-                        "required": Array [
-                          "message",
-                        ],
-                        "type": "object",
-                      },
-                      "type": "array",
-                    },
-                    "message": Object {
-                      "description": "The error message",
-                      "example": "Internal server error",
-                      "type": "string",
-                    },
-                  },
-                  "required": Array [
-                    "message",
-                    "code",
-                  ],
-                  "title": "Error",
-                  "type": "object",
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR",
                 },
               },
             },
@@ -1539,46 +1121,7 @@ describe('generator', () => {
             "content": Object {
               "application/json": Object {
                 "schema": Object {
-                  "description": "The error information",
-                  "example": Object {
-                    "code": "BAD_REQUEST",
-                    "issues": Array [],
-                    "message": "Invalid input data",
-                  },
-                  "properties": Object {
-                    "code": Object {
-                      "description": "The error code",
-                      "example": "BAD_REQUEST",
-                      "type": "string",
-                    },
-                    "issues": Object {
-                      "description": "An array of issues that were responsible for the error",
-                      "example": Array [],
-                      "items": Object {
-                        "properties": Object {
-                          "message": Object {
-                            "type": "string",
-                          },
-                        },
-                        "required": Array [
-                          "message",
-                        ],
-                        "type": "object",
-                      },
-                      "type": "array",
-                    },
-                    "message": Object {
-                      "description": "The error message",
-                      "example": "Invalid input data",
-                      "type": "string",
-                    },
-                  },
-                  "required": Array [
-                    "message",
-                    "code",
-                  ],
-                  "title": "Error",
-                  "type": "object",
+                  "$ref": "#/components/schemas/error.BAD_REQUEST",
                 },
               },
             },
@@ -1588,46 +1131,7 @@ describe('generator', () => {
             "content": Object {
               "application/json": Object {
                 "schema": Object {
-                  "description": "The error information",
-                  "example": Object {
-                    "code": "NOT_FOUND",
-                    "issues": Array [],
-                    "message": "Not found",
-                  },
-                  "properties": Object {
-                    "code": Object {
-                      "description": "The error code",
-                      "example": "NOT_FOUND",
-                      "type": "string",
-                    },
-                    "issues": Object {
-                      "description": "An array of issues that were responsible for the error",
-                      "example": Array [],
-                      "items": Object {
-                        "properties": Object {
-                          "message": Object {
-                            "type": "string",
-                          },
-                        },
-                        "required": Array [
-                          "message",
-                        ],
-                        "type": "object",
-                      },
-                      "type": "array",
-                    },
-                    "message": Object {
-                      "description": "The error message",
-                      "example": "Not found",
-                      "type": "string",
-                    },
-                  },
-                  "required": Array [
-                    "message",
-                    "code",
-                  ],
-                  "title": "Error",
-                  "type": "object",
+                  "$ref": "#/components/schemas/error.NOT_FOUND",
                 },
               },
             },
@@ -1637,46 +1141,7 @@ describe('generator', () => {
             "content": Object {
               "application/json": Object {
                 "schema": Object {
-                  "description": "The error information",
-                  "example": Object {
-                    "code": "INTERNAL_SERVER_ERROR",
-                    "issues": Array [],
-                    "message": "Internal server error",
-                  },
-                  "properties": Object {
-                    "code": Object {
-                      "description": "The error code",
-                      "example": "INTERNAL_SERVER_ERROR",
-                      "type": "string",
-                    },
-                    "issues": Object {
-                      "description": "An array of issues that were responsible for the error",
-                      "example": Array [],
-                      "items": Object {
-                        "properties": Object {
-                          "message": Object {
-                            "type": "string",
-                          },
-                        },
-                        "required": Array [
-                          "message",
-                        ],
-                        "type": "object",
-                      },
-                      "type": "array",
-                    },
-                    "message": Object {
-                      "description": "The error message",
-                      "example": "Internal server error",
-                      "type": "string",
-                    },
-                  },
-                  "required": Array [
-                    "message",
-                    "code",
-                  ],
-                  "title": "Error",
-                  "type": "object",
+                  "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR",
                 },
               },
             },
@@ -1727,15 +1192,15 @@ describe('generator', () => {
 
       expect(openApiDocument.paths!['/void']!.post!.requestBody).toMatchInlineSnapshot(`undefined`);
       expect(openApiDocument.paths!['/void']!.post!.responses[200]).toMatchInlineSnapshot(`
-      Object {
-        "content": Object {
-          "application/json": Object {
-            "schema": Object {},
-          },
-        },
-        "description": "Successful response",
-      }
-    `);
+              Object {
+                "content": Object {
+                  "application/json": Object {
+                    "schema": Object {},
+                  },
+                },
+                "description": "Successful response",
+              }
+          `);
     }
   });
 
@@ -2857,46 +2322,7 @@ describe('generator', () => {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
-                      "description": "The error information",
-                      "example": Object {
-                        "code": "BAD_REQUEST",
-                        "issues": Array [],
-                        "message": "Invalid input data",
-                      },
-                      "properties": Object {
-                        "code": Object {
-                          "description": "The error code",
-                          "example": "BAD_REQUEST",
-                          "type": "string",
-                        },
-                        "issues": Object {
-                          "description": "An array of issues that were responsible for the error",
-                          "example": Array [],
-                          "items": Object {
-                            "properties": Object {
-                              "message": Object {
-                                "type": "string",
-                              },
-                            },
-                            "required": Array [
-                              "message",
-                            ],
-                            "type": "object",
-                          },
-                          "type": "array",
-                        },
-                        "message": Object {
-                          "description": "The error message",
-                          "example": "Invalid input data",
-                          "type": "string",
-                        },
-                      },
-                      "required": Array [
-                        "message",
-                        "code",
-                      ],
-                      "title": "Error",
-                      "type": "object",
+                      "$ref": "#/components/schemas/error.BAD_REQUEST",
                     },
                   },
                 },
@@ -2906,46 +2332,7 @@ describe('generator', () => {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
-                      "description": "The error information",
-                      "example": Object {
-                        "code": "NOT_FOUND",
-                        "issues": Array [],
-                        "message": "Not found",
-                      },
-                      "properties": Object {
-                        "code": Object {
-                          "description": "The error code",
-                          "example": "NOT_FOUND",
-                          "type": "string",
-                        },
-                        "issues": Object {
-                          "description": "An array of issues that were responsible for the error",
-                          "example": Array [],
-                          "items": Object {
-                            "properties": Object {
-                              "message": Object {
-                                "type": "string",
-                              },
-                            },
-                            "required": Array [
-                              "message",
-                            ],
-                            "type": "object",
-                          },
-                          "type": "array",
-                        },
-                        "message": Object {
-                          "description": "The error message",
-                          "example": "Not found",
-                          "type": "string",
-                        },
-                      },
-                      "required": Array [
-                        "message",
-                        "code",
-                      ],
-                      "title": "Error",
-                      "type": "object",
+                      "$ref": "#/components/schemas/error.NOT_FOUND",
                     },
                   },
                 },
@@ -2955,46 +2342,7 @@ describe('generator', () => {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
-                      "description": "The error information",
-                      "example": Object {
-                        "code": "INTERNAL_SERVER_ERROR",
-                        "issues": Array [],
-                        "message": "Internal server error",
-                      },
-                      "properties": Object {
-                        "code": Object {
-                          "description": "The error code",
-                          "example": "INTERNAL_SERVER_ERROR",
-                          "type": "string",
-                        },
-                        "issues": Object {
-                          "description": "An array of issues that were responsible for the error",
-                          "example": Array [],
-                          "items": Object {
-                            "properties": Object {
-                              "message": Object {
-                                "type": "string",
-                              },
-                            },
-                            "required": Array [
-                              "message",
-                            ],
-                            "type": "object",
-                          },
-                          "type": "array",
-                        },
-                        "message": Object {
-                          "description": "The error message",
-                          "example": "Internal server error",
-                          "type": "string",
-                        },
-                      },
-                      "required": Array [
-                        "message",
-                        "code",
-                      ],
-                      "title": "Error",
-                      "type": "object",
+                      "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR",
                     },
                   },
                 },
@@ -3043,46 +2391,7 @@ describe('generator', () => {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
-                      "description": "The error information",
-                      "example": Object {
-                        "code": "BAD_REQUEST",
-                        "issues": Array [],
-                        "message": "Invalid input data",
-                      },
-                      "properties": Object {
-                        "code": Object {
-                          "description": "The error code",
-                          "example": "BAD_REQUEST",
-                          "type": "string",
-                        },
-                        "issues": Object {
-                          "description": "An array of issues that were responsible for the error",
-                          "example": Array [],
-                          "items": Object {
-                            "properties": Object {
-                              "message": Object {
-                                "type": "string",
-                              },
-                            },
-                            "required": Array [
-                              "message",
-                            ],
-                            "type": "object",
-                          },
-                          "type": "array",
-                        },
-                        "message": Object {
-                          "description": "The error message",
-                          "example": "Invalid input data",
-                          "type": "string",
-                        },
-                      },
-                      "required": Array [
-                        "message",
-                        "code",
-                      ],
-                      "title": "Error",
-                      "type": "object",
+                      "$ref": "#/components/schemas/error.BAD_REQUEST",
                     },
                   },
                 },
@@ -3092,46 +2401,7 @@ describe('generator', () => {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
-                      "description": "The error information",
-                      "example": Object {
-                        "code": "NOT_FOUND",
-                        "issues": Array [],
-                        "message": "Not found",
-                      },
-                      "properties": Object {
-                        "code": Object {
-                          "description": "The error code",
-                          "example": "NOT_FOUND",
-                          "type": "string",
-                        },
-                        "issues": Object {
-                          "description": "An array of issues that were responsible for the error",
-                          "example": Array [],
-                          "items": Object {
-                            "properties": Object {
-                              "message": Object {
-                                "type": "string",
-                              },
-                            },
-                            "required": Array [
-                              "message",
-                            ],
-                            "type": "object",
-                          },
-                          "type": "array",
-                        },
-                        "message": Object {
-                          "description": "The error message",
-                          "example": "Not found",
-                          "type": "string",
-                        },
-                      },
-                      "required": Array [
-                        "message",
-                        "code",
-                      ],
-                      "title": "Error",
-                      "type": "object",
+                      "$ref": "#/components/schemas/error.NOT_FOUND",
                     },
                   },
                 },
@@ -3141,46 +2411,7 @@ describe('generator', () => {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
-                      "description": "The error information",
-                      "example": Object {
-                        "code": "INTERNAL_SERVER_ERROR",
-                        "issues": Array [],
-                        "message": "Internal server error",
-                      },
-                      "properties": Object {
-                        "code": Object {
-                          "description": "The error code",
-                          "example": "INTERNAL_SERVER_ERROR",
-                          "type": "string",
-                        },
-                        "issues": Object {
-                          "description": "An array of issues that were responsible for the error",
-                          "example": Array [],
-                          "items": Object {
-                            "properties": Object {
-                              "message": Object {
-                                "type": "string",
-                              },
-                            },
-                            "required": Array [
-                              "message",
-                            ],
-                            "type": "object",
-                          },
-                          "type": "array",
-                        },
-                        "message": Object {
-                          "description": "The error message",
-                          "example": "Internal server error",
-                          "type": "string",
-                        },
-                      },
-                      "required": Array [
-                        "message",
-                        "code",
-                      ],
-                      "title": "Error",
-                      "type": "object",
+                      "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR",
                     },
                   },
                 },
@@ -3229,46 +2460,7 @@ describe('generator', () => {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
-                      "description": "The error information",
-                      "example": Object {
-                        "code": "BAD_REQUEST",
-                        "issues": Array [],
-                        "message": "Invalid input data",
-                      },
-                      "properties": Object {
-                        "code": Object {
-                          "description": "The error code",
-                          "example": "BAD_REQUEST",
-                          "type": "string",
-                        },
-                        "issues": Object {
-                          "description": "An array of issues that were responsible for the error",
-                          "example": Array [],
-                          "items": Object {
-                            "properties": Object {
-                              "message": Object {
-                                "type": "string",
-                              },
-                            },
-                            "required": Array [
-                              "message",
-                            ],
-                            "type": "object",
-                          },
-                          "type": "array",
-                        },
-                        "message": Object {
-                          "description": "The error message",
-                          "example": "Invalid input data",
-                          "type": "string",
-                        },
-                      },
-                      "required": Array [
-                        "message",
-                        "code",
-                      ],
-                      "title": "Error",
-                      "type": "object",
+                      "$ref": "#/components/schemas/error.BAD_REQUEST",
                     },
                   },
                 },
@@ -3278,46 +2470,7 @@ describe('generator', () => {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
-                      "description": "The error information",
-                      "example": Object {
-                        "code": "NOT_FOUND",
-                        "issues": Array [],
-                        "message": "Not found",
-                      },
-                      "properties": Object {
-                        "code": Object {
-                          "description": "The error code",
-                          "example": "NOT_FOUND",
-                          "type": "string",
-                        },
-                        "issues": Object {
-                          "description": "An array of issues that were responsible for the error",
-                          "example": Array [],
-                          "items": Object {
-                            "properties": Object {
-                              "message": Object {
-                                "type": "string",
-                              },
-                            },
-                            "required": Array [
-                              "message",
-                            ],
-                            "type": "object",
-                          },
-                          "type": "array",
-                        },
-                        "message": Object {
-                          "description": "The error message",
-                          "example": "Not found",
-                          "type": "string",
-                        },
-                      },
-                      "required": Array [
-                        "message",
-                        "code",
-                      ],
-                      "title": "Error",
-                      "type": "object",
+                      "$ref": "#/components/schemas/error.NOT_FOUND",
                     },
                   },
                 },
@@ -3327,46 +2480,7 @@ describe('generator', () => {
                 "content": Object {
                   "application/json": Object {
                     "schema": Object {
-                      "description": "The error information",
-                      "example": Object {
-                        "code": "INTERNAL_SERVER_ERROR",
-                        "issues": Array [],
-                        "message": "Internal server error",
-                      },
-                      "properties": Object {
-                        "code": Object {
-                          "description": "The error code",
-                          "example": "INTERNAL_SERVER_ERROR",
-                          "type": "string",
-                        },
-                        "issues": Object {
-                          "description": "An array of issues that were responsible for the error",
-                          "example": Array [],
-                          "items": Object {
-                            "properties": Object {
-                              "message": Object {
-                                "type": "string",
-                              },
-                            },
-                            "required": Array [
-                              "message",
-                            ],
-                            "type": "object",
-                          },
-                          "type": "array",
-                        },
-                        "message": Object {
-                          "description": "The error message",
-                          "example": "Internal server error",
-                          "type": "string",
-                        },
-                      },
-                      "required": Array [
-                        "message",
-                        "code",
-                      ],
-                      "title": "Error",
-                      "type": "object",
+                      "$ref": "#/components/schemas/error.INTERNAL_SERVER_ERROR",
                     },
                   },
                 },
