@@ -138,12 +138,12 @@ describe('fastify adapter', () => {
       { serverOpts: { basePath: '/open-api' } },
     );
 
-    const res = await fetch(`${url}/open-api/echo?payload=lilyrose2798`, { method: 'GET' });
+    const res = await fetch(`${url}/open-api/echo?payload=mcampa`, { method: 'GET' });
     const body = await res.json();
 
     expect(res.status).toBe(200);
     expect(body).toEqual({
-      payload: 'lilyrose2798',
+      payload: 'mcampa',
     });
     expect(createContextMock).toHaveBeenCalledTimes(1);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
@@ -168,14 +168,14 @@ describe('fastify adapter', () => {
       },
     );
 
-    const res = await fetch(`${url}/api-prefix/echo?payload=lilyrose2798`, {
+    const res = await fetch(`${url}/api-prefix/echo?payload=mcampa`, {
       method: 'GET',
     });
     const body = await res.json();
 
     expect(res.status).toBe(200);
     expect(body).toEqual({
-      payload: 'lilyrose2798',
+      payload: 'mcampa',
     });
     expect(createContextMock).toHaveBeenCalledTimes(1);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);

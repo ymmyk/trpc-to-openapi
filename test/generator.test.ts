@@ -67,7 +67,7 @@ describe('generator', () => {
         noInput: t.procedure
           .meta({ openapi: { method: 'GET', path: '/no-input' } })
           .output(z.object({ name: z.string() }))
-          .query(() => ({ name: 'lilyrose2798' })),
+          .query(() => ({ name: 'mcampa' })),
       });
 
       expect(() => {
@@ -79,7 +79,7 @@ describe('generator', () => {
         noInput: t.procedure
           .meta({ openapi: { method: 'POST', path: '/no-input' } })
           .output(z.object({ name: z.string() }))
-          .mutation(() => ({ name: 'lilyrose2798' })),
+          .mutation(() => ({ name: 'mcampa' })),
       });
 
       expect(() => {
@@ -186,7 +186,7 @@ describe('generator', () => {
           .meta({ openapi: { method: 'GET', path: '/bad-input' } })
           .input(z.object({ age: z.number().min(0).max(122) })) // RIP Jeanne Calment
           .output(z.object({ name: z.string() }))
-          .query(() => ({ name: 'lilyrose2798' })),
+          .query(() => ({ name: 'mcampa' })),
       });
 
       expect(() => {
@@ -199,7 +199,7 @@ describe('generator', () => {
           .meta({ openapi: { method: 'POST', path: '/ok-input' } })
           .input(z.object({ age: z.number().min(0).max(122) }))
           .output(z.object({ name: z.string() }))
-          .mutation(() => ({ name: 'lilyrose2798' })),
+          .mutation(() => ({ name: 'mcampa' })),
       });
 
       const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
@@ -2476,7 +2476,7 @@ describe('generator', () => {
     const appRouter = t.router({
       enum: t.procedure
         .meta({ openapi: { method: 'GET', path: '/enum' } })
-        .input(z.object({ name: z.enum(['Lily', 'lilyrose2798']) }))
+        .input(z.object({ name: z.enum(['Lily', 'mcampa']) }))
         .output(z.null())
         .query(() => null),
     });
@@ -2492,7 +2492,7 @@ describe('generator', () => {
           "schema": Object {
             "enum": Array [
               "Lily",
-              "lilyrose2798",
+              "mcampa",
             ],
             "type": "string",
           },
@@ -2505,7 +2505,7 @@ describe('generator', () => {
     {
       enum InvalidEnum {
         Lily,
-        lilyrose2798,
+        mcampa,
       }
 
       const appRouter = t.router({
@@ -2523,7 +2523,7 @@ describe('generator', () => {
     {
       enum ValidEnum {
         Lily = 'Lily',
-        lilyrose2798 = 'lilyrose2798',
+        mcampa = 'mcampa',
       }
 
       const appRouter = t.router({
@@ -2545,7 +2545,7 @@ describe('generator', () => {
             "schema": Object {
               "enum": Array [
                 "Lily",
-                "lilyrose2798",
+                "mcampa",
               ],
               "type": "string",
             },

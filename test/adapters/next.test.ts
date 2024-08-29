@@ -152,7 +152,7 @@ describe('next adapter', () => {
 
     expect(res.statusCode).toBe(500);
     expect(res.body).toEqual({
-      message: 'Query "trpc" not found - is the `trpc-openapi` file named `[...trpc].ts`?',
+      message: 'Query "trpc" not found - is the `trpc-to-openapi` file named `[...trpc].ts`?',
       code: 'INTERNAL_SERVER_ERROR',
     });
     expect(createContextMock).toHaveBeenCalledTimes(0);

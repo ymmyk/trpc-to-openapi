@@ -315,7 +315,7 @@ describe('standalone adapter', () => {
     const res = await fetch(`${url}/echo`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ payload: '@lilyrose2798' }),
+      body: JSON.stringify({ payload: '@mcampa' }),
     });
     const body = (await res.json()) as OpenApiErrorResponse;
 
@@ -471,12 +471,12 @@ describe('standalone adapter', () => {
       router: appRouter,
     });
 
-    const res = await fetch(`${url}/echo?payload=lilyrose2798`, { method: 'GET' });
+    const res = await fetch(`${url}/echo?payload=mcampa`, { method: 'GET' });
     const body = await res.json();
 
     expect(res.status).toBe(200);
     expect(body).toEqual({
-      payload: 'lilyrose2798',
+      payload: 'mcampa',
       context: { id: 1234567890 },
     });
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
@@ -499,13 +499,13 @@ describe('standalone adapter', () => {
       responseMeta: () => ({ status: 202, headers: { 'x-custom': 'custom header' } }),
     });
 
-    const res = await fetch(`${url}/echo?payload=lilyrose2798`, { method: 'GET' });
+    const res = await fetch(`${url}/echo?payload=mcampa`, { method: 'GET' });
     const body = await res.json();
 
     expect(res.status).toBe(202);
     expect(res.headers.get('x-custom')).toBe('custom header');
     expect(body).toEqual({
-      payload: 'lilyrose2798',
+      payload: 'mcampa',
       context: undefined,
     });
     expect(createContextMock).toHaveBeenCalledTimes(1);
@@ -531,12 +531,12 @@ describe('standalone adapter', () => {
       router: appRouter,
     });
 
-    const res = await fetch(`${url}/echo?payload=lilyrose2798`, { method: 'GET' });
+    const res = await fetch(`${url}/echo?payload=mcampa`, { method: 'GET' });
     const body = await res.json();
 
     expect(res.status).toBe(200);
     expect(body).toEqual({
-      payload: 'lilyrose2798',
+      payload: 'mcampa',
     });
     expect(createContextMock).toHaveBeenCalledTimes(1);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
@@ -664,7 +664,7 @@ describe('standalone adapter', () => {
     });
 
     {
-      const res = await fetch(`${url}/say-hello?name=Lily&name=lilyrose2798`, { method: 'GET' });
+      const res = await fetch(`${url}/say-hello?name=Lily&name=mcampa`, { method: 'GET' });
       const body = await res.json();
 
       expect(res.status).toBe(200);
@@ -768,7 +768,7 @@ describe('standalone adapter', () => {
       const res = await fetch(`${url}/say-hello/Lily`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: 'lilyrose2798' }),
+        body: JSON.stringify({ name: 'mcampa' }),
       });
       const body = await res.json();
 
@@ -781,7 +781,7 @@ describe('standalone adapter', () => {
       clearMocks();
     }
     {
-      const res = await fetch(`${url}/say-hello/Lily/Rose?greeting=Hello&first=lilyrose2798`, {
+      const res = await fetch(`${url}/say-hello/Lily/Rose?greeting=Hello&first=mcampa`, {
         method: 'GET',
       });
       const body = await res.json();
@@ -924,11 +924,11 @@ describe('standalone adapter', () => {
       router: appRouter,
     });
 
-    const res = await fetch(`${url}/echo-delete?payload=lilyrose2798`, { method: 'DELETE' });
+    const res = await fetch(`${url}/echo-delete?payload=mcampa`, { method: 'DELETE' });
     const body = await res.json();
 
     expect(res.status).toBe(200);
-    expect(body).toEqual({ payload: 'lilyrose2798' });
+    expect(body).toEqual({ payload: 'mcampa' });
     expect(createContextMock).toHaveBeenCalledTimes(1);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
     expect(onErrorMock).toHaveBeenCalledTimes(0);
@@ -952,12 +952,12 @@ describe('standalone adapter', () => {
     const res = await fetch(`${url}/echo-post`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ payload: 'lilyrose2798' }),
+      body: JSON.stringify({ payload: 'mcampa' }),
     });
     const body = await res.json();
 
     expect(res.status).toBe(200);
-    expect(body).toEqual({ payload: 'lilyrose2798' });
+    expect(body).toEqual({ payload: 'mcampa' });
     expect(createContextMock).toHaveBeenCalledTimes(1);
     expect(responseMetaMock).toHaveBeenCalledTimes(1);
     expect(onErrorMock).toHaveBeenCalledTimes(0);

@@ -1,4 +1,4 @@
-import { generateOpenApiDocument } from '@lilyrose2798/trpc-openapi';
+import { generateOpenApiDocument } from 'trpc-to-openapi';
 
 import { appRouter } from './router';
 
@@ -8,6 +8,6 @@ export const openApiDocument = generateOpenApiDocument(appRouter, {
   description: 'OpenAPI compliant REST API built using tRPC with Express',
   version: '1.0.0',
   baseUrl: 'http://localhost:3000/api',
-  docsUrl: 'https://github.com/lilyrose2798/trpc-openapi',
+  docsUrl: 'https://github.com/mcampa/trpc-to-openapi',
   tags: ['auth', 'users', 'posts'],
 });

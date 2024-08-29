@@ -1,4 +1,4 @@
-import { createOpenApiFetchHandler } from '@lilyrose2798/trpc-openapi';
+import { createOpenApiFetchHandler } from 'trpc-to-openapi';
 
 import { appRouter, createContext } from '../../../server/router';
 

@@ -1,8 +1,8 @@
 {
-  "name": "@lilyrose2798/trpc-openapi",
-  "version": "1.4.1",
+  "name": "trpc-to-openapi",
+  "version": "1.0.0",
   "description": "tRPC OpenAPI",
-  "author": "LilyRose2798 <lily@rose.place>",
+  "author": "mcampa <lily@rose.place>",
   "private": false,
   "license": "MIT",
   "keywords": [
@@ -10,9 +10,9 @@
     "openapi",
     "swagger"
   ],
-  "homepage": "https://github.com/lilyrose2798/trpc-openapi",
-  "repository": "github:lilyrose2798/trpc-openapi",
-  "bugs": "https://github.com/lilyrose2798/trpc-openapi/issues",
+  "homepage": "https://github.com/mcampa/trpc-to-openapi",
+  "repository": "github:mcampa/trpc-to-openapi",
+  "bugs": "https://github.com/mcampa/trpc-to-openapi/issues",
   "main": "dist/cjs/index.js",
   "module": "dist/esm/index.mjs",
   "typings": "dist/cjs/index.d.ts",

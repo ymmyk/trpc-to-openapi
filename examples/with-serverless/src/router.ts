@@ -1,7 +1,7 @@
-import { OpenApiMeta } from '@lilyrose2798/trpc-openapi';
 import { TRPCError, initTRPC } from '@trpc/server';
 import { APIGatewayEvent, CreateAWSLambdaContextOptions } from '@trpc/server/adapters/aws-lambda';
 import jwt from 'jsonwebtoken';
+import { OpenApiMeta } from 'trpc-to-openapi';
 import { v4 as uuid } from 'uuid';
 import { z } from 'zod';
 

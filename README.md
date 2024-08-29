@@ -1,8 +1,8 @@
-![@lilyrose2798/trpc-openapi](assets/trpc-openapi-readme.png)
+![trpc-to-openapi](assets/trpc-to-openapi-readme.png)
 
 <div align="center">
-  <h1>@lilyrose2798/trpc-openapi</h1>
-  <a href="https://www.npmjs.com/package/@lilyrose2798/trpc-openapi"><img src="https://img.shields.io/npm/v/@lilyrose2798/trpc-openapi.svg?style=flat&color=brightgreen" target="_blank" /></a>
+  <h1>trpc-to-openapi</h1>
+  <a href="https://www.npmjs.com/package/trpc-to-openapi"><img src="https://img.shields.io/npm/v/trpc-to-openapi.svg?style=flat&color=brightgreen" target="_blank" /></a>
   <a href="./LICENSE"><img src="https://img.shields.io/badge/license-MIT-black" /></a>
   <br />
   <hr />
@@ -18,20 +18,20 @@
 
 ## Usage
 
-**1. Install `@lilyrose2798/trpc-openapi`.**
+**1. Install `trpc-to-openapi`.**
 
 ```bash
 # npm
-npm install @lilyrose2798/trpc-openapi
+npm install trpc-to-openapi
 # yarn
-yarn add @lilyrose2798/trpc-openapi
+yarn add trpc-to-openapi
 ```
 
 **2. Add `OpenApiMeta` to your tRPC instance.**
 
 ```typescript
 import { initTRPC } from '@trpc/server';
-import { OpenApiMeta } from '@lilyrose2798/trpc-openapi';
+import { OpenApiMeta } from 'trpc-to-openapi';
 
 const t = initTRPC.meta<OpenApiMeta>().create(); /* 👈 */
 ```
@@ -53,7 +53,7 @@ export const appRouter = t.router({
 **4. Generate an OpenAPI document.**
 
 ```typescript
-import { generateOpenApiDocument } from '@lilyrose2798/trpc-openapi';
+import { generateOpenApiDocument } from 'trpc-to-openapi';
 
 import { appRouter } from '../appRouter';
 
@@ -65,7 +65,7 @@ export const openApiDocument = generateOpenApiDocument(appRouter, {
 });
 ```
 
-**5. Add an `@lilyrose2798/trpc-openapi` handler to your app.**
+**5. Add an `trpc-to-openapi` handler to your app.**
 
 We currently support adapters for [`Express`](http://expressjs.com/), [`Next.js`](https://nextjs.org/), [`Serverless`](https://www.serverless.com/), [`Fastify`](https://www.fastify.io/), [`Nuxt`](https://nuxtjs.org/) & [`Node:HTTP`](https://nodejs.org/api/http.html).
 
@@ -73,7 +73,7 @@ We currently support adapters for [`Express`](http://expressjs.com/), [`Next.js`
 
 ```typescript
 import http from 'http';
-import { createOpenApiHttpHandler } from '@lilyrose2798/trpc-openapi';
+import { createOpenApiHttpHandler } from 'trpc-to-openapi';
 
 import { appRouter } from '../appRouter';
 
@@ -188,7 +188,7 @@ Explore a [complete example here](examples/with-nextjs/src/server/router.ts).
 
 ```typescript
 import { TRPCError, initTRPC } from '@trpc/server';
-import { OpenApiMeta } from '@lilyrose2798/trpc-openapi';
+import { OpenApiMeta } from 'trpc-to-openapi';
 
 type User = { id: string; name: string };
 
@@ -247,7 +247,7 @@ Please see [full example here](examples/with-express).
 ```typescript
 import { createExpressMiddleware } from '@trpc/server/adapters/express';
 import express from 'express';
-import { createOpenApiExpressMiddleware } from '@lilyrose2798/trpc-openapi';
+import { createOpenApiExpressMiddleware } from 'trpc-to-openapi';
 
 import { appRouter } from '../appRouter';
 
@@ -265,7 +265,7 @@ Please see [full example here](examples/with-nextjs).
 
 ```typescript
 // pages/api/[...trpc].ts
-import { createOpenApiNextHandler } from '@lilyrose2798/trpc-openapi';
+import { createOpenApiNextHandler } from 'trpc-to-openapi';
 
 import { appRouter } from '../../server/appRouter';
 
@@ -277,7 +277,7 @@ export default createOpenApiNextHandler({ router: appRouter });
 Please see [full example here](examples/with-serverless).
 
 ```typescript
-import { createOpenApiAwsLambdaHandler } from '@lilyrose2798/trpc-openapi';
+import { createOpenApiAwsLambdaHandler } from 'trpc-to-openapi';
 
 import { appRouter } from './appRouter';
 
@@ -291,7 +291,7 @@ Please see [full example here](examples/with-fastify).
 ```typescript
 import { fastifyTRPCPlugin } from '@trpc/server/adapters/fastify';
 import Fastify from 'fastify';
-import { fastifyTRPCOpenApiPlugin } from '@lilyrose2798/trpc-openapi';
+import { fastifyTRPCOpenApiPlugin } from 'trpc-to-openapi';
 
 import { appRouter } from './router';
 
@@ -329,7 +329,7 @@ Please see [full typings here](src/types.ts).
 
 | Property             | Type                                    | Description                                                                                                                    | Required | Default                 |
 | -------------------- | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | -------- | ----------------------- |
-| `enabled`            | `boolean`                               | Exposes this procedure to `trpc-openapi` adapters and on the OpenAPI document.                                                 | `false`  | `true`                  |
+| `enabled`            | `boolean`                               | Exposes this procedure to `trpc-to-openapi` adapters and on the OpenAPI document.                                              | `false`  | `true`                  |
 | `method`             | `HttpMethod`                            | HTTP method this endpoint is exposed on. Value can be `GET`, `POST`, `PATCH`, `PUT` or `DELETE`.                               | `true`   | `undefined`             |
 | `path`               | `string`                                | Pathname this endpoint is exposed on. Value must start with `/`, specify path parameters using `{}`.                           | `true`   | `undefined`             |
 | `protect`            | `boolean`                               | Requires this endpoint to use a security scheme.                                                                               | `false`  | `false`                 |

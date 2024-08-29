@@ -1,5 +1,5 @@
-import { OpenApiMeta } from '@lilyrose2798/trpc-openapi';
 import * as trpc from '@trpc/server';
+import { OpenApiMeta } from 'trpc-to-openapi';
 import { z } from 'zod';
 
 const appRouter = trpc.router<any, OpenApiMeta>().query('echo', {
@@ -14,4 +14,4 @@ export const openApiV0AppRouter = appRouter;
 
 export type AppRouter = typeof trpcV10AppRouter;
 
-// Now add your `@trpc/server` && `@lilyrose2798/trpc-openapi` handlers...
+// Now add your `@trpc/server` && `trpc-to-openapi` handlers...

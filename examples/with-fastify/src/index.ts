@@ -7,9 +7,9 @@
  */
 import cors from '@fastify/cors';
 import fastifySwagger from '@fastify/swagger';
-import { fastifyTRPCOpenApiPlugin } from '@lilyrose2798/trpc-openapi';
 import { fastifyTRPCPlugin } from '@trpc/server/adapters/fastify';
 import Fastify from 'fastify';
+import { fastifyTRPCOpenApiPlugin } from 'trpc-to-openapi';
 
 import { openApiDocument } from './openapi';
 import { appRouter, createContext } from './router';
