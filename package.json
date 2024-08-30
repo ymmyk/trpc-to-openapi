@@ -1,6 +1,6 @@
 {
   "name": "trpc-to-openapi",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "tRPC OpenAPI",
   "author": "mcampa <lily@rose.place>",
   "private": false,
@@ -29,6 +29,7 @@
   },
   "workspaces": [
     ".",
+    "examples/with-nextjs-appdir",
     "examples/with-nextjs",
     "examples/with-express",
     "examples/with-interop",
@@ -40,7 +41,7 @@
     "test": "tsc --noEmit && jest --verbose",
     "lint": "eslint . --ext .ts",
     "lint-fix": "eslint . --ext .ts --fix",
-    "build": "rimraf dist && npm run build:cjs && npm run build:esm",
+    "build": "npm test && rimraf dist && npm run build:cjs && npm run build:esm",
     "build:cjs": "tsc -p tsconfig.build.cjs.json",
     "build:esm": "tsc -p tsconfig.build.esm.json",
     "postbuild": "node rename.js"

@@ -1,3 +1,5 @@
+import { OpenApiBuilder } from 'openapi3-ts/oas31';
+
 import {
   CreateOpenApiAwsLambdaHandlerOptions,
   CreateOpenApiExpressMiddlewareOptions,
@@ -50,6 +52,7 @@ export {
   errorResponseFromStatusCode,
   errorResponseFromMessage,
   GenerateOpenApiDocumentOptions,
+  OpenApiBuilder,
   OpenApiRouter,
   OpenApiMeta,
   OpenApiMethod,

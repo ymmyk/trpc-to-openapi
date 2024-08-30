@@ -2,16 +2,9 @@ import { Procedure, ProcedureParams, Router } from '@trpc/server';
 import type { RootConfig } from '@trpc/server/dist/core/internals/config';
 import type { RouterDef } from '@trpc/server/dist/core/router';
 import { TRPC_ERROR_CODE_KEY } from '@trpc/server/dist/rpc';
-import {
-  AnyZodObject,
-  ZodBigInt,
-  ZodDate,
-  ZodEffects,
-  ZodIssue,
-  ZodNumber,
-  ZodString,
-  ZodTypeAny,
-} from 'zod';
+import { AnyZodObject, ZodIssue } from 'zod';
+
+export { type OpenAPIObject, type SecuritySchemeObject } from 'openapi3-ts/oas31';
 
 export type OpenApiMethod = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
 

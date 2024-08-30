@@ -1,8 +1,6 @@
-import { OpenAPIObject, SecuritySchemeObject } from 'openapi3-ts/dist/oas31';
 import { ZodOpenApiObject, ZodOpenApiPathsObject, createDocument } from 'zod-openapi';
 
-// zod-openapi/dist/index
-import { OpenApiRouter } from '../types';
+import { type OpenAPIObject, OpenApiRouter, type SecuritySchemeObject } from '../types';
 import { getOpenApiPathsObject, mergePaths } from './paths';
 
 export type GenerateOpenApiDocumentOptions = {
