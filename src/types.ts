@@ -1,4 +1,4 @@
-import { TRPC_ERROR_CODE_KEY } from '@trpc/server/dist/rpc';
+import { TRPC_ERROR_CODE_KEY } from '@trpc/server/rpc';
 import type {
   CreateRootTypes,
   Procedure,
@@ -7,7 +7,7 @@ import type {
 } from '@trpc/server/unstable-core-do-not-import';
 import type { AnyZodObject, ZodIssue } from 'zod';
 
-export { type OpenAPIObject, type SecuritySchemeObject } from 'openapi3-ts/dist/oas31';
+export { type OpenAPIObject, type SecuritySchemeObject } from 'openapi3-ts/oas31';
 
 export type OpenApiMethod = 'GET' | 'POST' | 'PATCH' | 'PUT' | 'DELETE';
 

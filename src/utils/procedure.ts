@@ -46,7 +46,7 @@ export const forEachOpenApiProcedure = (
   for (const [path, procedure] of Object.entries(procedureRecord)) {
     // @ts-expect-error FIXME
     const meta = procedure._def.meta as unknown as OpenApiMeta;
-    const { openapi } = meta;
+    const { openapi } = meta ?? {};
     if (openapi && openapi.enabled !== false) {
       const type = getProcedureType(procedure as OpenApiProcedure);
       callback({ path, type, procedure: procedure as OpenApiProcedure, openapi });
