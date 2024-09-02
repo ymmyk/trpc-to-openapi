@@ -28,9 +28,12 @@ export function fastifyTRPCOpenApiPlugin<TRouter extends AnyRouter>(
 
   fastify.all(`${prefix}/*`, async (request, reply) => {
     const prefixRemovedFromUrl = request.url.replace(fastify.prefix, '').replace(prefix, '');
-    request.raw.url = prefixRemovedFromUrl;
+    const rawRequest = Object.assign(request.raw, {
+      body: request.body,
+      url: prefixRemovedFromUrl,
+    });
     return await openApiHttpHandler(
-      request,
+      rawRequest,
       Object.assign(reply, {
         setHeader: (key: string, value: string | number | readonly string[]) => {
           if (Array.isArray(value)) {
@@ -40,7 +43,7 @@ export function fastifyTRPCOpenApiPlugin<TRouter extends AnyRouter>(
 
           return reply.header(key, value);
         },
-        end: (body: any) => reply.send(body), // eslint-disable-line @typescript-eslint/no-explicit-any
+        end: (body: any) => reply.send(body),
       }),
     );
   });

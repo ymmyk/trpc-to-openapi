@@ -11,6 +11,7 @@
 
 ## **[OpenAPI](https://swagger.io/specification/) support for [tRPC](https://trpc.io/)** 🧩
 
+- tRPC 11 only 👈
 - Easy REST endpoints for your tRPC procedures.
 - Perfect for incremental adoption.
 - Supports all OpenAPI versions.
@@ -68,9 +69,11 @@ export const openApiDocument = generateOpenApiDocument(appRouter, {
 
 **5. Add an `trpc-to-openapi` handler to your app.**
 
-We currently support adapters for [`Express`](http://expressjs.com/), [`Next.js`](https://nextjs.org/), [`Serverless`](https://www.serverless.com/), [`Fastify`](https://www.fastify.io/), [`Nuxt`](https://nuxtjs.org/) & [`Node:HTTP`](https://nodejs.org/api/http.html).
+We currently support adapters for [`Express`](http://expressjs.com/), [`Next.js`](https://nextjs.org/), [`Fastify`](https://www.fastify.io/), [`Nuxt`](https://nuxtjs.org/) & [`Node:HTTP`](https://nodejs.org/api/http.html).
 
 [`Fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), [`Cloudflare Workers`](https://workers.cloudflare.com/) & more soon™, PRs are welcomed 🙌.
+
+No support for AWS lambdas yet 😢
 
 ```typescript
 import http from 'http';
@@ -271,18 +274,6 @@ import { createOpenApiNextHandler } from 'trpc-to-openapi';
 import { appRouter } from '../../server/appRouter';
 
 export default createOpenApiNextHandler({ router: appRouter });
-```
-
-#### With AWS Lambda
-
-Please see [full example here](examples/with-serverless).
-
-```typescript
-import { createOpenApiAwsLambdaHandler } from 'trpc-to-openapi';
-
-import { appRouter } from './appRouter';
-
-export const openApi = createOpenApiAwsLambdaHandler({ router: appRouter });
 ```
 
 #### With Fastify

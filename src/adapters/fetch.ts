@@ -1,12 +1,11 @@
 import { TRPCError } from '@trpc/server';
 import { FetchHandlerOptions } from '@trpc/server/adapters/fetch';
+import { getRequestInfo } from '@trpc/server/unstable-core-do-not-import';
 import { IncomingMessage, ServerResponse } from 'http';
 
 import { OpenApiRouter } from '../types';
-import {
-  CreateOpenApiNodeHttpHandlerOptions,
-  createOpenApiNodeHttpHandler,
-} from './node-http/core';
+import { normalizePath } from '../utils/path';
+import { createOpenApiNodeHttpHandler } from './node-http/core';
 
 export type CreateOpenApiFetchHandlerOptions<TRouter extends OpenApiRouter> = Omit<
   FetchHandlerOptions<TRouter>,
@@ -67,14 +66,6 @@ const createRequestProxy = async (req: Request, url?: string) => {
         return url ? url : target.url;
       }
 
-      if (prop === 'headers') {
-        return new Proxy(target.headers, {
-          get: (target, prop) => {
-            return target.get(prop.toString());
-          },
-        });
-      }
-
       if (prop === 'body') {
         if (!body.isValid) {
           throw new TRPCError({
@@ -101,7 +92,19 @@ export const createOpenApiFetchHandler = async <TRouter extends OpenApiRouter>(
 
   const createContext = () => {
     if (opts.createContext) {
-      return opts.createContext({ req: opts.req, resHeaders });
+      return (
+        opts.createContext({
+          req: opts.req,
+          resHeaders,
+          info: getRequestInfo({
+            req: req as unknown as Request,
+            path: decodeURIComponent(normalizePath(url.pathname)),
+            router: opts.router,
+            searchParams: url.searchParams,
+            headers: req.headers,
+          }),
+        }) ?? {}
+      );
     }
     return () => ({});
   };
@@ -109,16 +112,17 @@ export const createOpenApiFetchHandler = async <TRouter extends OpenApiRouter>(
   const openApiHttpHandler = createOpenApiNodeHttpHandler({
     router: opts.router,
     createContext,
+    // @ts-expect-error FIXME
     onError: opts.onError,
+    // @ts-expect-error FIXME
     responseMeta: opts.responseMeta,
-  } as CreateOpenApiNodeHttpHandlerOptions<TRouter, any, any>);
+  }); // as CreateOpenApiNodeHttpHandlerOptions<TRouter, any, any>);
 
   return new Promise<Response>((resolve) => {
-    let statusCode: number | undefined;
+    let statusCode: number;
 
     return openApiHttpHandler(
       req as unknown as IncomingMessage,
-
       {
         setHeader: (key: string, value: string | readonly string[]) => {
           if (typeof value === 'string') {
@@ -132,7 +136,7 @@ export const createOpenApiFetchHandler = async <TRouter extends OpenApiRouter>(
         get statusCode() {
           return statusCode;
         },
-        set statusCode(code: number | undefined) {
+        set statusCode(code: number) {
           statusCode = code;
         },
         end: (body: string) => {

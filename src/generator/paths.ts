@@ -8,7 +8,7 @@ import {
   extendZodWithOpenApi,
 } from 'zod-openapi';
 
-import { OpenApiProcedureRecord, OpenApiRouter } from '../types';
+import { OpenApiRouter } from '../types';
 import { acceptsRequestBody } from '../utils/method';
 import { getPathParameters, normalizePath } from '../utils/path';
 import { forEachOpenApiProcedure, getInputOutputParsers } from '../utils/procedure';
@@ -35,7 +35,7 @@ export const getOpenApiPathsObject = (
   securitySchemeNames: string[],
 ): ZodOpenApiPathsObject => {
   const pathsObject: ZodOpenApiPathsObject = {};
-  const procedures = cloneDeep(appRouter._def.procedures as OpenApiProcedureRecord);
+  const procedures = cloneDeep(appRouter._def.procedures);
 
   forEachOpenApiProcedure(procedures, ({ path: procedurePath, type, procedure, openapi }) => {
     const procedureName = `${type}.${procedurePath}`;
@@ -171,9 +171,10 @@ export const getOpenApiPathsObject = (
           ...(openapi.deprecated ? { deprecated: openapi.deprecated } : {}),
         },
       };
-    } catch (error: any) {
-      // eslint-disable-next-line @typescript-eslint/restrict-template-expressions
-      error.message = `[${procedureName}] - ${error.message}`;
+    } catch (error: unknown) {
+      if (error instanceof TRPCError) {
+        error.message = `[${procedureName}] - ${error.message}`;
+      }
       throw error;
     }
   });

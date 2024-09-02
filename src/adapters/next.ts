@@ -1,4 +1,5 @@
 import { TRPCError } from '@trpc/server';
+import { incomingMessageToRequest } from '@trpc/server/adapters/node-http';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import { OpenApiErrorResponse, OpenApiRouter } from '../types';
@@ -8,12 +9,8 @@ import {
   createOpenApiNodeHttpHandler,
 } from './node-http/core';
 
-export type CreateOpenApiNextHandlerOptions<TRouter extends OpenApiRouter> = Omit<
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore
-  CreateOpenApiNodeHttpHandlerOptions<TRouter, NextApiRequest, NextApiResponse>,
-  'maxBodySize'
->;
+export type CreateOpenApiNextHandlerOptions<TRouter extends OpenApiRouter> =
+  CreateOpenApiNodeHttpHandlerOptions<TRouter, NextApiRequest, NextApiResponse>;
 
 export const createOpenApiNextHandler = <TRouter extends OpenApiRouter>(
   opts: CreateOpenApiNextHandlerOptions<TRouter>,
@@ -53,6 +50,15 @@ export const createOpenApiNextHandler = <TRouter extends OpenApiRouter>(
 
       return;
     }
+
+    incomingMessageToRequest(
+      Object.assign(req, {
+        once: () => undefined,
+      }),
+      {
+        maxBodySize: opts.maxBodySize ?? null,
+      },
+    );
 
     req.url = normalizePath(pathname);
     await openApiHttpHandler(req, res);
