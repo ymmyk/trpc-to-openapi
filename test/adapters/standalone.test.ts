@@ -1,4 +1,4 @@
-import { createTRPCProxyClient, httpBatchLink } from '@trpc/client';
+import { createTRPCClient, httpBatchLink } from '@trpc/client';
 import { TRPCError, initTRPC } from '@trpc/server';
 import { createHTTPHandler } from '@trpc/server/adapters/standalone';
 import { Server } from 'http';
@@ -823,7 +823,7 @@ describe('standalone adapter', () => {
     });
 
     type AppRouter = typeof appRouter;
-    const client = createTRPCProxyClient<AppRouter>({
+    const client = createTRPCClient<AppRouter>({
       links: [httpBatchLink({ url: `${url}/trpc` })],
     });
 
