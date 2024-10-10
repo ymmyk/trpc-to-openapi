@@ -4,6 +4,7 @@ import type {
   Procedure,
   ProcedureType,
   Router,
+  RouterRecord,
 } from '@trpc/server/unstable-core-do-not-import';
 import type { AnyZodObject, ZodIssue } from 'zod';
 
@@ -45,9 +46,8 @@ export type OpenApiProcedure = Procedure<
   }
 >;
 
-// export type OpenApiProcedureRecord = Record<string, OpenApiProcedure>;
 export interface OpenApiProcedureRecord {
-  [key: string]: OpenApiProcedure | OpenApiProcedureRecord;
+  [key: string]: OpenApiProcedure | RouterRecord;
 }
 
 export type OpenApiRouter = Router<
@@ -57,7 +57,7 @@ export type OpenApiRouter = Router<
     errorShape: any;
     transformer: any;
   }>,
-  OpenApiProcedureRecord
+  RouterRecord
 >;
 
 export type OpenApiSuccessResponse<D = any> = D;

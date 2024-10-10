@@ -122,7 +122,7 @@ describe('generator', () => {
           .meta({ openapi: { method: 'GET', path: '/bad-input' } })
           .input((arg) => ({ payload: typeof arg === 'string' ? arg : String(arg) }))
           .output(z.object({ payload: z.string() }))
-          .query(({ input }) => ({ payload: 'Hello world!' })),
+          .query(() => ({ payload: 'Hello world!' })),
       });
 
       expect(() => {

@@ -1,6 +1,6 @@
 {
   "name": "trpc-to-openapi",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "tRPC OpenAPI",
   "author": "mcampa",
   "private": false,
@@ -48,7 +48,7 @@
     "postbuild": "node rename.js"
   },
   "peerDependencies": {
-    "@trpc/server": "^11.0.0-rc.490",
+    "@trpc/server": "^11.0.0-rc.566",
     "zod": "^3.23.8"
   },
   "dependencies": {
@@ -61,7 +61,7 @@
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^4.1.1",
-    "@trpc/client": "^11.0.0-rc.490",
+    "@trpc/client": "^11.0.0-rc.566",
     "@types/aws-lambda": "^8.10.115",
     "@types/co-body": "^6.1.0",
     "@types/express": "^4.17.17",
@@ -71,7 +71,6 @@
     "@types/node-fetch": "^2.6.4",
     "@typescript-eslint/eslint-plugin": "5.59.7",
     "@typescript-eslint/parser": "5.59.7",
-    "aws-lambda": "^1.0.7",
     "eslint": "8.41.0",
     "eslint-config-prettier": "8.8.0",
     "eslint-plugin-import": "2.27.5",
