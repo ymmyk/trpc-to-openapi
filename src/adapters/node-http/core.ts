@@ -62,11 +62,7 @@ export const createOpenApiNodeHttpHandler = <
   const getProcedure = createProcedureCache(router);
 
   return async (req: TRequest, res: TResponse, next?: OpenApiNextFunction) => {
-    const sendResponse = (
-      statusCode: number,
-      headers: HTTPHeaders,
-      body: OpenApiResponse | undefined,
-    ) => {
+    const sendResponse = (statusCode: number, headers: HTTPHeaders, body: OpenApiResponse) => {
       res.statusCode = statusCode;
       res.setHeader('Content-Type', 'application/json');
       for (const [key, value] of Object.entries(headers)) {

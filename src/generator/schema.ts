@@ -203,7 +203,7 @@ export const getResponsesObject = (
   isProtected: boolean,
   hasInputs: boolean,
   successDescription?: string,
-  errorResponses?: number[] | { [key: number]: string },
+  errorResponses?: number[] | Record<number, string>,
 ): ZodOpenApiResponsesObject => ({
   200: {
     description: successDescription ?? 'Successful response',

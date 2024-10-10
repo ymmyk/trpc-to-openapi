@@ -3,7 +3,7 @@ import { ZodOpenApiObject, ZodOpenApiPathsObject, createDocument } from 'zod-ope
 import { type OpenAPIObject, OpenApiRouter, type SecuritySchemeObject } from '../types';
 import { getOpenApiPathsObject, mergePaths } from './paths';
 
-export type GenerateOpenApiDocumentOptions = {
+export interface GenerateOpenApiDocumentOptions {
   title: string;
   description?: string;
   version: string;
@@ -13,13 +13,13 @@ export type GenerateOpenApiDocumentOptions = {
   tags?: string[];
   securitySchemes?: Record<string, SecuritySchemeObject>;
   paths?: ZodOpenApiPathsObject;
-};
+}
 
 export const generateOpenApiDocument = (
   appRouter: OpenApiRouter,
   opts: GenerateOpenApiDocumentOptions,
 ): OpenAPIObject => {
-  const securitySchemes = opts.securitySchemes || {
+  const securitySchemes = opts.securitySchemes ?? {
     Authorization: {
       type: 'http',
       scheme: 'bearer',

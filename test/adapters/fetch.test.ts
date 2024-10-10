@@ -1168,7 +1168,6 @@ describe('fetch adapter', () => {
     // only applies when zod does not support (below version v3.20.0)
 
     // @ts-expect-error - hack to disable zodSupportsCoerce
-    // eslint-disable-next-line import/namespace
     zodUtils.zodSupportsCoerce = false;
     {
       const appRouter = t.router({
@@ -1205,7 +1204,6 @@ describe('fetch adapter', () => {
       expect(onErrorMock).toHaveBeenCalledTimes(0);
     }
     // @ts-expect-error - hack to re-enable zodSupportsCoerce
-    // eslint-disable-next-line import/namespace
     zodUtils.zodSupportsCoerce = true;
   });
 

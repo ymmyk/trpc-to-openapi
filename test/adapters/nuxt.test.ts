@@ -42,7 +42,7 @@ const createOpenApiNuxtHandlerCaller = <TRouter extends OpenApiRouter>(
     new Promise<{
       statusCode: number;
       headers: Record<string, any>;
-      body: OpenApiResponse | undefined;
+      body: OpenApiResponse;
       /* eslint-disable-next-line @typescript-eslint/no-misused-promises, no-async-promise-executor */
     }>(async (resolve, reject) => {
       const headers = new Map();

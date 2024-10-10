@@ -28,7 +28,7 @@ export const createOpenApiNuxtHandler = <TRouter extends OpenApiRouter>(
     let pathname: string | null = null;
 
     const params = event.context.params;
-    if (params && params?.trpc) {
+    if (params?.trpc) {
       if (!params.trpc.includes('/')) {
         pathname = params.trpc;
       } else {

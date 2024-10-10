@@ -78,7 +78,7 @@ export const getOpenApiPathsObject = (
         });
       }
 
-      const contentTypes = openapi.contentTypes || ['application/json'];
+      const contentTypes = openapi.contentTypes ?? ['application/json'];
       if (contentTypes.length === 0) {
         throw new TRPCError({
           message: 'At least one content type must be specified',
@@ -133,7 +133,7 @@ export const getOpenApiPathsObject = (
               pathParameters,
               requestHeaders,
               'path',
-            ) || {};
+            ) ?? {};
         } else {
           requestData.requestParams =
             getParameterObjects(
@@ -142,7 +142,7 @@ export const getOpenApiPathsObject = (
               pathParameters,
               requestHeaders,
               'all',
-            ) || {};
+            ) ?? {};
         }
       }
 

@@ -177,7 +177,6 @@ describe('generator', () => {
     // only applies when zod does not support (below version v3.20.0)
 
     // @ts-expect-error - hack to disable zodSupportsCoerce
-    // eslint-disable-next-line import/namespace
     zodUtils.zodSupportsCoerce = false;
 
     {
@@ -229,7 +228,6 @@ describe('generator', () => {
     }
 
     // @ts-expect-error - hack to re-enable zodSupportsCoerce
-    // eslint-disable-next-line import/namespace
     zodUtils.zodSupportsCoerce = true;
   });
 

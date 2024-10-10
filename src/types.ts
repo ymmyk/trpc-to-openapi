@@ -34,7 +34,7 @@ export type OpenApiMeta<TMeta = TRPCMeta> = TMeta & {
     requestHeaders?: AnyZodObject;
     responseHeaders?: AnyZodObject;
     successDescription?: string;
-    errorResponses?: number[] | { [key: number]: string };
+    errorResponses?: number[] | Record<number, string>;
   };
 };
 
@@ -46,9 +46,7 @@ export type OpenApiProcedure = Procedure<
   }
 >;
 
-export interface OpenApiProcedureRecord {
-  [key: string]: OpenApiProcedure | RouterRecord;
-}
+export type OpenApiProcedureRecord = Record<string, OpenApiProcedure | RouterRecord>;
 
 export type OpenApiRouter = Router<
   CreateRootTypes<{
@@ -62,10 +60,10 @@ export type OpenApiRouter = Router<
 
 export type OpenApiSuccessResponse<D = any> = D;
 
-export type OpenApiErrorResponse = {
+export interface OpenApiErrorResponse {
   message: string;
   code: TRPC_ERROR_CODE_KEY;
   issues?: ZodIssue[];
-};
+}
 
 export type OpenApiResponse<D = any> = OpenApiSuccessResponse<D> | OpenApiErrorResponse;
