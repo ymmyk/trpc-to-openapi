@@ -33,9 +33,9 @@ export const instanceofZodTypeLikeVoid = (type: z.ZodTypeAny): type is ZodTypeLi
 
 export const unwrapZodType = (type: z.ZodTypeAny, unwrapPreprocess: boolean): z.ZodTypeAny => {
   // TODO: Allow parsing array query params
-  // if (instanceofZodTypeKind(type, z.ZodFirstPartyTypeKind.ZodArray)) {
-  //   return unwrapZodType(type.element, unwrapPreprocess);
-  // }
+  if (instanceofZodTypeKind(type, z.ZodFirstPartyTypeKind.ZodArray)) {
+    return unwrapZodType(type.element, unwrapPreprocess);
+  }
   if (instanceofZodTypeKind(type, z.ZodFirstPartyTypeKind.ZodEnum)) {
     return unwrapZodType(z.string(), unwrapPreprocess);
   }
@@ -68,10 +68,10 @@ export const unwrapZodType = (type: z.ZodTypeAny, unwrapPreprocess: boolean): z.
   return type;
 };
 
-type NativeEnumType = {
+interface NativeEnumType {
   [k: string]: string | number;
   [nu: number]: string;
-};
+}
 
 export type ZodTypeLikeString =
   | z.ZodString

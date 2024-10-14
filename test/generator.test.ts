@@ -1966,6 +1966,45 @@ describe('generator', () => {
     `);
   });
 
+  test('with array of native-enums', () => {
+    {
+      enum ValidEnum {
+        Lily = 'Lily',
+        Mario = 'Mario',
+      }
+
+      const appRouter = t.router({
+        nativeEnum: t.procedure
+          .meta({ openapi: { method: 'GET', path: '/arrayOfEnums' } })
+          .input(z.object({ names: z.array(z.nativeEnum(ValidEnum)) }))
+          .output(z.null())
+          .query(() => null),
+      });
+
+      const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
+
+      expect(openApiDocument.paths!['/arrayOfEnums']!.get!.parameters).toMatchInlineSnapshot(`
+        Array [
+          Object {
+            "in": "query",
+            "name": "names",
+            "required": true,
+            "schema": Object {
+              "items": Object {
+                "enum": Array [
+                  "Lily",
+                  "Mario",
+                ],
+                "type": "string",
+              },
+              "type": "array",
+            },
+          },
+        ]
+      `);
+    }
+  });
+
   test('with native-enum', () => {
     {
       enum InvalidEnum {
@@ -1983,7 +2022,7 @@ describe('generator', () => {
 
       expect(() => {
         generateOpenApiDocument(appRouter, defaultDocOpts);
-      }).toThrowError('[query.nativeEnum] - Input parser key: "name" must be ZodString');
+      }).toThrow('[query.nativeEnum] - Input parser key: "name" must be ZodString');
     }
     {
       enum ValidEnum {
