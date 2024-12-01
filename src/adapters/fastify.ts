@@ -35,6 +35,7 @@ export function fastifyTRPCOpenApiPlugin<TRouter extends AnyRouter>(
     return await openApiHttpHandler(
       rawRequest,
       Object.assign(reply, {
+        once: () => undefined,
         setHeader: (key: string, value: string | number | readonly string[]) => {
           if (Array.isArray(value)) {
             value.forEach((v) => reply.header(key, v));

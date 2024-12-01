@@ -1,6 +1,9 @@
 /* eslint-disable @typescript-eslint/ban-types */
 import { initTRPC } from '@trpc/server';
 import { NextApiRequest, NextApiResponse } from 'next';
+import { IncomingMessage } from 'http';
+import { NextApiRequestCookies, NextApiRequestQuery } from 'next/dist/server/api-utils';
+import { Socket } from 'net';
 import { z } from 'zod';
 
 import {
@@ -10,6 +13,24 @@ import {
   OpenApiRouter,
   createOpenApiNextHandler,
 } from '../../src';
+
+type NextApiRequestOptions = Partial<NextApiRequestMock>;
+class NextApiRequestMock extends IncomingMessage implements NextApiRequest {
+  public query: NextApiRequestQuery = {};
+  public cookies: NextApiRequestCookies = {};
+  public env = {};
+  public body: any;
+
+  constructor(options: NextApiRequestOptions) {
+    super(new Socket());
+
+    this.method = options.method;
+    this.body = options.body;
+    this.query = options.query ?? {};
+    this.headers = options.headers ?? {};
+    this.env = options.env ?? {};
+  }
+}
 
 const createContextMock = jest.fn();
 const responseMetaMock = jest.fn();
@@ -41,26 +62,30 @@ const createOpenApiNextHandlerCaller = <TRouter extends OpenApiRouter>(
       statusCode: number;
       headers: Record<string, any>;
       body: OpenApiResponse;
-      /* eslint-disable-next-line @typescript-eslint/no-misused-promises, no-async-promise-executor */
     }>(async (resolve, reject) => {
       const headers = new Map();
       let body: any;
-      const res: any = {
+      const nextResponse = {
         statusCode: undefined,
         setHeader: (key: string, value: any) => headers.set(key, value),
+        getHeaders: () => Object.fromEntries(headers.entries()),
         end: (data: string) => {
           body = JSON.parse(data);
         },
-      };
+      } as unknown as NextApiResponse;
+
+      const nextRequest = new NextApiRequestMock({
+        method: req.method,
+        query: req.query,
+        body: req.body,
+        headers: req.headers,
+      });
 
       try {
-        await openApiNextHandler(
-          req as unknown as NextApiRequest,
-          res as unknown as NextApiResponse,
-        );
+        await openApiNextHandler(nextRequest, nextResponse);
         resolve({
-          statusCode: res.statusCode,
-          headers: Object.fromEntries(headers.entries()),
+          statusCode: nextResponse.statusCode,
+          headers: nextResponse.getHeaders(),
           body,
         });
       } catch (error) {
@@ -122,7 +147,7 @@ describe('next adapter', () => {
         headers: { 'Content-Type': 'application/json' },
       });
 
-      // expect(res.statusCode).toBe(200);
+      expect(res.statusCode).toBe(200);
       expect(res.body).toEqual({ greeting: 'Hello Lily!' });
       expect(createContextMock).toHaveBeenCalledTimes(1);
       expect(responseMetaMock).toHaveBeenCalledTimes(1);

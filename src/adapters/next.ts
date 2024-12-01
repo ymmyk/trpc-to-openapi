@@ -52,7 +52,8 @@ export const createOpenApiNextHandler = <TRouter extends OpenApiRouter>(
     }
 
     incomingMessageToRequest(
-      Object.assign(req, {
+      req,
+      Object.assign(res, {
         once: () => undefined,
       }),
       {

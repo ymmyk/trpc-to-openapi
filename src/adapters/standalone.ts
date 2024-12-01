@@ -16,7 +16,7 @@ export const createOpenApiHttpHandler = <TRouter extends OpenApiRouter>(
   const openApiHttpHandler = createOpenApiNodeHttpHandler(opts);
   return async (req: IncomingMessage, res: ServerResponse) => {
     await openApiHttpHandler(
-      incomingMessageToRequest(req, {
+      incomingMessageToRequest(req, res, {
         maxBodySize: opts.maxBodySize ?? null,
       }) as unknown as IncomingMessage,
       res,
