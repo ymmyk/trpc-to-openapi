@@ -131,7 +131,7 @@ export const createOpenApiNodeHttpHandler = <
       if (zodSupportsCoerce && instanceofZodTypeObject(unwrappedSchema)) {
         if (!useBody) {
           for (const [key, shape] of Object.entries(unwrappedSchema.shape)) {
-            if (shape instanceof ZodArray && typeof input[key] === 'string') {
+            if (shape instanceof ZodArray && !Array.isArray(input[key])) {
               input[key] = [input[key]];
             }
           }

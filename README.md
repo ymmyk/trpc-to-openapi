@@ -11,7 +11,7 @@
 
 ## **[OpenAPI](https://swagger.io/specification/) support for [tRPC](https://trpc.io/)** 🧩
 
-- tRPC 11 only 👈
+- tRPC ^11.0.0-rc.648 only 👈
 - Easy REST endpoints for your tRPC procedures.
 - Perfect for incremental adoption.
 - Supports all OpenAPI versions.
@@ -20,6 +20,7 @@ Note: This project is a fork of a fork, with full credit to the original authors
 
 ## Changelog
 
+- 2.0.4 Upgrade to tRPC 11.0.0-rc.648
 - 2.0.3 Added support for array inputs for GET requests
 
 ## Usage
@@ -77,7 +78,7 @@ We currently support adapters for [`Express`](http://expressjs.com/), [`Next.js`
 
 [`Fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API), [`Cloudflare Workers`](https://workers.cloudflare.com/) & more soon™, PRs are welcomed 🙌.
 
-No support for AWS lambdas yet 😢
+No support for AWS lambdas
 
 ```typescript
 import http from 'http';
@@ -122,7 +123,7 @@ Please note:
 
 ## HTTP Requests
 
-Procedures with a `GET`/`DELETE` method will accept inputs via URL `query parameters`. Procedures with a `POST`/`PATCH`/`PUT` method will accept inputs via the `request body` with a `application/json` or `application/x-www-form-urlencoded` content type.
+Procedures with a `GET`/`DELETE` method will accept inputs via URL `query parameters`. Procedures with a `POST`/`PATCH`/`PUT` method will accept inputs via the `request body` with a `application/json` content type.
 
 ### Path parameters
 
@@ -267,7 +268,41 @@ app.use('/api', createOpenApiExpressMiddleware({ router: appRouter })); /* 👈 
 app.listen(3000);
 ```
 
-#### With Next.js
+#### With Next.js app router
+
+Please see [full example here](examples/with-nextjs-appdir).
+
+```typescript
+// src/app/[...trpc]/route.ts
+import { appRouter } from '~/server/api/root';
+import { createContext } from '~/server/api/trpc';
+import { type NextRequest } from 'next/server';
+import { createOpenApiFetchHandler } from 'trpc-to-openapi';
+
+export const dynamic = 'force-dynamic';
+
+const handler = (req: NextRequest) => {
+  // Handle incoming OpenAPI requests
+  return createOpenApiFetchHandler({
+    endpoint: '/',
+    router: appRouter,
+    createContext: () => createContext(req),
+    req,
+  });
+};
+
+export {
+  handler as GET,
+  handler as POST,
+  handler as PUT,
+  handler as PATCH,
+  handler as DELETE,
+  handler as OPTIONS,
+  handler as HEAD,
+};
+```
+
+#### With Next.js pages router
 
 Please see [full example here](examples/with-nextjs).
 
