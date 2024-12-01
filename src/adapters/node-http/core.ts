@@ -8,7 +8,7 @@ import {
 } from '@trpc/server/adapters/node-http';
 import { getErrorShape, getRequestInfo } from '@trpc/server/unstable-core-do-not-import';
 import cloneDeep from 'lodash.clonedeep';
-import { ZodError, ZodTypeAny } from 'zod';
+import { ZodArray, ZodError, ZodTypeAny } from 'zod';
 
 import { generateOpenApiDocument } from '../../generator';
 import {
@@ -129,6 +129,13 @@ export const createOpenApiNodeHttpHandler = <
 
       // if supported, coerce all string values to correct types
       if (zodSupportsCoerce && instanceofZodTypeObject(unwrappedSchema)) {
+        if (!useBody) {
+          for (const [key, shape] of Object.entries(unwrappedSchema.shape)) {
+            if (shape instanceof ZodArray && typeof input[key] === 'string') {
+              input[key] = [input[key]];
+            }
+          }
+        }
         coerceSchema(unwrappedSchema);
       }
 

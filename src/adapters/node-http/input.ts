@@ -2,8 +2,8 @@ import { TRPCError } from '@trpc/server';
 import { NodeHTTPRequest } from '@trpc/server/adapters/node-http';
 import parse from 'co-body';
 
-export const getQuery = (req: NodeHTTPRequest, url: URL): Record<string, string> => {
-  const query: Record<string, string> = {};
+export const getQuery = (req: NodeHTTPRequest, url: URL): Record<string, string | string[]> => {
+  const query: Record<string, string | string[]> = {};
 
   if (!req.query) {
     const parsedQs: Record<string, string[]> = {};
@@ -22,13 +22,7 @@ export const getQuery = (req: NodeHTTPRequest, url: URL): Record<string, string>
   Object.keys(reqQuery).forEach((key) => {
     const value = reqQuery[key];
     if (value) {
-      if (typeof value === 'string') {
-        query[key] = value;
-      } else if (Array.isArray(value)) {
-        if (typeof value[0] === 'string') {
-          query[key] = value[0];
-        }
-      }
+      query[key] = Array.isArray(value) && value.length === 1 ? value[0]! : value;
     }
   });
 

@@ -18,6 +18,10 @@
 
 Note: This project is a fork of a fork, with full credit to the original authors. It appears that the original author has abandoned the project, so I plan to add new features in the near future.
 
+## Changelog
+
+- 2.0.3 Added support for array inputs for GET requests
+
 ## Usage
 
 **1. Install `trpc-to-openapi`.**

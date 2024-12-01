@@ -635,7 +635,50 @@ describe('fetch adapter', () => {
     });
 
     {
-      const req = new Request('https://localhost:3000/say-hello?name=Lily&name=mcampa', {
+      const req = new Request('https://localhost:3000/say-hello?name=Lily&name=Mario', {
+        method: 'GET',
+      });
+
+      const res = await createFetchHandlerCaller({
+        router: appRouter,
+        endpoint: '/',
+        req,
+      });
+      const body = await res.json();
+
+      expect(res.status).toBe(400);
+      expect(body).toEqual(
+        expect.objectContaining({
+          message: 'Input validation failed',
+          code: 'BAD_REQUEST',
+          issues: [
+            {
+              code: 'invalid_type',
+              expected: 'string',
+              message: 'Expected string, received array',
+              path: ['name'],
+              received: 'array',
+            },
+          ],
+        }),
+      );
+      expect(createContextMock).toHaveBeenCalledTimes(1);
+      expect(responseMetaMock).toHaveBeenCalledTimes(1);
+      expect(onErrorMock).toHaveBeenCalledTimes(1);
+    }
+  });
+
+  test('with array input query string params', async () => {
+    const appRouter = t.router({
+      sayHello: t.procedure
+        .meta({ openapi: { method: 'GET', path: '/say-hello' } })
+        .input(z.object({ name: z.array(z.string()) }))
+        .output(z.object({ greeting: z.string() }))
+        .query(({ input }) => ({ greeting: `Hello ${input.name.join(' & ')}!` })),
+    });
+
+    {
+      const req = new Request('https://localhost:3000/say-hello?name=Lily&name=Mario', {
         method: 'GET',
       });
 
@@ -647,7 +690,7 @@ describe('fetch adapter', () => {
       const body = await res.json();
 
       expect(res.status).toBe(200);
-      expect(body).toEqual({ greeting: 'Hello Lily!' });
+      expect(body).toEqual({ greeting: 'Hello Lily & Mario!' });
       expect(createContextMock).toHaveBeenCalledTimes(1);
       expect(responseMetaMock).toHaveBeenCalledTimes(1);
       expect(onErrorMock).toHaveBeenCalledTimes(0);
