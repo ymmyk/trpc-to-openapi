@@ -450,7 +450,49 @@ describe('generator', () => {
                 "message",
                 "code",
               ],
-              "title": "Error",
+              "title": "Invalid input data error (400)",
+              "type": "object",
+            },
+            "error.FORBIDDEN": Object {
+              "description": "The error information",
+              "example": Object {
+                "code": "FORBIDDEN",
+                "issues": Array [],
+                "message": "Insufficient access",
+              },
+              "properties": Object {
+                "code": Object {
+                  "description": "The error code",
+                  "example": "FORBIDDEN",
+                  "type": "string",
+                },
+                "issues": Object {
+                  "description": "An array of issues that were responsible for the error",
+                  "example": Array [],
+                  "items": Object {
+                    "properties": Object {
+                      "message": Object {
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "message",
+                    ],
+                    "type": "object",
+                  },
+                  "type": "array",
+                },
+                "message": Object {
+                  "description": "The error message",
+                  "example": "Insufficient access",
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "message",
+                "code",
+              ],
+              "title": "Insufficient access error (403)",
               "type": "object",
             },
             "error.INTERNAL_SERVER_ERROR": Object {
@@ -492,7 +534,7 @@ describe('generator', () => {
                 "message",
                 "code",
               ],
-              "title": "Error",
+              "title": "Internal server error error (500)",
               "type": "object",
             },
             "error.NOT_FOUND": Object {
@@ -534,7 +576,49 @@ describe('generator', () => {
                 "message",
                 "code",
               ],
-              "title": "Error",
+              "title": "Not found error (404)",
+              "type": "object",
+            },
+            "error.UNAUTHORIZED": Object {
+              "description": "The error information",
+              "example": Object {
+                "code": "UNAUTHORIZED",
+                "issues": Array [],
+                "message": "Authorization not provided",
+              },
+              "properties": Object {
+                "code": Object {
+                  "description": "The error code",
+                  "example": "UNAUTHORIZED",
+                  "type": "string",
+                },
+                "issues": Object {
+                  "description": "An array of issues that were responsible for the error",
+                  "example": Array [],
+                  "items": Object {
+                    "properties": Object {
+                      "message": Object {
+                        "type": "string",
+                      },
+                    },
+                    "required": Array [
+                      "message",
+                    ],
+                    "type": "object",
+                  },
+                  "type": "array",
+                },
+                "message": Object {
+                  "description": "The error message",
+                  "example": "Authorization not provided",
+                  "type": "string",
+                },
+              },
+              "required": Array [
+                "message",
+                "code",
+              ],
+              "title": "Authorization not provided error (401)",
               "type": "object",
             },
           },
@@ -583,6 +667,26 @@ describe('generator', () => {
                   },
                   "description": "Successful response",
                 },
+                "401": Object {
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "$ref": "#/components/schemas/error.UNAUTHORIZED",
+                      },
+                    },
+                  },
+                  "description": "Authorization not provided",
+                },
+                "403": Object {
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "$ref": "#/components/schemas/error.FORBIDDEN",
+                      },
+                    },
+                  },
+                  "description": "Insufficient access",
+                },
                 "500": Object {
                   "content": Object {
                     "application/json": Object {
@@ -594,7 +698,11 @@ describe('generator', () => {
                   "description": "Internal server error",
                 },
               },
-              "security": undefined,
+              "security": Array [
+                Object {
+                  "Authorization": Array [],
+                },
+              ],
               "summary": undefined,
               "tags": undefined,
             },
@@ -652,6 +760,26 @@ describe('generator', () => {
                   },
                   "description": "Invalid input data",
                 },
+                "401": Object {
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "$ref": "#/components/schemas/error.UNAUTHORIZED",
+                      },
+                    },
+                  },
+                  "description": "Authorization not provided",
+                },
+                "403": Object {
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "$ref": "#/components/schemas/error.FORBIDDEN",
+                      },
+                    },
+                  },
+                  "description": "Insufficient access",
+                },
                 "500": Object {
                   "content": Object {
                     "application/json": Object {
@@ -663,7 +791,11 @@ describe('generator', () => {
                   "description": "Internal server error",
                 },
               },
-              "security": undefined,
+              "security": Array [
+                Object {
+                  "Authorization": Array [],
+                },
+              ],
               "summary": undefined,
               "tags": undefined,
             },
@@ -701,6 +833,26 @@ describe('generator', () => {
                   },
                   "description": "Invalid input data",
                 },
+                "401": Object {
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "$ref": "#/components/schemas/error.UNAUTHORIZED",
+                      },
+                    },
+                  },
+                  "description": "Authorization not provided",
+                },
+                "403": Object {
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "$ref": "#/components/schemas/error.FORBIDDEN",
+                      },
+                    },
+                  },
+                  "description": "Insufficient access",
+                },
                 "404": Object {
                   "content": Object {
                     "application/json": Object {
@@ -722,7 +874,11 @@ describe('generator', () => {
                   "description": "Internal server error",
                 },
               },
-              "security": undefined,
+              "security": Array [
+                Object {
+                  "Authorization": Array [],
+                },
+              ],
               "summary": undefined,
               "tags": undefined,
             },
@@ -772,6 +928,26 @@ describe('generator', () => {
                   },
                   "description": "Invalid input data",
                 },
+                "401": Object {
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "$ref": "#/components/schemas/error.UNAUTHORIZED",
+                      },
+                    },
+                  },
+                  "description": "Authorization not provided",
+                },
+                "403": Object {
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "$ref": "#/components/schemas/error.FORBIDDEN",
+                      },
+                    },
+                  },
+                  "description": "Insufficient access",
+                },
                 "404": Object {
                   "content": Object {
                     "application/json": Object {
@@ -793,7 +969,11 @@ describe('generator', () => {
                   "description": "Internal server error",
                 },
               },
-              "security": undefined,
+              "security": Array [
+                Object {
+                  "Authorization": Array [],
+                },
+              ],
               "summary": undefined,
               "tags": undefined,
             },
@@ -858,6 +1038,26 @@ describe('generator', () => {
                   },
                   "description": "Invalid input data",
                 },
+                "401": Object {
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "$ref": "#/components/schemas/error.UNAUTHORIZED",
+                      },
+                    },
+                  },
+                  "description": "Authorization not provided",
+                },
+                "403": Object {
+                  "content": Object {
+                    "application/json": Object {
+                      "schema": Object {
+                        "$ref": "#/components/schemas/error.FORBIDDEN",
+                      },
+                    },
+                  },
+                  "description": "Insufficient access",
+                },
                 "404": Object {
                   "content": Object {
                     "application/json": Object {
@@ -879,7 +1079,11 @@ describe('generator', () => {
                   "description": "Internal server error",
                 },
               },
-              "security": undefined,
+              "security": Array [
+                Object {
+                  "Authorization": Array [],
+                },
+              ],
               "summary": undefined,
               "tags": undefined,
             },
@@ -933,10 +1137,10 @@ describe('generator', () => {
     expect(openApiDocument.paths!['/metadata/all']!.get!.tags).toEqual(['tagA', 'tagB']);
   });
 
-  test('with security', () => {
+  test('secured by default', () => {
     const appRouter = t.router({
       protectedEndpoint: t.procedure
-        .meta({ openapi: { method: 'POST', path: '/secure/endpoint', protect: true } })
+        .meta({ openapi: { method: 'POST', path: '/secured/endpoint' } })
         .input(z.object({ name: z.string() }))
         .output(z.object({ name: z.string() }))
         .query(({ input }) => ({ name: input.name })),
@@ -944,9 +1148,23 @@ describe('generator', () => {
 
     const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
 
-    expect(openApiDocument.paths!['/secure/endpoint']!.post!.security).toEqual([
+    expect(openApiDocument.paths!['/secured/endpoint']!.post!.security).toEqual([
       { Authorization: [] },
     ]);
+  });
+
+  test('with no security', () => {
+    const appRouter = t.router({
+      protectedEndpoint: t.procedure
+        .meta({ openapi: { method: 'POST', path: '/unsecure/endpoint', protect: false } })
+        .input(z.object({ name: z.string() }))
+        .output(z.object({ name: z.string() }))
+        .query(({ input }) => ({ name: input.name })),
+    });
+
+    const openApiDocument = generateOpenApiDocument(appRouter, defaultDocOpts);
+
+    expect(openApiDocument.paths!['/unsecure/endpoint']!.post!.security).toBeUndefined();
   });
 
   test('with schema descriptions', () => {
@@ -1055,6 +1273,26 @@ describe('generator', () => {
             },
             "description": "Invalid input data",
           },
+          "401": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "$ref": "#/components/schemas/error.UNAUTHORIZED",
+                },
+              },
+            },
+            "description": "Authorization not provided",
+          },
+          "403": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "$ref": "#/components/schemas/error.FORBIDDEN",
+                },
+              },
+            },
+            "description": "Insufficient access",
+          },
           "500": Object {
             "content": Object {
               "application/json": Object {
@@ -1066,7 +1304,11 @@ describe('generator', () => {
             "description": "Internal server error",
           },
         },
-        "security": undefined,
+        "security": Array [
+          Object {
+            "Authorization": Array [],
+          },
+        ],
         "summary": undefined,
         "tags": undefined,
       }
@@ -1125,6 +1367,26 @@ describe('generator', () => {
             },
             "description": "Invalid input data",
           },
+          "401": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "$ref": "#/components/schemas/error.UNAUTHORIZED",
+                },
+              },
+            },
+            "description": "Authorization not provided",
+          },
+          "403": Object {
+            "content": Object {
+              "application/json": Object {
+                "schema": Object {
+                  "$ref": "#/components/schemas/error.FORBIDDEN",
+                },
+              },
+            },
+            "description": "Insufficient access",
+          },
           "404": Object {
             "content": Object {
               "application/json": Object {
@@ -1146,7 +1408,11 @@ describe('generator', () => {
             "description": "Internal server error",
           },
         },
-        "security": undefined,
+        "security": Array [
+          Object {
+            "Authorization": Array [],
+          },
+        ],
         "summary": undefined,
         "tags": undefined,
       }
@@ -2368,6 +2634,26 @@ describe('generator', () => {
                 },
                 "description": "Invalid input data",
               },
+              "401": Object {
+                "content": Object {
+                  "application/json": Object {
+                    "schema": Object {
+                      "$ref": "#/components/schemas/error.UNAUTHORIZED",
+                    },
+                  },
+                },
+                "description": "Authorization not provided",
+              },
+              "403": Object {
+                "content": Object {
+                  "application/json": Object {
+                    "schema": Object {
+                      "$ref": "#/components/schemas/error.FORBIDDEN",
+                    },
+                  },
+                },
+                "description": "Insufficient access",
+              },
               "404": Object {
                 "content": Object {
                   "application/json": Object {
@@ -2389,7 +2675,11 @@ describe('generator', () => {
                 "description": "Internal server error",
               },
             },
-            "security": undefined,
+            "security": Array [
+              Object {
+                "Authorization": Array [],
+              },
+            ],
             "summary": undefined,
             "tags": undefined,
           },
@@ -2437,6 +2727,26 @@ describe('generator', () => {
                 },
                 "description": "Invalid input data",
               },
+              "401": Object {
+                "content": Object {
+                  "application/json": Object {
+                    "schema": Object {
+                      "$ref": "#/components/schemas/error.UNAUTHORIZED",
+                    },
+                  },
+                },
+                "description": "Authorization not provided",
+              },
+              "403": Object {
+                "content": Object {
+                  "application/json": Object {
+                    "schema": Object {
+                      "$ref": "#/components/schemas/error.FORBIDDEN",
+                    },
+                  },
+                },
+                "description": "Insufficient access",
+              },
               "404": Object {
                 "content": Object {
                   "application/json": Object {
@@ -2458,7 +2768,11 @@ describe('generator', () => {
                 "description": "Internal server error",
               },
             },
-            "security": undefined,
+            "security": Array [
+              Object {
+                "Authorization": Array [],
+              },
+            ],
             "summary": undefined,
             "tags": undefined,
           },
@@ -2506,6 +2820,26 @@ describe('generator', () => {
                 },
                 "description": "Invalid input data",
               },
+              "401": Object {
+                "content": Object {
+                  "application/json": Object {
+                    "schema": Object {
+                      "$ref": "#/components/schemas/error.UNAUTHORIZED",
+                    },
+                  },
+                },
+                "description": "Authorization not provided",
+              },
+              "403": Object {
+                "content": Object {
+                  "application/json": Object {
+                    "schema": Object {
+                      "$ref": "#/components/schemas/error.FORBIDDEN",
+                    },
+                  },
+                },
+                "description": "Insufficient access",
+              },
               "404": Object {
                 "content": Object {
                   "application/json": Object {
@@ -2527,7 +2861,11 @@ describe('generator', () => {
                 "description": "Internal server error",
               },
             },
-            "security": undefined,
+            "security": Array [
+              Object {
+                "Authorization": Array [],
+              },
+            ],
             "summary": undefined,
             "tags": undefined,
           },
@@ -2935,12 +3273,14 @@ describe('generator', () => {
         "description": "Successful response",
         "headers": Object {
           "X-RateLimit-Limit": Object {
+            "required": true,
             "schema": Object {
               "description": "Request limit per hour.",
               "type": "integer",
             },
           },
           "X-RateLimit-Remaining": Object {
+            "required": true,
             "schema": Object {
               "description": "The number of requests left for the time window.",
               "type": "integer",

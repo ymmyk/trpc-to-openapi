@@ -20,8 +20,19 @@ Note: This project is a fork of a fork, with full credit to the original authors
 
 ## Changelog
 
-- 2.0.4 Upgrade to tRPC 11.0.0-rc.648
-- 2.0.3 Added support for array inputs for GET requests
+- v2.1.0
+
+  - Updated the minimum version of `zod-openapi` to 4.1.0.
+  - Changed `zod-openapi` to a peer dependency.
+  - The `protect` option now defaults to `true`.
+  - Improved Error schema titles
+
+- v2.0.4
+
+  - Upgraded to tRPC 11.0.0-rc.648.
+
+- v2.0.3
+  - Added support for array inputs in GET requests.
 
 ## Usage
 
@@ -363,7 +374,7 @@ Please see [full typings here](src/types.ts).
 | `enabled`            | `boolean`                               | Exposes this procedure to `trpc-to-openapi` adapters and on the OpenAPI document.                                              | `false`  | `true`                  |
 | `method`             | `HttpMethod`                            | HTTP method this endpoint is exposed on. Value can be `GET`, `POST`, `PATCH`, `PUT` or `DELETE`.                               | `true`   | `undefined`             |
 | `path`               | `string`                                | Pathname this endpoint is exposed on. Value must start with `/`, specify path parameters using `{}`.                           | `true`   | `undefined`             |
-| `protect`            | `boolean`                               | Requires this endpoint to use a security scheme.                                                                               | `false`  | `false`                 |
+| `protect`            | `boolean`                               | Requires this endpoint to use a security scheme.                                                                               | `false`  | `true`                  |
 | `summary`            | `string`                                | A short summary of the endpoint included in the OpenAPI document.                                                              | `false`  | `undefined`             |
 | `description`        | `string`                                | A verbose description of the endpoint included in the OpenAPI document.                                                        | `false`  | `undefined`             |
 | `tags`               | `string[]`                              | A list of tags used for logical grouping of endpoints in the OpenAPI document.                                                 | `false`  | `undefined`             |

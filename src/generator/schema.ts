@@ -9,7 +9,11 @@ import {
   extendZodWithOpenApi,
 } from 'zod-openapi';
 
-import { HTTP_STATUS_TRPC_ERROR_CODE, TRPC_ERROR_CODE_MESSAGE } from '../adapters/node-http/errors';
+import {
+  HTTP_STATUS_TRPC_ERROR_CODE,
+  TRPC_ERROR_CODE_HTTP_STATUS,
+  TRPC_ERROR_CODE_MESSAGE,
+} from '../adapters/node-http/errors';
 import { OpenApiContentType } from '../types';
 import {
   instanceofZodType,
@@ -114,7 +118,7 @@ export const getRequestBodyObject = (
   pathParameters.forEach((pathParameter) => {
     mask[pathParameter] = true;
   });
-  const o = schema._def.openapi;
+  const o = schema._def.zodOpenApi?.openapi;
   const dedupedSchema = schema.omit(mask).openapi({
     ...(o?.title ? { title: o?.title } : {}),
     ...(o?.description ? { description: o?.description } : {}),
@@ -143,7 +147,7 @@ export const hasInputs = (schema: unknown) =>
 const errorResponseObjectByCode: Record<string, ZodOpenApiResponseObject> = {};
 
 export const errorResponseObject = (
-  code = 'INTERNAL_SERVER_ERROR',
+  code: TRPCError['code'] = 'INTERNAL_SERVER_ERROR',
   message?: string,
   issues?: { message: string }[],
 ): ZodOpenApiResponseObject => {
@@ -171,7 +175,7 @@ export const errorResponseObject = (
                 }),
             })
             .openapi({
-              title: 'Error',
+              title: `${message ?? 'Internal server'} error (${TRPC_ERROR_CODE_HTTP_STATUS[code] ?? 500})`,
               description: 'The error information',
               example: {
                 code: code ?? 'INTERNAL_SERVER_ERROR',
@@ -190,11 +194,11 @@ export const errorResponseObject = (
 export const errorResponseFromStatusCode = (status: number) => {
   const code = HTTP_STATUS_TRPC_ERROR_CODE[status];
   const message = code && TRPC_ERROR_CODE_MESSAGE[code];
-  return errorResponseObject(code ?? 'UNKNOWN_ERROR', message ?? 'Unknown error');
+  return errorResponseObject(code, message ?? 'Unknown error');
 };
 
 export const errorResponseFromMessage = (status: number, message: string) =>
-  errorResponseObject(HTTP_STATUS_TRPC_ERROR_CODE[status] ?? 'UNKNOWN_ERROR', message);
+  errorResponseObject(HTTP_STATUS_TRPC_ERROR_CODE[status], message);
 
 export const getResponsesObject = (
   schema: ZodTypeAny,

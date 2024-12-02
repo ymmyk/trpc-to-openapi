@@ -50,7 +50,6 @@ export const getOpenApiPathsObject = (
 
       const {
         method,
-        protect,
         summary,
         description,
         tags,
@@ -58,6 +57,7 @@ export const getOpenApiPathsObject = (
         responseHeaders,
         successDescription,
         errorResponses,
+        protect = true,
       } = openapi;
 
       const path = normalizePath(openapi.path);
@@ -101,7 +101,7 @@ export const getOpenApiPathsObject = (
         });
       }
       const isInputRequired = !inputParser.isOptional();
-      const o = inputParser?._def?.openapi;
+      const o = inputParser?._def.zodOpenApi?.openapi;
       const inputSchema = unwrapZodType(inputParser, true).openapi({
         ...(o?.title ? { title: o?.title } : {}),
         ...(o?.description ? { description: o?.description } : {}),
@@ -150,7 +150,7 @@ export const getOpenApiPathsObject = (
         outputParser,
         httpMethod,
         responseHeaders,
-        protect ?? false,
+        protect,
         hasInputs(inputParser),
         successDescription,
         errorResponses,
