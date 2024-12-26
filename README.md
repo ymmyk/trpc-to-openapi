@@ -18,22 +18,6 @@
 
 Note: This project is a fork of a fork, with full credit to the original authors. It appears that the original author has abandoned the project, so I plan to add new features in the near future.
 
-## Changelog
-
-- v2.1.0
-
-  - Updated the minimum version of `zod-openapi` to 4.1.0.
-  - Changed `zod-openapi` to a peer dependency.
-  - The `protect` option now defaults to `true`.
-  - Improved Error schema titles
-
-- v2.0.4
-
-  - Upgraded to tRPC 11.0.0-rc.648.
-
-- v2.0.3
-  - Added support for array inputs in GET requests.
-
 ## Usage
 
 **1. Install `trpc-to-openapi`.**
