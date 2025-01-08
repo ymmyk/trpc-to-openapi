@@ -1,6 +1,10 @@
 ## Changelog
 
-- v2.1.1
+- v2.1.2
+
+  bug fix: remove lodash.cloneDeep from the build output
+
+- v2.1.1 (bad build, do not use)
 
   - chore: remove lodash.cloneDeep and update some dependencies
 
