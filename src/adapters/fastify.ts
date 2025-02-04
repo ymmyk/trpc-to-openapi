@@ -2,10 +2,7 @@ import { AnyRouter } from '@trpc/server';
 import { FastifyInstance } from 'fastify';
 
 import { OpenApiRouter } from '../types';
-import {
-  CreateOpenApiNodeHttpHandlerOptions,
-  createOpenApiNodeHttpHandler,
-} from './node-http/core';
+import { CreateOpenApiNodeHttpHandlerOptions, createOpenApiNodeHttpHandler } from './node-http';
 
 export type CreateOpenApiFastifyPluginOptions<TRouter extends OpenApiRouter> =
   CreateOpenApiNodeHttpHandlerOptions<TRouter, any, any> & {

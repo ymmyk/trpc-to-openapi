@@ -1,6 +1,5 @@
 import { OpenApiMethod, OpenApiProcedure, OpenApiRouter } from '../../types';
-import { getPathRegExp, normalizePath } from '../../utils/path';
-import { forEachOpenApiProcedure } from '../../utils/procedure';
+import { getPathRegExp, normalizePath, forEachOpenApiProcedure } from '../../utils';
 
 export const createProcedureCache = (router: OpenApiRouter) => {
   const procedureCache = new Map<

@@ -4,11 +4,8 @@ import { defineEventHandler, getQuery } from 'h3';
 import { IncomingMessage } from 'http';
 
 import { OpenApiErrorResponse, OpenApiRouter } from '../types';
-import { normalizePath } from '../utils/path';
-import {
-  CreateOpenApiNodeHttpHandlerOptions,
-  createOpenApiNodeHttpHandler,
-} from './node-http/core';
+import { normalizePath } from '../utils';
+import { CreateOpenApiNodeHttpHandlerOptions, createOpenApiNodeHttpHandler } from './node-http';
 
 export type CreateOpenApiNuxtHandlerOptions<TRouter extends OpenApiRouter> = Omit<
   CreateOpenApiNodeHttpHandlerOptions<TRouter, NodeIncomingMessage, NodeServerResponse>,

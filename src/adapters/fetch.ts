@@ -4,8 +4,8 @@ import { getRequestInfo } from '@trpc/server/unstable-core-do-not-import';
 import { IncomingMessage, ServerResponse } from 'http';
 
 import { OpenApiRouter } from '../types';
-import { normalizePath } from '../utils/path';
-import { createOpenApiNodeHttpHandler } from './node-http/core';
+import { normalizePath } from '../utils';
+import { createOpenApiNodeHttpHandler } from './node-http';
 
 export type CreateOpenApiFetchHandlerOptions<TRouter extends OpenApiRouter> = Omit<
   FetchHandlerOptions<TRouter>,

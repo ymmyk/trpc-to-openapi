@@ -18,16 +18,16 @@ import {
   OpenApiRouter,
   OpenApiSuccessResponse,
 } from '../../types';
-import { acceptsRequestBody } from '../../utils/method';
-import { normalizePath } from '../../utils/path';
-import { getInputOutputParsers } from '../../utils/procedure';
 import {
+  acceptsRequestBody,
+  normalizePath,
+  getInputOutputParsers,
   coerceSchema,
   instanceofZodTypeLikeVoid,
   instanceofZodTypeObject,
   unwrapZodType,
   zodSupportsCoerce,
-} from '../../utils/zod';
+} from '../../utils';
 import { TRPC_ERROR_CODE_HTTP_STATUS, getErrorFromUnknown } from './errors';
 import { getBody, getQuery } from './input';
 import { createProcedureCache } from './procedures';
@@ -205,7 +205,7 @@ export const createOpenApiNodeHttpHandler = <
         ...errorShape, // Pass the error through
         message: isInputValidationError
           ? 'Input validation failed'
-          : (errorShape?.message ?? error.message ?? 'An error occurred'),
+          : errorShape?.message ?? error.message ?? 'An error occurred',
         code: error.code,
         issues: isInputValidationError ? (error.cause as ZodError).errors : undefined,
       };

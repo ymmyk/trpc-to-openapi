@@ -8,15 +8,17 @@ import {
 } from 'zod-openapi';
 
 import { OpenApiRouter } from '../types';
-import { acceptsRequestBody } from '../utils/method';
-import { getPathParameters, normalizePath } from '../utils/path';
-import { forEachOpenApiProcedure, getInputOutputParsers } from '../utils/procedure';
 import {
+  acceptsRequestBody,
+  getPathParameters,
+  normalizePath,
+  forEachOpenApiProcedure,
+  getInputOutputParsers,
   instanceofZodType,
   instanceofZodTypeLikeVoid,
   instanceofZodTypeObject,
   unwrapZodType,
-} from '../utils/zod';
+} from '../utils';
 import { getParameterObjects, getRequestBodyObject, getResponsesObject, hasInputs } from './schema';
 
 extendZodWithOpenApi(z);

@@ -13,7 +13,7 @@ import {
   HTTP_STATUS_TRPC_ERROR_CODE,
   TRPC_ERROR_CODE_HTTP_STATUS,
   TRPC_ERROR_CODE_MESSAGE,
-} from '../adapters/node-http/errors';
+} from '../adapters';
 import { OpenApiContentType } from '../types';
 import {
   instanceofZodType,
@@ -24,7 +24,7 @@ import {
   instanceofZodTypeOptional,
   unwrapZodType,
   zodSupportsCoerce,
-} from '../utils/zod';
+} from '../utils';
 import { HttpMethods } from './paths';
 
 extendZodWithOpenApi(z);
@@ -175,7 +175,9 @@ export const errorResponseObject = (
                 }),
             })
             .openapi({
-              title: `${message ?? 'Internal server'} error (${TRPC_ERROR_CODE_HTTP_STATUS[code] ?? 500})`,
+              title: `${message ?? 'Internal server'} error (${
+                TRPC_ERROR_CODE_HTTP_STATUS[code] ?? 500
+              })`,
               description: 'The error information',
               example: {
                 code: code ?? 'INTERNAL_SERVER_ERROR',
@@ -217,9 +219,9 @@ export const getResponsesObject = (
         schema: instanceofZodTypeKind(schema, z.ZodFirstPartyTypeKind.ZodVoid)
           ? {}
           : instanceofZodTypeKind(schema, z.ZodFirstPartyTypeKind.ZodNever) ||
-              instanceofZodTypeKind(schema, z.ZodFirstPartyTypeKind.ZodUndefined)
-            ? { not: {} }
-            : schema,
+            instanceofZodTypeKind(schema, z.ZodFirstPartyTypeKind.ZodUndefined)
+          ? { not: {} }
+          : schema,
       },
     },
   },

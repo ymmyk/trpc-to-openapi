@@ -3,11 +3,8 @@ import { incomingMessageToRequest } from '@trpc/server/adapters/node-http';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 import { OpenApiErrorResponse, OpenApiRouter } from '../types';
-import { normalizePath } from '../utils/path';
-import {
-  CreateOpenApiNodeHttpHandlerOptions,
-  createOpenApiNodeHttpHandler,
-} from './node-http/core';
+import { normalizePath } from '../utils';
+import { CreateOpenApiNodeHttpHandlerOptions, createOpenApiNodeHttpHandler } from './node-http';
 
 export type CreateOpenApiNextHandlerOptions<TRouter extends OpenApiRouter> =
   CreateOpenApiNodeHttpHandlerOptions<TRouter, NextApiRequest, NextApiResponse>;
