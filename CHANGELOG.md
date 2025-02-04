@@ -1,8 +1,13 @@
 ## Changelog
 
+- v2.1.3
+
+  - Export all internals. Contribution by @bkniffler https://github.com/mcampa/trpc-to-openapi/pull/44
+  - CVE fixes by running npm audit fix.
+
 - v2.1.2
 
-  bug fix: remove lodash.cloneDeep from the build output
+   - bug fix: remove lodash.cloneDeep from the build output
 
 - v2.1.1 (bad build, do not use)
 
