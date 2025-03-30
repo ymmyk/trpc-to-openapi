@@ -1,5 +1,9 @@
 ## Changelog
 
+- v2.1.4
+  - Koa adapter. Contribution by @danperkins
+  - Fix for Fastify adapter. Contribution by @natejohnson05
+
 - v2.1.3
 
   - Export all internals. Contribution by @bkniffler https://github.com/mcampa/trpc-to-openapi/pull/44
