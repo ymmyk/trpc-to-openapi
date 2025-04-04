@@ -1,12 +1,15 @@
 ## Changelog
 
+- v2.1.5
+  - fix(fastify): send raw request in http handler https://github.com/mcampa/trpc-to-openapi/pull/63. Contribution by [@meriadec](https://github.com/meriadec)
+
 - v2.1.4
-  - Koa adapter. Contribution by @danperkins
-  - Fix for Fastify adapter. Contribution by @natejohnson05
+  - Koa adapter https://github.com/mcampa/trpc-to-openapi/pull/47. Contribution by [@danperkins](https://github.com/danperkins)
+  - Fix for Fastify adapter https://github.com/mcampa/trpc-to-openapi/pull/56. Contribution by [@natejohnson05](https://github.com/natejohnson05)
 
 - v2.1.3
 
-  - Export all internals. Contribution by @bkniffler https://github.com/mcampa/trpc-to-openapi/pull/44
+  - Export all internals https://github.com/mcampa/trpc-to-openapi/pull/44. Contribution by [@bkniffler](https://github.com/bkniffler)
   - CVE fixes by running npm audit fix.
 
 - v2.1.2
