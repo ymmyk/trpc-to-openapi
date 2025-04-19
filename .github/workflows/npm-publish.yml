@@ -36,7 +36,14 @@ jobs:
 
           echo "Local version: $LOCAL_VERSION"
           echo "NPM version: $NPM_VERSION"
-          echo "should_publish=false" >> $GITHUB_OUTPUT
+
+          if [ "$LOCAL_VERSION" != "$NPM_VERSION" ] && [ "$(printf '%s\n' "$NPM_VERSION" "$LOCAL_VERSION" | sort -V | head -n 1)" = "$NPM_VERSION" ]; then
+            echo "Version $LOCAL_VERSION is greater than $NPM_VERSION. Preparing to publish."
+            echo "should_publish=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Version $LOCAL_VERSION is not greater than $NPM_VERSION. Skipping publish."
+            echo "should_publish=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - name: Run tests
         if: steps.check_version.outputs.should_publish == 'true'
