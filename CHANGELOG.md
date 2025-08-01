@@ -1,5 +1,8 @@
 ## Changelog
 
+- v2.4.0
+  - fix: replace `reply.raw` with reply for fastify adapter https://github.com/mcampa/trpc-to-openapi/pull/99
+
 - v2.3.1
   - fix: meta can be undefined
 
