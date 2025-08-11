@@ -86,6 +86,13 @@ export function fastifyTRPCOpenApiPlugin<TRouter extends AnyRouter>(
       replyWithNodeMethods.emit = reply.raw.emit.bind(reply.raw);
       replyWithNodeMethods.removeListener = reply.raw.removeListener.bind(reply.raw);
 
+      // Add request event emitter methods
+      request.raw.once = request.raw.once.bind(request.raw);
+      request.raw.on = request.raw.on.bind(request.raw);
+      request.raw.off = request.raw.off.bind(request.raw);
+      request.raw.emit = request.raw.emit.bind(request.raw);
+      request.raw.removeListener = request.raw.removeListener.bind(request.raw);
+
       return await openApiHttpHandler(request, replyWithNodeMethods);
     },
   });
